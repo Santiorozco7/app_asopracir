@@ -1,0 +1,38 @@
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': orderVisible }">
+  <div class="modal-body card">
+    <div class="modal-header">
+      <h1 class="heading">Detalles de la Orden</h1>
+      <a href="javascript:void(0);" role="button" class="close" (click)="cerrar()"><i class="fa-solid fa-xmark"></i>X</a>
+    </div>
+    <div class="info-cinta">
+        <p> Colaborador: <span>{{ order.collaborator }}</span></p>
+        <p> Fecha de la orden: <span>{{ order.startDate }}</span></p>
+        <p> Estimación de racimos: <span>{{ order.estBunches }}</span></p>
+        <p> Racimos cosechados: <span>{{ order.numBunches }}</span></p>
+        <p> Fecha de la cosecha: <span>{{ order.pickupDate }}</span></p>
+        <p> peso: <span>{{ order.weight }}Kg</span></p>
+        <p> Pago de la cosecha: $<span>{{ order.payAmount }}</span></p>
+        <!-- <p> Fecha del pago: <span>{{ order.weight }}</span></p> -->
+        <p> Recibido por: <span>{{ order.signedBy }}</span></p>
+        <p> Transportado por: <span>{{ order.transporter }}</span></p>
+    </div>
+    <!-- {{ order.weight | json }} -->
+    <!-- {{ order | json }} -->
+    <!-- collaborator : "Rus Belly Lopez Alzate" estBunches : "32" numBunches : "30"
+    orderID : "1" payAmount : "567000"   : "2023-07-29" pickupDate :
+    "2023-07-29" signedBy : "Pedro perez" startDate : "2023-07-19" state : "5"
+    stateRoute : "3" transporter : "Pollo Ramirez Aristizabal" weight : "200.5" -->
+
+    <!-- aqui inicia la visualización de los pasos -->
+    <div class="alertaProgreso">
+      <span>{{paso}}</span>
+    </div>
+    <div class="progress-bar">
+      <div *ngFor="let step of [1,2,3,4,5,6]" class="step" [ngClass]="{'active': step <= state, 'current': step === state}">
+        <span>{{ step }}</span>
+      </div>
+    </div>
+    <!-- aqui finaliza la visualización de los pasos -->
+    
+  </div>
+</div>

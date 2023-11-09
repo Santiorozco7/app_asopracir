@@ -1,0 +1,35 @@
+<div class="ruta">
+    <a href="">Nueva ruta activa</a>
+</div>
+
+<section>
+  <div class="produccion">
+    <div class="tarjetaproduccion" *ngFor="let item of ordenes">
+      <a href="javascript:void(0);" (click)="mostrarOrder(item.orderID)">
+        <h2>{{ item.startDate}}</h2>
+        <ul>
+          <li>{{ item.batchName }}</li>
+          <li>{{ item.estBunches }} racimos</li>
+          <!-- <li>{{ item.numBunches }}</li> -->
+          <li>{{ item.signedBy }}</li>
+        </ul>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="container-floating"> 
+  <a class="nd1 nds" href="javascript:void(0);" (click)="mostrarCrearOrden()">
+    <p class="text">Crear Orden</p>
+    <img class="reminder" src="https://cdn-icons-png.flaticon.com/512/5105/5105195.png" />
+  </a>
+
+  <a id="floating-button">
+    <p class="plus">+</p>
+    <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png">
+  </a>
+</div>
+
+<app-modal-order [orderVisible]="orderVisible" [order]="order" [orderID]="orderID" (cerrarOrder)="cerrarOrder()"></app-modal-order>
+
+<app-create-order [createOrderVisible]="createOrderVisible" [cinta]="cinta" [ordenes]="ordenes" (cerrarCrearOrden)="cerrarCrearOrden()" (actualizarOrden)="View()"></app-create-order>

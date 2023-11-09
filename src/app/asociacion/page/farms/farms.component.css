@@ -1,0 +1,24 @@
+.farm-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.farm-table th, .farm-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.farm-table th {
+    background-color: #333;
+    color: white;
+}
+
+.farm-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.farm-table tbody tr:hover {
+    background-color: #ddd;
+}
+

@@ -1,0 +1,35 @@
+/* Reset de margen y padding para el body */
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Estilos para la barra de navegación */
+  .bottom-nav {
+    background-color: #333; /* Color de fondo */
+    color: white; /* Color del texto */
+    text-align: center; /* Alineación del texto en el centro */
+    position: fixed; /* Posición fija */
+    bottom: 0; /* Alineación en la parte inferior */
+    left: 0; /* Alineación a la izquierda */
+    width: 100%; /* Ancho completo */
+    padding: 10px 0; /* Espaciado interno arriba y abajo */
+  }
+  
+  /* Estilos para los enlaces dentro de la barra de navegación */
+  .bottom-nav ul {
+    list-style: none; /* Quita los marcadores de la lista */
+    padding: 0; /* Quita el espacio interno de la lista */
+    margin: 0; /* Quita el margen de la lista */
+  }
+  
+  .bottom-nav li {
+    display: inline; /* Muestra los elementos en línea */
+    margin: 0 15px; /* Espaciado horizontal entre elementos */
+  }
+  
+  .bottom-nav a {
+    color: white; /* Color del texto de los enlaces */
+    text-decoration: none; /* Sin subrayado */
+  }
+  

@@ -1,0 +1,32 @@
+<h1>Fincas</h1>
+<table class="farm-table">
+    <thead>
+        <tr>
+            <th>Finca</th>
+            <th>Propietario</th>
+            <th>Extensión (m²)</th>
+            <th>Próximo corte</th>
+            <th>Vereda</th>
+            <th>Celular</th>
+            <th>Correo electrónico</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let farm of farms">
+            <td>{{ farm.farmName }}</td>
+            <td>{{ farm.names }} {{ farm.firstLastname }}</td>
+            <td>{{ farm.area }}</td>
+            <td>{{ farm.endDate }}</td>
+            <td>{{ farm.zoneName }}</td>
+            <td>{{ farm.phoneNumber }}</td>
+            <td>{{ farm.email }}</td>
+            <td>
+              <a href="javascript:void(0);" (click)="mostrarModal(farm.docNumber,farm.docType)">
+                  Editar
+              </a>
+          </td>
+        </tr>
+    </tbody>
+</table>
+
+<app-modal-farm [modalVisible]="modalVisible" (cerrarModal)="cerrarModal()" (cerrarActualizar)="View()" [modalData]="modalData"></app-modal-farm>

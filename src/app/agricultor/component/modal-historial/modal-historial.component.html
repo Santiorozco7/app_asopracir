@@ -1,0 +1,16 @@
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': historialVisible }">
+    <div class="modal-body card">
+      <div class="modal-header">
+        <h1 class="heading">Detalles del Historial</h1>
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrar()"><i class="fa-solid fa-xmark"></i>X</a>
+      </div>
+      <div class="info-cinta">
+          <p> Cantidad de racimos cosechados en el mes: <span>{{ detallesHistorial.numBunches }}</span></p>
+          <p> Peso total de la cosecha del mes: <span>{{ detallesHistorial.weight }}Kg</span></p>
+          <p> Pago de la cosecha del mes: <span>${{ detallesHistorial.payAmount }}</span></p>
+      </div>
+      <!-- {{ order.weight | json }} -->
+      <!-- {{ detallesHistorial | json }}       -->
+    </div>
+  </div>
+  

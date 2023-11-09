@@ -1,0 +1,21 @@
+<div class="modal-wrapper" [ngClass]="{'mostrar-modal': modalVisible}">
+    <div class="modal-body card">
+      <div class="modal-header">
+        <button (click)="editar(batchID)">Editar</button>
+        <h1 class="heading">Historial de precios</h1>
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarModal.emit()"><i class="fa-solid fa-xmark"></i>X</a>
+      </div>
+      <div *ngFor="let cintaItem of cinta">
+        <div class="info-cinta" *ngIf="cintaItem.batchID === batchID">
+          <div class="color-cinta" [style.background-color]="cintaItem.color"></div>
+          <div class="tipo-platano">{{ cintaItem.variety }}</div>
+          <div class="cantidad-platano">{{ cintaItem.numBunches }}</div>
+          <div class="fecha-inicio">{{ cintaItem.startDate }}</div>
+          <div class="fecha-final">{{ cintaItem.endDate }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+  

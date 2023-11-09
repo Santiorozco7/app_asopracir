@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app_asopracir';
+  camb=true;
+  cambio(){
+    this.camb=!this.camb;
+  }
 }

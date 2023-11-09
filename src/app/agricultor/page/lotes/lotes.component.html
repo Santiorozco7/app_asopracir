@@ -1,0 +1,79 @@
+<app-aviso [cinta]="cinta"></app-aviso>
+
+<!-- <button (click)="View()">hola</button> -->
+
+<section>
+  <div class="lotes">
+    <div class="tarjeta" *ngFor="let item of lote">
+      <!-- <button *ngIf="editarlote" (click)="mostrarEditarlote(item.batchID)">Seleccionar Lote</button> -->
+      <a href="javascript:void(0);" (click)="mostrarModal(item.batchID)">
+        <h2>{{ item.batchName }}</h2>
+        <div *ngFor="let itemCinta of primeraCintaPorLote">
+          <div *ngIf="!primerCumplimiento && (item.batchID === itemCinta.batchID)">
+            <div class="color" [style.background-color]="itemCinta.color"></div>
+            <!-- <h2>{{ item.batchName }}</h2> -->
+            <ul>
+              <li>{{ itemCinta.responsible }}</li>
+              <li>{{ itemCinta.variety }}</li>
+              <li>{{ itemCinta.numBunches }}</li>
+              <li>{{ itemCinta.endDate }}</li>
+            </ul>
+          </div>
+        </div>
+      </a> 
+    </div>
+  </div>
+</section>
+
+<app-modal-lotes [modalVisible]="modalVisible" [cinta]="cinta" [batchID]="batchID" (editarLote)="mostrarEditarlote($event)" (cerrarModal)="cerrarModal()"></app-modal-lotes>
+
+<div id="container-floating">
+    <a class="nd3 nds" href="javascript:void(0);" (click)="mostrarCrearlote()">
+    <p class="text">Nueva lote</p>
+    <img class="reminder" src="https://cdn-icons-png.flaticon.com/512/2385/2385240.png" />
+  </a>
+  
+  <a class="nd1 nds" href="javascript:void(0);" (click)="mostrarCrearcinta()">
+    <p class="text">Nueva cinta</p>
+    <img class="reminder" src="https://cdn-icons-png.flaticon.com/512/5105/5105195.png" />
+  </a>
+
+  <a id="floating-button">
+    <p class="plus">+</p>
+    <img class="edit" src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/1x/bt_compose2_1x.png">
+  </a>
+</div>
+
+<app-crear-lote (loteCreado)="View()" [crearLoteVisible]="crearLoteVisible" (cerrarCrearlote)="cerrarCrearlote()"></app-crear-lote>
+
+<app-crear-cinta (cintaCreada)="View()" [crearCintaVisible]="crearCintaVisible" [lote]="lote" (cerrarCrearcinta)="cerrarCrearcinta()"></app-crear-cinta>
+
+<app-editar-eliminar-lote (loteEditado)="View()" (loteEditado)="cerrarEditarlote()"  (cerrarModal)="cerrarModal()" [lote]="lote" [batchID]="batchID" [editarloteVisible]="editarloteVisible" (cerrarEditarlote)="cerrarEditarlote()"></app-editar-eliminar-lote>
+
+<!-- <div class="modal-wrapper" [ngClass]="{'mostrar-modal': crearLoteVisible}">
+  <div class="modal-body card">
+    <div class="modal-header">
+      <h1 class="heading">Nuevo Lote</h1>
+      <a href="javascript:void(0);" role="button" class="close" (click)="cerrarCrearlote()"><i class="fa-solid fa-xmark"></i>X</a>
+    </div>
+    
+    <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="batchName">Nombre del Lote</label>
+        <input type="text" formControlName="batchName" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="responsible">Responsable</label>
+        <input type="text" formControlName="responsible" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="mainVariety">Variedad Principal</label>
+        <input type="text" formControlName="mainVariety" class="form-control" required>
+      </div>
+      <button type="submit" [disabled]="loteForm.invalid" class="btn btn-primary">Crear Lote</button>
+    </form>
+
+    {{loteForm.value | json }}
+
+  </div>
+</div> -->
