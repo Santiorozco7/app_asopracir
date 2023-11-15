@@ -8,14 +8,13 @@ import { Router } from '@angular/router';
   templateUrl: './crear-lote.component.html',
   styleUrls: ['./crear-lote.component.css']
 })
-export class CrearLoteComponent {
 
+export class CrearLoteComponent {
   @Input() crearLoteVisible: boolean = false;
   @Output() loteCreado = new EventEmitter<void>();
   @Output() cerrarCrearlote = new EventEmitter<void>();
 
   constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router) {
-    
   }
 
   loteForm = this.formBuilder.group({
@@ -23,10 +22,6 @@ export class CrearLoteComponent {
     responsible: ['', [Validators.required]],
     mainVariety: ['', [Validators.required]]
   });
-
-  cerrar(): void {
-    this.cerrarCrearlote.emit();
-  }
 
   onSubmit(): void {
     if (this.loteForm.valid) {
@@ -42,10 +37,7 @@ export class CrearLoteComponent {
           this.loteCreado.emit();
         }
       });
-      // Aquí puedes enviar los datos al servidor (usando HttpClient, por ejemplo) para crear el nuevo lote.
-      // También puedes agregar lógica de manejo de errores y respuestas del servidor.
     }
     this.cerrarCrearlote.emit();
   }
-
 }

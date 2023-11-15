@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Renderer2, ElementRef } from '@angular/core';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
 
@@ -11,13 +11,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './lotes.component.html',
   styleUrls: ['./lotes.component.css']
 })
+
 export class LotesComponent {
   lote: any[] = [];
   cinta: any[] = [];
   primeraCintaPorLote: any[] = [];
   
-
-  constructor(private service: AgricultorService, private router: Router) {
+  constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
   }
 
   ngOnInit(): void{
@@ -31,14 +31,11 @@ export class LotesComponent {
         this.router.navigate(['/']);
       }
       this.lote = LT.data;
-      console.log(LT.data);
-
       this.primeraCintaPorLote = [];
   
       // Después de cargar los datos de los lotes, realizamos la suscripción a los datos de las cintas
       this.service.cinta().subscribe(cintas => {
         this.cinta = cintas.data;
-        console.log(this.cinta);
   
         // Al cargar los datos de las cintas, encontraremos la primera cinta de cada lote
         this.lote.forEach(loteItem => {
@@ -46,14 +43,15 @@ export class LotesComponent {
           if (primeraCintaLote) {
             this.primeraCintaPorLote.push(primeraCintaLote); // Agregar la primera cinta completa al array
           }
-        });
-  
-        console.log('datos del array:', this.primeraCintaPorLote);
+        });  
       });
     });
   }
   
-
+  getPrimeraCintaPorLote(batchID: string): any {
+    return this.primeraCintaPorLote.find(cinta => cinta.batchID === batchID) || {};
+  }
+  
   // Modal -----------------------------------------------------------
   modalVisible = false;
   batchID?: any;
@@ -62,11 +60,12 @@ export class LotesComponent {
   mostrarModal(batchID:string) {
     this.batchID = batchID;
     this.modalVisible = true;
-    console.log(this.batchID);
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
 
   cerrarModal() {
     this.modalVisible = false;
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
   }
 
   // Crear Lote -------------------------------------------------------
@@ -74,12 +73,11 @@ export class LotesComponent {
   
   mostrarCrearlote(){
     this.crearLoteVisible = true;
-    console.log('crearLoteVisible actualizado:', this.crearLoteVisible);
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
   cerrarCrearlote() {
     this.crearLoteVisible = false;
-    console.log('crearLoteVisible actualizado:', this.crearLoteVisible);
-
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
   }
 
   // Crear Cinta -------------------------------------------------------
@@ -87,35 +85,19 @@ export class LotesComponent {
   
   mostrarCrearcinta(){
     this.crearCintaVisible = true;
-    console.log('crearLoteVisible actualizado:', this.crearCintaVisible);
   }
   cerrarCrearcinta() {
     this.crearCintaVisible = false;
-    console.log('crearLoteVisible actualizado:', this.crearCintaVisible);
-
   }
 
   //Editar lote ---------------------------------------------------------
-  // editarlote = false;
   editarloteVisible=false;
-  // @Input() batchIDSeleccionado:string = "";
-  // cambiearEditarLote(){
-  //   this.editarlote = !this.editarlote;
-  // }
-
-  // cerrar() {
-  //   this.editarlote = false;
-  // }
 
   mostrarEditarlote(batchID:string){
-    console.log(batchID);
     this.batchID=batchID;
     this.editarloteVisible=true;
-    // console.log('crearLoteVisible actualizado:', this.editarlote);
   }
-
   cerrarEditarlote(){
     this.editarloteVisible=false;
-    // console.log('crearLoteVisible actualizado:', this.editarlote);
   }
 }

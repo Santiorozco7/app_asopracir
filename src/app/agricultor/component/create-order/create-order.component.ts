@@ -6,10 +6,9 @@ import { AgricultorService } from '../../agricultor.service';
   templateUrl: './create-order.component.html',
   styleUrls: ['./create-order.component.css']
 })
+
 export class CreateOrderComponent {
   @Input() createOrderVisible: boolean = false;
-  // @Input() order: any = {};
-  // @Input() orderID: string = "";
   @Input() cinta: any[] = [];
   @Input() ordenes: any[] = [];
   ordenFiltrada: any[] = [];
@@ -18,18 +17,11 @@ export class CreateOrderComponent {
   @Output() actualizarOrden = new EventEmitter<void>();
 
   constructor(private service: AgricultorService) {
-    
   }
 
   ngOnChanges() {
     // Llamar a filterCintaByDate cuando cinta cambie
     this.filterCintaByDate();
-    console.log("ordenes filtradas:",this.ordenFiltrada);
-  }
-
-  cerrar() {
-    console.log('Cerrando el modal de CrearLoteComponent');
-    this.cerrarCrearOrden.emit();
   }
 
   // Método para filtrar los objetos con fecha a menos de 5 días
@@ -50,7 +42,6 @@ export class CreateOrderComponent {
       }
     });
   }
-  
 
   agregarOrden(tapeID:string){
     console.log("orden agregada");
@@ -64,5 +55,4 @@ export class CreateOrderComponent {
       }
     })
   }
-  
 }

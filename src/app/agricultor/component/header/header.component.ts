@@ -10,9 +10,4 @@ export class HeaderComponent {
 
   constructor() { }
 
-  // ngOnChanges() {
-  //   console.log("paso final:", this.title);
-  // }
-
-  // Método para cambiar el título
 }

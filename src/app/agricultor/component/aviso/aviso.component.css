@@ -4,11 +4,12 @@
 }
 
 .aviso {
-    background-color: aqua;
-    margin: 10px;
+    background-color: #D0EFDB;
+    margin: 5%;
     padding: 10px;
     display: flex;
     justify-content: space-around;
+    border-radius: 15px;
 }
 
 .info {

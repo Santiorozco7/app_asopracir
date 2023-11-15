@@ -5,6 +5,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './modal-historial.component.html',
   styleUrls: ['./modal-historial.component.css']
 })
+
 export class ModalHistorialComponent {
   @Input() historialVisible: boolean = false;
   @Input() detallesHistorial: any = {};
@@ -13,10 +14,4 @@ export class ModalHistorialComponent {
 
   ngOnChanges() {
   }
-
-  cerrar() {
-    console.log('Cerrando el modal de CrearLoteComponent');
-    this.cerrarHistorial.emit();
-  }
-
 }

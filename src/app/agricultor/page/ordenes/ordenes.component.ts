@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2, ElementRef } from '@angular/core';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
 
@@ -12,7 +12,7 @@ export class OrdenesComponent {
   order: any = {};
   cinta: any[] = [];
 
-  constructor(private service: AgricultorService, private router: Router) {
+  constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
   }
 
   ngOnInit(): void{
@@ -26,13 +26,17 @@ export class OrdenesComponent {
         this.router.navigate(['/']);
       }
       this.ordenes = OD.data;
-      console.log("Estas son las ordenes",OD.data);
       this.service.cinta().subscribe(cintas => {
         this.cinta = cintas.data;
-        console.log("Cintas:",this.cinta);
-        });
+      });
     });
     
+  }
+  
+  getFormattedDate(dateString: string): string {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-ES', options);
   }
 
   // Modal -----------------------------------------------------------
@@ -43,15 +47,15 @@ export class OrdenesComponent {
   mostrarOrder(orderID:string) {
     this.orderID = orderID;
     this.orderVisible = true;
-    console.log(orderID);
     this.service.orden(orderID).subscribe(orden => {
       this.order = orden.data;
-      console.log(this.order);
     })
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
 
   cerrarOrder() {
     this.orderVisible = false;
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
   }
 
   // Crear Orden -------------------------------------------------------
@@ -59,11 +63,10 @@ export class OrdenesComponent {
   
   mostrarCrearOrden(){
     this.createOrderVisible = true;
-    console.log('crearLoteVisible actualizado:', this.createOrderVisible);
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
   cerrarCrearOrden() {
     this.createOrderVisible = false;
-    console.log('crearLoteVisible actualizado:', this.createOrderVisible);
-
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
   }
 }

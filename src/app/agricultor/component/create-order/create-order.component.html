@@ -2,7 +2,7 @@
     <div class="modal-body card">
       <div class="modal-header">
         <h1 class="heading">Crear Orden</h1>
-        <a href="javascript:void(0);" role="button" class="close" (click)="cerrar()"><i class="fa-solid fa-xmark"></i>X</a>
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarCrearOrden.emit()"><i class="fa-solid fa-xmark"></i></a>
       </div>
       <div *ngFor="let cintaItem of ordenFiltrada">
         <div class="info-cinta">

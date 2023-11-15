@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-crear-cinta',
   templateUrl: './crear-cinta.component.html',
@@ -16,7 +15,6 @@ export class CrearCintaComponent {
   @Input() lote: any[] = [];
 
   constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router) {
-    
   }
 
   loteForm = this.formBuilder.group({
@@ -25,10 +23,6 @@ export class CrearCintaComponent {
     variety: ['', [Validators.required]],
     color: ['', [Validators.required]]
   });
-
-  cerrar(): void {
-    this.cerrarCrearcinta.emit();
-  }
 
   onSubmit(): void {
     if (this.loteForm.valid) {
@@ -58,6 +52,4 @@ export class CrearCintaComponent {
     }
     this.cerrarCrearcinta.emit();
   }
-  
-
 }

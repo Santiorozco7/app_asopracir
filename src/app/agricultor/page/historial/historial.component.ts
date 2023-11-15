@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer2, ElementRef } from '@angular/core';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
 
@@ -11,7 +11,7 @@ export class HistorialComponent {
   historial: any[] = [];
   detallesHistorial: any = {};
 
-  constructor(private service: AgricultorService, private router: Router) {
+  constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
   }
 
   ngOnInit(): void{
@@ -25,7 +25,6 @@ export class HistorialComponent {
         this.router.navigate(['/']);
       }
       this.historial = HT.data;
-      console.log("Este es el historial:",HT.data);
     });  
   }
 
@@ -43,10 +42,11 @@ export class HistorialComponent {
   mostrarHistorial(detallesHistorial:string) {
     this.historialVisible = true;
     this.detallesHistorial = detallesHistorial;
-    console.log("Estos son los detalles del historial:", this.detallesHistorial);
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
 
   cerrarHistorial() {
     this.historialVisible = false;
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
   }
 }

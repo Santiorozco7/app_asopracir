@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
@@ -29,7 +29,7 @@ export class EditarEliminarLoteComponent implements OnChanges {
     mainVariety: ['', [Validators.required]]
   });
 
-  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
 
   }
 
@@ -60,7 +60,7 @@ export class EditarEliminarLoteComponent implements OnChanges {
       const mainVariety: string = formData.mainVariety ?? "";
 
       // Llama a mostrarConfirmacion antes de realizar la edición
-      this.mostrarConfirmacion('¿Estás seguro de que deseas editar este lote?', () => {
+      this.mostrarConfirmacion('¿Estás seguro de editar el lote ', this.getSelectedBatchName(), () => {
         this.service.editarLote(this.batchID, batchName, responsible, mainVariety).subscribe(loteEditado => {
           if (loteEditado['state'] === 'Ok') {
             console.log(loteEditado['state']);
@@ -73,11 +73,12 @@ export class EditarEliminarLoteComponent implements OnChanges {
     }
     this.cerrarEditarlote.emit();
     this.cerrarModal.emit();
+    //this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
 
   eliminarLote() {
     // Llama a mostrarConfirmacion antes de realizar la eliminación
-    this.mostrarConfirmacion('¿Estás seguro de que deseas eliminar este lote?', () => {
+    this.mostrarConfirmacion('¿Estás seguro de eliminar el lote: ', this.getSelectedBatchName(), () => {
       this.service.eliminarLote(this.batchID).subscribe(loteEliminado => {
         if (loteEliminado['state'] === 'Ok') {
           console.log(loteEliminado['state']);
@@ -89,15 +90,21 @@ export class EditarEliminarLoteComponent implements OnChanges {
     });
     this.cerrarEditarlote.emit();
     this.cerrarModal.emit();
+    //this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
 
+  getSelectedBatchName(): string {
+    const selectedBatch = this.lote.find(item => item.batchID === this.batchID);
+    return selectedBatch ? selectedBatch.batchName : '';
+  }
+  
   editarEliminar() {
     this.editareliminar = !this.editareliminar;
   }
 
   // Función para mostrar el cuadro de diálogo de confirmación
-  mostrarConfirmacion(mensaje: string, callback: () => void) {
-    this.mensaje = mensaje;
+  mostrarConfirmacion(mensaje: string, batchName: string, callback: () => void) {
+    this.mensaje = `${mensaje} ${batchName} ?`;
     this.mostrarDialogo = true;
     this.confirmCallback = callback; // Almacenamos el callback para llamarlo después
   }
@@ -109,16 +116,38 @@ export class EditarEliminarLoteComponent implements OnChanges {
       this.confirmCallback();
     }
     this.mostrarDialogo = false;
-    this.confirmCallback = null; // Limpia el callback después de ejecutarlo o cancelarlo
+    this.confirmCallback = null; // Limpia el callback después de ejecutarlo o cancelarlo    
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
   }
 
   // Función para cancelar la acción
   cancelarAccion() {
-    // Cancela la acción (si es necesario)
-    // ...
-
     // Restablece confirmCallback a null
     this.confirmCallback = null;
-    this.mostrarDialogo = false;
+    this.mostrarDialogo = false;    
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+  }
+
+  @HostListener('wheel', ['$event'])
+  @HostListener('touchmove', ['$event'])
+  onScroll(event: Event): void {
+    // Verifica si el modal está visible y se está haciendo scroll
+    if (this.mostrarDialogo || this.editarloteVisible) {
+      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      this.mostrarDialogo = false;
+      setTimeout(() => {
+        this.cerrarEditarlote.emit();
+        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      }, 200);
+    }
+  }
+  
+  cerrarDialogo(event: Event): void {
+    // Verifica si el clic se realizó fuera del contenido del modal
+    if (event.target === event.currentTarget) {
+      this.mostrarDialogo = false;
+      this.cerrarEditarlote.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+    }
   }
 }
