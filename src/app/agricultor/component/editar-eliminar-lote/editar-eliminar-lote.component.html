@@ -1,32 +1,49 @@
 <div class="modal-wrapper" [ngClass]="{'mostrar-modal': editarloteVisible}" (click)="cerrarDialogo($event)">
   <div class="modal-body card">
     <div class="modal-header">
-      <button class="edit-delete-button" (click)="editarEliminar()"><i class="edit fa-solid fa-pen fa-xl"></i></button>
-      <h1 class="heading">Editar Lote</h1>
+      <h1 class="heading">{{ accion === 'editar' ? 'Editar Lote' : 'Eliminar Lote' }}</h1>
       <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i></a>
     </div>
-    <div *ngIf="editareliminar">
-      <button (click)="eliminarLote()">
-      <h1>Eliminar Lote</h1>
-      </button>
-      </div>
-    <div *ngIf="!editareliminar">
-      <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="batchName">Nombre del Lote</label>
-          <input type="text" id="batchName" formControlName="batchName" class="form-control" required>
-
+    <div *ngIf="accion === 'eliminar'">
+      <main>
+        <div class="description">
+          <p>Precaución: Eliminar este lote de tu finca significa...</p>
         </div>
-        <div class="form-group">
-          <label for="responsible">Responsable</label>
-          <input type="text" id="responsible" formControlName="responsible" class="form-control" required>
+        <div [formGroup]="deleteBatch" class="delete-input">
+          <label for="eliminarInput">Escribe 'eliminar' para confirmar:</label>
+          <input type="text" id="eliminarInput" formControlName="confirmationText" (input)="onConfirmationTextChange()" autocomplete="off" required>
         </div>
-        <div class="form-group">
-          <label for="mainVariety">Variedad Principal</label>
-          <input type="text" id="mainVariety" formControlName="mainVariety" class="form-control" required>
-        </div>
-        <button type="submit" [disabled]="loteForm.invalid" class="btn btn-primary">Editar Lote</button>
-      </form>
+        <button (click)="eliminarLote()" [disabled]="!deleteBatch.get('confirmationIsValid')?.value" class="delete-edit-button">
+          <div class="items-button">
+            <i [class]="'fa-solid ' + getDeleteButtonIconClass()"></i>
+            {{ getDeleteButtonMessage() }}
+          </div>
+        </button>      
+      </main>
+    </div>
+    <div *ngIf="accion === 'editar'">
+      <main>
+        <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="batchName">Nombre del Lote</label>
+            <input type="text" id="batchName" formControlName="batchName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="responsible">Responsable</label>
+            <input type="text" id="responsible" formControlName="responsible" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="mainVariety">Variedad Principal</label>
+            <input type="text" id="mainVariety" formControlName="mainVariety" class="form-control" required>
+          </div>
+          <button type="submit" [disabled]="!formularioValido" class="delete-edit-button">
+            <div class="items-button">
+              <i [class]="'fa-solid ' + getEditButtonIconClass()"></i>
+              {{ getEditButtonMessage() }}
+            </div>
+          </button>
+        </form>
+      </main>
     </div>
   </div>
 </div>

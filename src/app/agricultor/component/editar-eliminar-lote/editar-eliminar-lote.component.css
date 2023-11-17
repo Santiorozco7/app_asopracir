@@ -60,15 +60,29 @@
     justify-content: space-evenly;
     flex-direction: column;
     padding: 5%;
+    margin: 0 5%;
+    border-radius: 15px;
+    background-color: white;
   }
   
-  .edit-delete-button {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 75px;
-    right: 30px;
+  /* CSS */
+  .delete-edit-button {
+    background-color: #dc3545; /* Color de fondo predeterminado (rojo) */
+    color: #ffffff; /* Color del texto predeterminado (blanco) */
+  }
+
+  .delete-edit-button:disabled {
+    background-color: #e9ecef; /* Color de fondo cuando el botón está deshabilitado */
+    color: #6c757d; /* Color del texto cuando el botón está deshabilitado */
+  }
+
+  .delete-edit-button.valid {
+    background-color: #dc3545; /* Color de fondo cuando la confirmación es válida */
+  }
+
+  .delete-edit-button.invalid {
+    background-color: #e9ecef; /* Color de fondo cuando la confirmación es inválida */
+    color: #6c757d; /* Color del texto cuando la confirmación es inválida */
   }
 
   #graphics-modal,
@@ -118,9 +132,8 @@
     /* Estilos del overlay */
   }
   
-  
   .mostrar-modal  {
-    background-color: rgb(246, 246, 246);
+    background-color: rgba(0, 0, 0, 0.5);
     opacity: 1;
     visibility: visible;
     z-index: 999;
@@ -129,6 +142,8 @@
   .avisoConfirmacion {
     background-color: #1d594f;
   }
+
+  
 
   /* ----------------------------------------- aviso de confirmación ------------------------------------------------------ */
 

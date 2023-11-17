@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-modal-order',
@@ -14,6 +14,9 @@ export class ModalOrderComponent {
   paso:string = "";
 
   @Output() cerrarOrder = new EventEmitter<void>();
+
+  constructor(private renderer: Renderer2, private el: ElementRef) {
+  }
 
   ngOnChanges() {
     this.state = Number(this.order.state); // Convierte el valor de "state" a número
@@ -36,6 +39,27 @@ export class ModalOrderComponent {
         return 'Pagada';
       default:
         return 'En espera de agendar';
+    }
+  }
+
+  @HostListener('wheel', ['$event'])
+  @HostListener('touchmove', ['$event'])
+  onScroll(event: Event): void {
+    // Verifica si el modal está visible y se está haciendo scroll
+    if (this.orderVisible) {
+      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      setTimeout(() => {
+        this.cerrarOrder.emit();
+        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      }, 200);
+    }
+  }
+  
+  cerrarDialogo(event: Event): void {
+    // Verifica si el clic se realizó fuera del contenido del modal
+    if (event.target === event.currentTarget) {
+      this.cerrarOrder.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
     }
   }
 }

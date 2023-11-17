@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, Renderer2, ElementRef, HostListener } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
 
@@ -16,11 +16,14 @@ export class EditarEliminarLoteComponent implements OnChanges {
   @Output() cerrar = new EventEmitter<void>();
   @Input() lote: any[] = [];
   @Input() batchID: string = "";
+  @Input() accion: string = "";  // Nueva entrada para recibir la acción
   editareliminar: boolean = false;
+  formularioValido = false;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
   mensaje = '';
+  originData: any;
   confirmCallback: (() => void) | null = null;
 
   loteForm = this.formBuilder.group({
@@ -29,8 +32,28 @@ export class EditarEliminarLoteComponent implements OnChanges {
     mainVariety: ['', [Validators.required]]
   });
 
-  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
+  deleteBatch = this.formBuilder.group({
+    confirmationText: [
+      '',
+      [Validators.required, (control: AbstractControl) => (control.value && control.value.toLowerCase() === 'eliminar' ? null : { incorrectConfirmation: true })],
+    ],
+    confirmationIsValid: [false],
+  });
 
+  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
+    this.loteForm.valueChanges.subscribe(() => {
+      this.actualizarEstadoFormulario();
+    });
+  }
+
+  private actualizarEstadoFormulario(): void {
+    const currentFormValues = this.loteForm.value;
+
+    this.formularioValido = (
+      currentFormValues.batchName !== this.originData.batchName ||
+      currentFormValues.responsible !== this.originData.responsible ||
+      currentFormValues.mainVariety !== this.originData.mainVariety
+    ) && this.loteForm.valid;
   }
 
   cerrarTodo() {
@@ -40,20 +63,20 @@ export class EditarEliminarLoteComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     // Detecta cambios en batchID y actualiza el formulario cuando coincida con itemLote.
-    if (changes['batchID'] && this.lote && this.lote.length > 0) {
-      const itemLote = this.lote.find(item => item['batchID'] === this.batchID);
-      if (itemLote) {
-        this.loteForm.patchValue({
-          batchName: itemLote.batchName,
-          responsible: itemLote.responsible,
-          mainVariety: itemLote.mainVariety
-        });
-      }
+    const itemLote = this.lote.find(item => item['batchID'] === this.batchID);
+    if (itemLote) {
+      this.originData = {...itemLote};
+      this.loteForm.patchValue({
+        batchName: itemLote.batchName,
+        responsible: itemLote.responsible,
+        mainVariety: itemLote.mainVariety
+      });
     }
+  
   }
 
   onSubmit(): void {
-    if (this.loteForm.valid) {
+    if (this.loteForm.valid && this.accion === 'editar') {
       const formData = this.loteForm.value;
       const batchName: string = formData.batchName ?? "";
       const responsible: string = formData.responsible ?? "";
@@ -77,20 +100,44 @@ export class EditarEliminarLoteComponent implements OnChanges {
   }
 
   eliminarLote() {
-    // Llama a mostrarConfirmacion antes de realizar la eliminación
-    this.mostrarConfirmacion('¿Estás seguro de eliminar el lote: ', this.getSelectedBatchName(), () => {
-      this.service.eliminarLote(this.batchID).subscribe(loteEliminado => {
-        if (loteEliminado['state'] === 'Ok') {
-          console.log(loteEliminado['state']);
-          this.cerrar.emit();
-          this.loteEditado.emit();
-          this.cerrarModal.emit();
-        }
-      });
+    this.deleteBatch.reset();
+    this.service.eliminarLote(this.batchID).subscribe(loteEliminado => {
+      if (loteEliminado['state'] === 'Ok') {
+        console.log(loteEliminado['state']);
+        this.cerrar.emit();
+        this.loteEditado.emit();
+        this.cerrarModal.emit();
+      }
     });
+    
     this.cerrarEditarlote.emit();
     this.cerrarModal.emit();
     //this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
+  }
+
+  onConfirmationTextChange(): void {
+    const confirmationTextControl = this.deleteBatch.get('confirmationText');
+    if (confirmationTextControl) {
+      this.deleteBatch.patchValue({
+        confirmationIsValid: confirmationTextControl.valid,
+      });
+    }
+  }
+  
+  getDeleteButtonMessage(): string {
+    return this.deleteBatch.get('confirmationIsValid')?.value ? 'Eliminar lote permanentemente' : 'Bloqueado';
+  }
+  
+  getDeleteButtonIconClass(): string {
+    return this.deleteBatch.get('confirmationIsValid')?.value ? 'fa-triangle-exclamation' : 'fa-lock';
+  }
+
+  getEditButtonMessage(): string {
+    return this.formularioValido ? 'Editar este lote' : 'Bloqueado';
+  }
+
+  getEditButtonIconClass(): string {
+    return this.formularioValido? 'fa-triangle-exclamation' : 'fa-lock';
   }
 
   getSelectedBatchName(): string {

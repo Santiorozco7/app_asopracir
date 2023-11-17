@@ -16,6 +16,7 @@ export class LotesComponent {
   lote: any[] = [];
   cinta: any[] = [];
   primeraCintaPorLote: any[] = [];
+  accionSeleccionada: string = "";
   
   constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
   }
@@ -52,6 +53,12 @@ export class LotesComponent {
     return this.primeraCintaPorLote.find(cinta => cinta.batchID === batchID) || {};
   }
   
+  // Función para manejar la acción seleccionada
+  manejarAccion(accion: string): void {
+    console.log(accion);
+    this.accionSeleccionada = accion;
+  }
+  
   // Modal -----------------------------------------------------------
   modalVisible = false;
   batchID?: any;
@@ -85,9 +92,11 @@ export class LotesComponent {
   
   mostrarCrearcinta(){
     this.crearCintaVisible = true;
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
   }
   cerrarCrearcinta() {
     this.crearCintaVisible = false;
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
   }
 
   //Editar lote ---------------------------------------------------------

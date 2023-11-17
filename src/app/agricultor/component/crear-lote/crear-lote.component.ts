@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ export class CrearLoteComponent {
   @Output() loteCreado = new EventEmitter<void>();
   @Output() cerrarCrearlote = new EventEmitter<void>();
 
-  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
   }
 
   loteForm = this.formBuilder.group({
@@ -39,5 +39,26 @@ export class CrearLoteComponent {
       });
     }
     this.cerrarCrearlote.emit();
+  }
+
+  @HostListener('wheel', ['$event'])
+  @HostListener('touchmove', ['$event'])
+  onScroll(event: Event): void {
+    // Verifica si el modal está visible y se está haciendo scroll
+    if (this.crearLoteVisible) {
+      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      setTimeout(() => {
+        this.cerrarCrearlote.emit();
+        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      }, 200);
+    }
+  }
+  
+  cerrarDialogo(event: Event): void {
+    // Verifica si el clic se realizó fuera del contenido del modal
+    if (event.target === event.currentTarget) {
+      this.cerrarCrearlote.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+    }
   }
 }

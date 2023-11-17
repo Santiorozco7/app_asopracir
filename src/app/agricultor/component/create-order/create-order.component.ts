@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { AgricultorService } from '../../agricultor.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class CreateOrderComponent {
   @Output() cerrarCrearOrden = new EventEmitter<void>();
   @Output() actualizarOrden = new EventEmitter<void>();
 
-  constructor(private service: AgricultorService) {
+  constructor(private service: AgricultorService, private renderer: Renderer2, private el: ElementRef) {
   }
 
   ngOnChanges() {
@@ -54,5 +54,26 @@ export class CreateOrderComponent {
         this.actualizarOrden.emit();
       }
     })
+  }
+
+  @HostListener('wheel', ['$event'])
+  @HostListener('touchmove', ['$event'])
+  onScroll(event: Event): void {
+    // Verifica si el modal está visible y se está haciendo scroll
+    if (this.createOrderVisible) {
+      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      setTimeout(() => {
+        this.cerrarCrearOrden.emit();
+        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      }, 200);
+    }
+  }
+  
+  cerrarDialogo(event: Event): void {
+    // Verifica si el clic se realizó fuera del contenido del modal
+    if (event.target === event.currentTarget) {
+      this.cerrarCrearOrden.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+    }
   }
 }

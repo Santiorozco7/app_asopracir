@@ -1,4 +1,4 @@
-<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': orderVisible }">
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': orderVisible }" (click)="cerrarDialogo($event)">
   <div class="modal-body card">
     <div class="modal-header">
       <h1 class="heading">Detalles de la Orden</h1>

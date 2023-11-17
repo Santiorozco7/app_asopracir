@@ -21,7 +21,7 @@
   </div>
 </section>
 
-<app-modal-lotes [modalVisible]="modalVisible" [cinta]="cinta" [lote]="lote" [batchID]="batchID" (editarLote)="mostrarEditarlote($event)" (cerrarModal)="cerrarModal()"></app-modal-lotes>
+<app-modal-lotes [modalVisible]="modalVisible" [cinta]="cinta" [lote]="lote" [batchID]="batchID" (editarLote)="mostrarEditarlote($event)" (cerrarModal)="cerrarModal()" (accionSeleccionada)="manejarAccion($event)"></app-modal-lotes>
 
 <div id="container-floating">
   <a class="nd3 nds" href="javascript:void(0);" (click)="mostrarCrearlote()">
@@ -44,4 +44,4 @@
 
 <app-crear-cinta (cintaCreada)="View()" [crearCintaVisible]="crearCintaVisible" [lote]="lote" (cerrarCrearcinta)="cerrarCrearcinta()"></app-crear-cinta>
 
-<app-editar-eliminar-lote (loteEditado)="View()" (loteEditado)="cerrarEditarlote()"  (cerrarModal)="cerrarModal()" [lote]="lote" [batchID]="batchID" [editarloteVisible]="editarloteVisible" (cerrarEditarlote)="cerrarEditarlote()"></app-editar-eliminar-lote>
+<app-editar-eliminar-lote (loteEditado)="View()" (loteEditado)="cerrarEditarlote()" (cerrarModal)="cerrarModal()" [lote]="lote" [batchID]="batchID" [editarloteVisible]="editarloteVisible" (cerrarEditarlote)="cerrarEditarlote()" [accion]="accionSeleccionada"></app-editar-eliminar-lote>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ export class CrearCintaComponent {
   @Output() cerrarCrearcinta = new EventEmitter<void>();
   @Input() lote: any[] = [];
 
-  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
   }
 
   loteForm = this.formBuilder.group({
@@ -46,10 +46,28 @@ export class CrearCintaComponent {
           this.cintaCreada.emit(); // Envia el evento al componente de Lotes
         }
       });
-  
-      // Aquí puedes enviar los datos al servidor (usando HttpClient, por ejemplo) para crear el nuevo lote.
-      // También puedes agregar lógica de manejo de errores y respuestas del servidor.
     }
     this.cerrarCrearcinta.emit();
+  }
+
+  @HostListener('wheel', ['$event'])
+  @HostListener('touchmove', ['$event'])
+  onScroll(event: Event): void {
+    // Verifica si el modal está visible y se está haciendo scroll
+    if (this.crearCintaVisible) {
+      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      setTimeout(() => {
+        this.cerrarCrearcinta.emit();
+        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      }, 200);
+    }
+  }
+  
+  cerrarDialogo(event: Event): void {
+    // Verifica si el clic se realizó fuera del contenido del modal
+    if (event.target === event.currentTarget) {
+      this.cerrarCrearcinta.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+    }
   }
 }

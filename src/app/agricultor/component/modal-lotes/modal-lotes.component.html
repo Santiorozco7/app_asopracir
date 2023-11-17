@@ -1,4 +1,4 @@
-<div class="modal-wrapper" [ngClass]="{'mostrar-modal': modalVisible}" (click)="closeModal($event)">
+<div class="modal-wrapper" [ngClass]="{'mostrar-modal': modalVisible}">
   <div class="modal-body card">
       <div class="modal-header">
         <h1 class="heading">Cintas - {{getSelectedBatchName()}}</h1>
@@ -15,6 +15,21 @@
           </div>
         </div>
       </div>
-      <button class="edit-button" (click)="editarLote.emit(batchID)"><i class="edit fa-solid fa-pen fa-xl"></i></button>
+      
+      <div class="button-container" [ngClass]="{'overlay': menuVisible}" (click)="closeButton($event)">
+        <button class="edit-button" (click)="toggleMenu()">
+          <i class="edit fa-solid fa-pen fa-xl"></i>
+          <div *ngIf="menuVisible" class="menu-options">
+            <div (click)="emitirAccion('editar', batchID)">
+              <span>Editar</span>
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div (click)="emitirAccion('eliminar', batchID)">
+              <span>Eliminar</span>
+              <i class="fa-solid fa-trash"></i>
+            </div>
+          </div>
+        </button>
+      </div>
     </div>
   </div>  
