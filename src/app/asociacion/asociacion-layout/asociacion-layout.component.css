@@ -1,0 +1,22 @@
+/* Estilos para el layout principal */
+.layout {
+    display: grid;
+    grid-template-columns: 200px 1fr; /* Columnas: barra lateral de 200px y contenido principal restante */
+    grid-template-rows: auto;
+    grid-template-areas: "nav main"; /* Áreas del diseño */
+    min-height: 100vh; /* Altura mínima para ocupar la pantalla completa */
+}
+
+/* Estilos para la barra lateral (nav) */
+nav {
+    grid-area: nav;
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+
+/* Estilos para el contenido principal (main) */
+main {
+    grid-area: main;
+    padding: 20px;
+}

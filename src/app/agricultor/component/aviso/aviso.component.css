@@ -1,0 +1,17 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.aviso {
+    background-color: #D0EFDB;
+    margin: 5%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 15px;
+}
+
+.info {
+    text-align: center;
+}

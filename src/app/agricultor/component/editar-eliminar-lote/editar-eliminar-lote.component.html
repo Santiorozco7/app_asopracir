@@ -1,0 +1,61 @@
+<div class="modal-wrapper" [ngClass]="{'mostrar-modal': editarloteVisible}" (click)="cerrarDialogo($event)">
+  <div class="modal-body card">
+    <div class="modal-header">
+      <h1 class="heading">{{ accion === 'editar' ? 'Editar Lote' : 'Eliminar Lote' }}</h1>
+      <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i></a>
+    </div>
+    <div *ngIf="accion === 'eliminar'">
+      <main>
+        <div class="description">
+          <p>Precaución: Eliminar este lote de tu finca significa...</p>
+        </div>
+        <div [formGroup]="deleteBatch" class="delete-input">
+          <label for="eliminarInput">Escribe 'eliminar' para confirmar:</label>
+          <input type="text" id="eliminarInput" formControlName="confirmationText" (input)="onConfirmationTextChange()" autocomplete="off" required>
+        </div>
+        <button (click)="eliminarLote()" [disabled]="!deleteBatch.get('confirmationIsValid')?.value" class="delete-edit-button">
+          <div class="items-button">
+            <i [class]="'fa-solid ' + getDeleteButtonIconClass()"></i>
+            {{ getDeleteButtonMessage() }}
+          </div>
+        </button>      
+      </main>
+    </div>
+    <div *ngIf="accion === 'editar'">
+      <main>
+        <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="batchName">Nombre del Lote</label>
+            <input type="text" id="batchName" formControlName="batchName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="responsible">Responsable</label>
+            <input type="text" id="responsible" formControlName="responsible" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="mainVariety">Variedad Principal</label>
+            <input type="text" id="mainVariety" formControlName="mainVariety" class="form-control" required>
+          </div>
+          <button type="submit" [disabled]="!formularioValido" class="delete-edit-button">
+            <div class="items-button">
+              <i [class]="'fa-solid ' + getEditButtonIconClass()"></i>
+              {{ getEditButtonMessage() }}
+            </div>
+          </button>
+        </form>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div class="custom-dialog" *ngIf="mostrarDialogo" (click)="cerrarDialogo($event)">
+  <div class="dialog-content">
+    <div class="dialoh-header">
+      <p>{{ mensaje }}</p>
+    </div>
+    <div class="dialog-options">
+      <button (click)="confirmarAccion()">Aceptar</button>
+      <button (click)="cancelarAccion()">Cancelar</button>
+    </div>
+  </div>
+</div>

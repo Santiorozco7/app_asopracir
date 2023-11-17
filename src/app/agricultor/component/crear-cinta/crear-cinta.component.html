@@ -1,0 +1,32 @@
+<div class="modal-wrapper" [ngClass]="{'mostrar-modal': crearCintaVisible}" (click)="cerrarDialogo($event)">
+    <div class="modal-body card">
+      <div class="modal-header">
+        <h1 class="heading">Nuevo Lote</h1>
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarCrearcinta.emit()"><i class="fa-solid fa-xmark"></i></a>
+      </div>
+      
+      <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="batchID">Seleccionar Lote</label>
+          <!-- <input type="number" id="batchID" formControlName="batchID" class="form-control" required> -->
+          <select name="batchID" id="batchID" formControlName="batchID" required>
+            <option *ngFor="let item of lote" [value]="item.batchID">{{ item.batchName }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="numBunches">Número de racimos</label>
+          <input type="number" id="numBunches" formControlName="numBunches" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="variety">Variedad</label>
+          <input type="text" id="variety" formControlName="variety" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="color">Color de encinte</label>
+            <input type="color" id="color" formControlName="color" class="form-control" value="" required>
+          </div>
+        <button type="submit" [disabled]="loteForm.invalid" class="btn btn-primary">Crear Cinta</button>
+      </form>  
+    </div>
+  </div>
+  

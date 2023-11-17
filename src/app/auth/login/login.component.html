@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-body">
+      <form [formGroup]="formUser" (ngSubmit)="login()">
+        <div class="mb-2">
+          <label class="form-label">Numero de documento</label>
+          <input type="number" formControlName="documento" class="form-control" placeholder="Por favor ingrese su email"/>
+          <div class="alert alert-danger mt-2" [hidden]="formUser.get('documento')?.valid || formUser.get('documento')?.pristine">
+            <span *ngIf="formUser.get('documento')?.errors?.['required']">
+              El usuario es obligatorio
+            </span>
+            <!-- <span *ngIf="formUser.get('email')?.errors?.['email']">
+              El email debe ser válido
+            </span> -->
+          </div>
+        </div>
+  
+        <div class="mb-2">
+          <label class="form-label">Contraseña</label>
+          <input type="password" formControlName="password" class="form-control" placeholder="Por favor ingrese su contraseña"/>
+          <div class="alert alert-danger mt-2" [hidden]="password.valid || password.pristine">
+            <span *ngIf="password.errors?.['required']">
+              La contraseña es obligatoria
+            </span>
+          </div>
+        </div>
+
+        <span *ngIf="err">Documeto o contraseña invalido</span>
+
+        <button class="btn btn-primary" [disabled]="formUser.invalid">Enviar</button>
+      </form>
+    </div>
+  </div>
+  
+  {{ formUser.value | json }}
+  <!-- {{ formUser.get("email")?.value }} -->
+  

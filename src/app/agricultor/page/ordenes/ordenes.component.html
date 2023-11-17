@@ -1,0 +1,30 @@
+<section>
+  <div class="produccion">
+    <div class="tarjeta" *ngFor="let item of ordenes">
+      <a href="javascript:void(0);" (click)="mostrarOrder(item.orderID)">
+        <h2>{{ getFormattedDate(item.startDate) }}</h2>
+        <ul>
+          <li><i class="fa-solid fa-sun-plant-wilt"></i><span class="truncate-text">{{ item.batchName || '------------' }}</span></li>
+          <li><i><img src="../../../../assets/fontawesome/platano.png"></i><span class="truncate-text">{{ item.estBunches || '------------' }} Racimos</span></li>
+          <li><i class="fa-solid fa-user"></i><span class="truncate-text">{{ item.signedBy || '------------' }}</span></li>
+        </ul>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="container-floating"> 
+  <a class="nd1 nds" href="javascript:void(0);" (click)="mostrarCrearOrden()">
+    <i class="fa-solid fa-handshake fa-xl reminder"></i>
+    <span class="text">Crear Orden</span>
+  </a>
+
+  <a id="floating-button">
+    <i class="plus fa-solid fa-plus fa-xl"></i>
+    <i class="edit fa-solid fa-pen fa-xl"></i>
+  </a>
+</div>
+
+<app-modal-order [orderVisible]="orderVisible" [order]="order" [orderID]="orderID" (cerrarOrder)="cerrarOrder()"></app-modal-order>
+
+<app-create-order [createOrderVisible]="createOrderVisible" [cinta]="cinta" [ordenes]="ordenes" (cerrarCrearOrden)="cerrarCrearOrden()" (actualizarOrden)="View()"></app-create-order>

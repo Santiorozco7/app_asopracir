@@ -1,0 +1,102 @@
+<div class="header">
+    <h1>Ordenes</h1>
+    <!-- <a href="javascript:void(0);" (click)="mostrarcreateVehicle()">Crear Vehículo</a> -->
+</div>
+
+<h2>Órdenes pendientes por programar ruta de recolección</h2>
+
+<table class="farm-table">
+    <thead>
+        <tr>
+            <th>Fecha Orden</th>
+            <th>Finca</th>
+            <th>Vereda</th>
+            <th>Cantidad Racimos</th>
+            <th>Nombre Agricultor</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let Transporter of Transporters">
+            <td>{{ Transporter.valid }}</td>
+            <td>{{ Transporter.plate }}</td>
+            <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
+            <td>{{ Transporter.docNumber }}</td>
+            <td>{{ typeSelect[Transporter.type] }}</td>
+            <td>{{ Transporter.capacity }}</td>
+            <td>{{ Transporter.phoneNumber }}</td>
+            <td>
+                <a href="javascript:void(0);">
+                    Editar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Futuras cosechas sin generar orden ni ruta</h2>
+
+<table class="farm-table">
+    <thead>
+        <tr>
+            <th>Fecha Embolsada</th>
+            <th>Finca</th>
+            <th>Vereda</th>
+            <th>Cantidad Racimos</th>
+            <th>Nombre Agricultor</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let Transporter of Transporters">
+            <td>{{ Transporter.valid }}</td>
+            <td>{{ Transporter.plate }}</td>
+            <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
+            <td>{{ Transporter.docNumber }}</td>
+            <td>{{ typeSelect[Transporter.type] }}</td>
+            <td>{{ Transporter.capacity }}</td>
+            <td>{{ Transporter.phoneNumber }}</td>
+            <td>
+                <a href="javascript:void(0);">
+                    Editar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Órdenes programadas</h2>
+
+<table class="farm-table">
+    <thead>
+        <tr>
+            <th>Estado</th>
+            <th>Fecha Orden</th>
+            <th>Finca</th>
+            <th>Vereda</th>
+            <th>Cantidad Racimos</th>
+            <th>Nombre Agricultor</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let Transporter of Transporters">
+            <td>{{ Transporter.valid }}</td>
+            <td>{{ Transporter.plate }}</td>
+            <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
+            <td>{{ Transporter.docNumber }}</td>
+            <td>{{ typeSelect[Transporter.type] }}</td>
+            <td>{{ Transporter.capacity }}</td>
+            <td>{{ Transporter.phoneNumber }}</td>
+            <td>{{ Transporter.phoneNumber }}</td>
+            <td>
+                <a href="javascript:void(0);">
+                    Editar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

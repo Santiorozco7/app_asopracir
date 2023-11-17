@@ -1,0 +1,38 @@
+<div class="header">
+    <h1>Transportador</h1>
+    <a href="javascript:void(0);" (click)="mostrarcreateVehicle()">Crear Vehículo</a>
+</div>
+<table class="farm-table">
+    <thead>
+        <tr>
+            <th>Estado</th>
+            <th>Placa</th>
+            <th>Propietario</th>
+            <th>No. Cedula</th>
+            <th>Tipo de vehiculo</th>
+            <th>Capacidad (T)</th>
+            <th>Celular</th>
+            <th>Correo electrónico</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let Transporter of Transporters">
+            <td>{{ Transporter.valid }}</td>
+            <td>{{ Transporter.plate }}</td>
+            <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
+            <td>{{ Transporter.docNumber }}</td>
+            <td>{{ typeSelect[Transporter.type] }}</td>
+            <td>{{ Transporter.capacity }}</td>
+            <td>{{ Transporter.phoneNumber }}</td>
+            <td>{{ Transporter.email }}</td>
+            <td>
+                <a href="javascript:void(0);" (click)="mostrarModal(Transporter.docNumber,Transporter.docType,Transporter.plate)">
+                    Editar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<app-modal-transport [modalVisible]="modalVisible" (cerrarModal)="cerrarModal()" (cerrarActualizar)="View()" [modalData]="modalData"></app-modal-transport>
+<app-create-vehicle [createVehicleVisible]="createVehicleVisible" (cerrarcreateVehicle)="cerrarcreateVehicleVisible()" (cerrarActualizar)="View()"></app-create-vehicle>

@@ -1,0 +1,35 @@
+<div class="modal-wrapper" [ngClass]="{'mostrar-modal': modalVisible}">
+  <div class="modal-body card">
+      <div class="modal-header">
+        <h1 class="heading">Cintas - {{getSelectedBatchName()}}</h1>
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarModal.emit()"><i class="fa-solid fa-xmark"></i></a>
+      </div>
+      <div class="tapes-section">
+        <div *ngFor="let cintaItem of getFilteredCintas()">
+          <div class="info-cinta">
+            <div class="color-cinta" [style.background-color]="cintaItem.color"></div>
+            <div class="tipo-platano">{{ cintaItem.variety }}</div>
+            <div class="cantidad-platano">{{ cintaItem.numBunches }}</div>
+            <div class="fecha-inicio">{{ cintaItem.startDate }}</div>
+            <div class="fecha-final">{{ cintaItem.endDate }}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="button-container" [ngClass]="{'overlay': menuVisible}" (click)="closeButton($event)">
+        <button class="edit-button" (click)="toggleMenu()">
+          <i class="edit fa-solid fa-pen fa-xl"></i>
+          <div *ngIf="menuVisible" class="menu-options">
+            <div (click)="emitirAccion('editar', batchID)">
+              <span>Editar</span>
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div (click)="emitirAccion('eliminar', batchID)">
+              <span>Eliminar</span>
+              <i class="fa-solid fa-trash"></i>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>  

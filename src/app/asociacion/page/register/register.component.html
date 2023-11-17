@@ -1,0 +1,168 @@
+<div class="modal-wrapper">
+  <div class="modal-body card">
+    <div class="modal-header">
+      <h1 class="heading">Nuevo Usuario</h1>
+    </div>
+    
+    <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+      <div class="infoUser">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" formControlName="name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="firstLastname">Primer Apellido</label>
+          <input type text id="firstLastname" formControlName="firstLastname" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="docType">Tipo de documento</label>
+          <select name="docType" id="docType" formControlName="docType" required>
+            <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="docNumber">Numero de documento</label>
+          <input type="number" id="docNumber" formControlName="docNumber" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="secondLastname">Segundo Apellido (Opcional)</label>
+          <input type="text" id="secondLastname" formControlName="secondLastname" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="docIssueDate">Fecha de Expedición de Documento (Opcional)</label>
+          <input type="date" id="docIssueDate" formControlName="docIssueDate" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="docIssuePlace">Lugar de Expedición de Documento (Opcional)</label>
+          <input type="text" id="docIssuePlace" formControlName="docIssuePlace" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="birthday">Fecha de Nacimiento (Opcional)</label>
+          <input type="date" id="birthday" formControlName="birthday" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="address">Dirección (Opcional)</label>
+          <input type="text" id="address" formControlName="address" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="city">Ciudad (Opcional)</label>
+          <input type="text" id="city" formControlName="city" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Número de Teléfono (Opcional)</label>
+          <input type="number" id="phoneNumber" formControlName="phoneNumber" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="altPhoneNumber">Número de Teléfono Alternativo (Opcional)</label>
+          <input type="number" id="altPhoneNumber" formControlName="altPhoneNumber" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="email">Correo Electrónico (Opcional)</label>
+          <input type="email" id="email" formControlName="email" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="bankAccountBName">Nombre del Banco (Opcional)</label>
+          <input type="text" id="bankAccountBName" formControlName="bankAccountBName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="bankAccountType">Tipo de Cuenta Bancaria (Opcional)</label>
+          <select name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
+            <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bankAccountNumber">Número de Cuenta Bancaria (Opcional)</label>
+          <input type="number" id="bankAccountNumber" formControlName="bankAccountNumber" class="form-control">
+        </div>
+      </div>
+
+      <h2>Registrar</h2>
+      <select name="select" id="userType" (change)="onSelectUserType($event)">
+        <option value="0">Agricultor</option>
+        <option value="1">Transportador</option>
+      </select>
+
+      <!-- Crear Agricultor -->
+      <div class="infoFarm" *ngIf="selectRegister">
+        <h2>Información de la finca</h2>
+        <div class="form-group">
+          <label for="farmName">Nombre de la Granja</label>
+          <input type="text" id="farmName" formControlName="farmName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="zoneName">Nombre de la Zona</label>
+          <input type="text" id="zoneName" formControlName="zoneName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="cityFarm">Ciudad de la Granja</label>
+          <input type="text" id="cityFarm" formControlName="cityFarm" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="area">Área de la Granja</label>
+          <input type="text" id="area" formControlName="area" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="GPSposition">Posición GPS</label>
+          <input type="text" id="GPSposition" formControlName="GPSposition" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="fileOwnerCertificate">Certificado de Propiedad (Opcional)</label>
+          <input type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate" class="form-control">
+        </div>        
+      </div>
+
+      <!-- Crear Transportador -->
+      <div class="infoTransport" *ngIf="!selectRegister">
+        <h2>Información del transportador</h2>
+        <div class="form-group">
+          <label for="licenseExpiration">Fecha de expedición de la Licencia</label>
+          <input type="date" id="licenseExpiration" formControlName="licenseExpiration" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="licenseType">Tipo de Licencia</label>
+          <input type="text" id="licenseType" formControlName="licenseType" class="form-control">
+        </div>    
+      
+        <div class="form-group">
+          <label for="plate">Placa</label>
+          <input type="text" id="plate" formControlName="plate" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="soatExpiration">Vencimiento de SOAT</label>
+          <input type="date" id="soatExpiration" formControlName="soatExpiration" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="techExpiration">Vencimiento de Revisión Técnico-Mecánica</label>
+          <input type="date" id="techExpiration" formControlName="techExpiration" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="type">Tipo</label>
+            <select name="docType" id="type" formControlName="type">
+              <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="state">Estado</label>
+            <select name="docType" id="state" formControlName="state">
+              <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+          <label for="capacity">Capacidad (T)</label>
+          <input type="number" id="capacity" formControlName="capacity" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="comments">Comentarios</label>
+          <input type="text" id="comments" formControlName="comments" class="form-control">
+        </div>
+      </div>
+      
+      <button type="submit" [disabled]="loteForm.invalid" class="btn btn-primary">
+        <div *ngIf="selectRegister">Crear Agricultor</div>
+        <div *ngIf="!selectRegister">Crear Transportador</div>
+      </button>
+    </form>
+
+    {{ loteForm.value | json }}
+  </div>
+</div>

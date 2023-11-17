@@ -1,0 +1,17 @@
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': createOrderVisible }" (click)="cerrarDialogo($event)">
+    <div class="modal-body card">
+      <div class="modal-header">
+        <h1 class="heading">Crear Orden</h1>
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarCrearOrden.emit()"><i class="fa-solid fa-xmark"></i></a>
+      </div>
+      <div *ngFor="let cintaItem of ordenFiltrada">
+        <div class="info-cinta">
+          <div class="color-cinta" [style.background-color]="cintaItem.color"></div>
+          <div class="tipo-platano">{{ cintaItem.variety }}</div>
+          <div class="cantidad-platano">{{ cintaItem.numBunches }}</div>
+          <div class="fecha-final">{{ cintaItem.endDate }}</div>
+          <div><button (click)="agregarOrden(cintaItem.tapeID)">Agregar Orden</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
