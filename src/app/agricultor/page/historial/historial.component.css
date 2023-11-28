@@ -64,7 +64,8 @@ button {
   height: 85px;
   width: 85px;
   border-radius: 50%;
-  border: 1px solid #000; /* Borde sólido de 1 px */
+  mix-blend-mode: darken;
+  border: 1px solid #000; 
 }
 
 .circuloNumBunches {

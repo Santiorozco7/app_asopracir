@@ -1,17 +1,29 @@
 * {
     padding: 0;
     margin: 0;
-}
-
-.aviso {
-    background-color: #D0EFDB;
+  }
+  
+  .alert {
+    background-color: #e2f6e7;
     margin: 5%;
     padding: 10px;
     display: flex;
     justify-content: space-around;
     border-radius: 15px;
-}
-
-.info {
-    text-align: center;
-}
+  }
+  
+  .alert__item:nth-child(2) {
+    border-inline: 1px solid gray;
+    padding-inline: 1rem;
+  }
+  
+  .alert__title {
+    font-size: 1rem;
+    color: #296c3c;
+  }
+  
+  .alert__text {
+    font-size: 1.3rem;
+    color: #296c3c;
+  }
+  

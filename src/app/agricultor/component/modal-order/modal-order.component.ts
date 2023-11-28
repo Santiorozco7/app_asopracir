@@ -26,19 +26,19 @@ export class ModalOrderComponent {
   getTextForState(state: number): string {
     switch (state) {
       case 1:
-        return 'Agendada';
+        return 'Tu cosecha ha sido <strong> agendada</strong>';
       case 2:
-        return 'En ruta';
+        return 'Tu cosecha está en <strong> ruta</strong>';
       case 3:
-        return 'En recolección';
+        return 'Tu cosecha está en <strong> recolección</strong>';
       case 4:
-        return 'Recogida';
+        return 'Tu cosecha ha sido <strong> recogida</strong>';
       case 5:
-        return 'Facturada';
+        return 'Tu cosecha ha sido <strong> facturada</strong>';
       case 6:
-        return 'Pagada';
+        return 'Tu cosecha ha sido <strong> pagada</strong>';
       default:
-        return 'En espera de agendar';
+        return 'Tu cosecha está <strong> en espera de agendar</strong>';
     }
   }
 

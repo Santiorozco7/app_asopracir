@@ -46,13 +46,17 @@
         <input class="form__input input--truncated" id="transporter" [value]="order.transporter" disabled>
       </div>
     </div>  
-    <div class="alertaProgreso">
-      <span>{{step}}</span>
-    </div>
-    <div class="progress-bar">
-      <div *ngFor="let step of [1,2,3,4,5,6]" class="step" [ngClass]="{'active': step <= state, 'current': step === state}">
-        <span>{{ step }}</span>
-      </div>
+    <div class="step-progress">
+      <div class="alertaProgreso" [innerHTML]="step"></div>
+      <div class="progress-bar">
+        <ng-container *ngFor="let step of [1,2,3,4,5,6]; let last = last">
+          <div class="step" [ngClass]="{'active': step <= state, 'current': step === state}">
+            <span>{{ step }}</span>
+          </div>
+          <div class="line" *ngIf="!last" [ngClass]="{'active': step < state, 'current': step === state - 1}">
+          </div>
+        </ng-container>
+      </div>    
     </div>
   </div>
 </div>
