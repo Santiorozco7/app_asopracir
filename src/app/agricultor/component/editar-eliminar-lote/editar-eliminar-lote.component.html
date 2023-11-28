@@ -1,61 +1,84 @@
-<div class="modal-wrapper" [ngClass]="{'mostrar-modal': editarloteVisible}" (click)="cerrarDialogo($event)">
-  <div class="modal-body card">
-    <div class="modal-header">
-      <h1 class="heading">{{ accion === 'editar' ? 'Editar Lote' : 'Eliminar Lote' }}</h1>
-      <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i></a>
+<div class="modal" [ngClass]="{'modal--show': manageBatch}" (click)="closeDialog($event)"
+  [attr.aria-hidden]="!manageBatch"
+  [attr.aria-modal]="manageBatch ? 'true' : 'false'" role="dialog" aria-labelledby="modalTitle">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h1 class="modal__heading" id="modalTitle">{{ getModalTitle() }}</h1>
+      <a  class="modal__close" href="javascript:void(0);" role="button" (click)="closeManageBatch.emit()" aria-label="Cerrar modal">
+        <i class="close__icon fa-solid fa-xmark" aria-hidden="true"></i>
+      </a>
     </div>
-    <div *ngIf="accion === 'eliminar'">
-      <main>
-        <div class="description">
-          <p>Precaución: Eliminar este lote de tu finca significa...</p>
-        </div>
-        <div [formGroup]="deleteBatch" class="delete-input">
-          <label for="eliminarInput">Escribe 'eliminar' para confirmar:</label>
-          <input type="text" id="eliminarInput" formControlName="confirmationText" (input)="onConfirmationTextChange()" autocomplete="off" required>
-        </div>
-        <button (click)="eliminarLote()" [disabled]="!deleteBatch.get('confirmationIsValid')?.value" class="delete-edit-button">
-          <div class="items-button">
-            <i [class]="'fa-solid ' + getDeleteButtonIconClass()"></i>
-            {{ getDeleteButtonMessage() }}
-          </div>
-        </button>      
-      </main>
+    <div class="modal__content" *ngIf="action === 'deleteBatch'">
+      <div class="modal__description">
+        <p>Precaución: Eliminar este lote de tu finca significa que no podrás recuperarlo. ¿Estás seguro de que deseas proceder?</p>
+      </div>
+      <div class="form__item" [formGroup]="deleteBatch">
+        <label class="form__label" for="eliminarInput">Escribe 'eliminar' para confirmar:</label>
+        <input class="form__input" type="text" id="eliminarInput" formControlName="confirmationText" (input)="onConfirmationTextChange()" autocomplete="off" required>
+      </div>
+      <button class="button button--warning" (click)="removeBatch()" [disabled]="!deleteBatch.get('confirmationIsValid')?.value">
+        <i [class]="'button__icon fa-solid ' + getDeleteButtonIconClass()" aria-hidden="true"></i>
+        <span class="button__text">{{ getDeleteButtonMessage() }}</span>
+      </button>      
     </div>
-    <div *ngIf="accion === 'editar'">
-      <main>
-        <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label for="batchName">Nombre del Lote</label>
-            <input type="text" id="batchName" formControlName="batchName" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="responsible">Responsable</label>
-            <input type="text" id="responsible" formControlName="responsible" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label for="mainVariety">Variedad Principal</label>
-            <input type="text" id="mainVariety" formControlName="mainVariety" class="form-control" required>
-          </div>
-          <button type="submit" [disabled]="!formularioValido" class="delete-edit-button">
-            <div class="items-button">
-              <i [class]="'fa-solid ' + getEditButtonIconClass()"></i>
-              {{ getEditButtonMessage() }}
-            </div>
-          </button>
-        </form>
-      </main>
+    <div class="modal__content" *ngIf="action === 'updateBatch'">
+      <div class="modal__description">
+        <p>Aquí puedes editar la información de tu lote. Asegúrate de revisar cuidadosamente antes de guardar los cambios</p>
+      </div>
+      <form class="modal__form" [formGroup]="batchForm" (ngSubmit)="onSubmit()">
+        <div class="form__item">
+          <label class="form__label" for="batchName">Nombre del Lote</label>
+          <input class="form__input" type="text" id="batchName" formControlName="batchName" autocomplete="off" required>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="responsible">Responsable</label>
+          <input class="form__input" type="text" id="responsible" formControlName="responsible" autocomplete="off" required>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="mainVariety">Variedad Principal</label>
+          <select class="form__input input--select" id="mainVariety" formControlName="mainVariety" required>
+            <option value="Hartón">Hartón</option>
+            <option value="Dominico">Dominico</option>
+            <option value="Dominico Hartón">Dominico Hartón</option>
+          </select>
+        </div>
+        <button class="button button--success" type="submit" [disabled]="!isValidForm">
+          <i [class]="'button__icon fa-solid ' + getEditButtonIconClass()" aria-hidden="true"></i>
+          <span class="button__text">{{ getEditButtonMessage() }}</span>
+        </button>
+      </form>
+    </div>
+    <div class="modal__content" *ngIf="action === 'updateTape'">
+      <div class="modal__description">
+        <p>Aquí puedes editar la información de la cinta. Asegúrate de revisar cuidadosamente antes de guardar los cambios</p>
+      </div>
+      <form class="modal__form" [formGroup]="tapeForm" (ngSubmit)="onSubmit()">
+        <div class="form__item">
+          <label class="form__label" for="numBunches">Número de racimos</label>
+          <input class="form__input" type="number" id="numBunches" formControlName="numBunches" autocomplete="off" required>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="variety">Variedad</label>
+          <select class="form__input input--select" id="variety" formControlName="variety" required>
+            <option value="Hartón">Hartón</option>
+            <option value="Dominico">Dominico</option>
+            <option value="Dominico Hartón">Dominico Hartón</option>
+          </select>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="color">Color de encinte</label>
+          <input class="form__input form__input--color" type="color" id="color" formControlName="color" required>
+        </div>
+        <button class="button button--success" type="submit" [disabled]="!isValidForm">
+          <i [class]="'button__icon fa-solid ' + getUpdateTapeButtonIconClass()" aria-hidden="true"></i>
+          <span class="button__text">{{ getUpdateTapeButtonMessage() }}</span>
+        </button>
+      </form> 
     </div>
   </div>
 </div>
 
-<div class="custom-dialog" *ngIf="mostrarDialogo" (click)="cerrarDialogo($event)">
-  <div class="dialog-content">
-    <div class="dialoh-header">
-      <p>{{ mensaje }}</p>
-    </div>
-    <div class="dialog-options">
-      <button (click)="confirmarAccion()">Aceptar</button>
-      <button (click)="cancelarAccion()">Cancelar</button>
-    </div>
-  </div>
+<div class="notification" *ngIf="showDialog">
+  <i class="notification__icon  fa-regular fa-circle-check"></i>
+  <span>{{ message }}</span>
 </div>

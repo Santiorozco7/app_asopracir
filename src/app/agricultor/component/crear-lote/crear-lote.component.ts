@@ -10,12 +10,14 @@ import { Router } from '@angular/router';
 })
 
 export class CrearLoteComponent {
-  @Input() crearLoteVisible: boolean = false;
-  @Output() loteCreado = new EventEmitter<void>();
-  @Output() cerrarCrearlote = new EventEmitter<void>();
+  @Input() showCreateBatch: boolean = false;
+  @Output() batchCreated = new EventEmitter<void>();
+  @Output() closeCreateBatch = new EventEmitter<void>();
 
-  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
-  }
+  showDialog = false;
+  message = '';
+
+  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {}
 
   loteForm = this.formBuilder.group({
     batchName: ['', [Validators.required]],
@@ -29,36 +31,40 @@ export class CrearLoteComponent {
       const batchName: string = formData.batchName ?? "";
       const responsible: string = formData.responsible ?? "";
       const mainVariety: string = formData.mainVariety ?? "";
-      console.log(formData.batchName);
-      this.service.crearLote(batchName, responsible, mainVariety).subscribe(lotecreado => {
-        if(lotecreado['state'] === 'Ok') {
-          console.log(lotecreado['state']);
-          // this.router.navigate(['/agricultor']);
-          this.loteCreado.emit();
+      this.service.createBatch(batchName, responsible, mainVariety).subscribe(batchCreated => {
+        if (batchCreated['state'] === 'Ok') {
+          this.batchCreated.emit();
+          this.showNotification(`Se ha creado el lote "${batchName}"`);
+        } else {
+          this.batchCreated.emit();
+          this.showNotification(`¡Ha occurido un error!"`);
         }
       });
     }
-    this.cerrarCrearlote.emit();
+    this.closeCreateBatch.emit();
   }
 
-  @HostListener('wheel', ['$event'])
-  @HostListener('touchmove', ['$event'])
-  onScroll(event: Event): void {
-    // Verifica si el modal está visible y se está haciendo scroll
-    if (this.crearLoteVisible) {
-      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      setTimeout(() => {
-        this.cerrarCrearlote.emit();
-        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      }, 200);
-    }
+  getCreateBatchIconClass(): string {
+    return this.loteForm.valid? 'fa-triangle-exclamation' : 'fa-lock';
   }
   
-  cerrarDialogo(event: Event): void {
+  getCreateBatchButtonMessage(): string {
+    return this.loteForm.valid? 'Crear lote' : 'Bloqueado';
+  }
+
+  showNotification(message: string) {
+    this.showDialog = true;
+    this.message = message;
+    setTimeout(() => {
+      this.showDialog = false;
+    }, 3000);
+  }
+
+  closeDialog(event: Event): void {
     // Verifica si el clic se realizó fuera del contenido del modal
     if (event.target === event.currentTarget) {
-      this.cerrarCrearlote.emit();
-      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      this.closeCreateBatch.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
     }
   }
 }

@@ -1,47 +1,52 @@
-<app-aviso [cinta]="cinta"></app-aviso>
+<app-aviso [tapes]="tapes" [batches]="batches"></app-aviso>
 
-<section>
-  <div class="lotes">
-    <div class="tarjeta" *ngFor="let item of lote">
-      <a href="javascript:void(0);" (click)="mostrarModal(item.batchID)">
-        <h2>{{ item.batchName }}</h2>
-        
-        <!-- Buscar la primera cinta correspondiente a este lote -->
-        <ng-container *ngIf="getPrimeraCintaPorLote(item.batchID) as primeraCinta;">
-          <div class="color" [style.background-color]="primeraCinta.color"></div>
-          <ul>
-            <li><i class="fa-solid fa-user"></i><span class="truncate-text">{{ primeraCinta.responsible || '------------' }}</span></li>
-            <li><i class="fa-solid fa-caret-right"></i><span class="truncate-text">{{ primeraCinta.variety || '------------' }}</span></li>
-            <li><i><img src="../../../../assets/fontawesome/platano.png"></i><span class="truncate-text">{{ primeraCinta.numBunches || '------------' }}</span></li>
-            <li><i class="fa-solid fa-calendar-days"></i><span class="truncate-text">{{ primeraCinta.endDate || '------------' }}</span></li>
-          </ul>
-        </ng-container>
-      </a>
-    </div>
+<section class="batches">
+  <div class="batch" *ngFor="let item of batches">
+    <button class="batch__link" href="javascript:void(0);" (click)="modal(item.batchID)" [attr.aria-label]="'Abrir detalles del lote: ' + (item.batchName)" >
+      <ng-container *ngIf="getFirstTapeByBatch(item.batchID) as tape;">
+        <div class="batch__color" [style.background-color]="tape.color"></div>
+        <h2 class="batch__title">{{ item.batchName }}</h2>
+        <ul class="batch__info">
+          <li class="batch__item">
+            <i class="batch__icon fa-solid fa-user" aria-hidden="true"></i>
+            <span class="batch__text">{{ tape.responsible || '------------' }}</span>
+          </li>
+          <li class="batch__item">
+            <i class="batch__icon fa-solid fa-caret-right" aria-hidden="true"></i>
+            <span class="batch__text">{{ tape.variety || '------------' }}</span>
+          </li>
+          <li class="batch__item">
+            <i class="batch__icon" aria-hidden="true"><img src="../../../../assets/fontawesome/platano.png" alt="Icono de racimos de plátano"></i>
+            <span class="batch__text">{{ tape.numBunches || '------------' }}</span>
+          </li>
+          <li class="batch__item">
+            <i class="batch__icon fa-solid fa-calendar-days" aria-hidden="true"></i>
+            <span class="batch__text">{{ tape.endDate || '------------' }}</span>
+          </li>
+        </ul>
+      </ng-container>
+    </button>
   </div>
 </section>
 
-<app-modal-lotes [modalVisible]="modalVisible" [cinta]="cinta" [lote]="lote" [batchID]="batchID" (editarLote)="mostrarEditarlote($event)" (cerrarModal)="cerrarModal()" (accionSeleccionada)="manejarAccion($event)"></app-modal-lotes>
+<app-modal-lotes [showModal]="showModal" [tapes]="tapes" [batches]="batches" [batchID]="batchID" (closeModal)="closeModal()" (loteEditado)="View()"></app-modal-lotes>
 
-<div id="container-floating">
-  <a class="nd3 nds" href="javascript:void(0);" (click)="mostrarCrearlote()">
-    <i class="fa-solid fa-plant-wilt fa-xl reminder"></i>
-    <span class="text">Nuevo lote</span>
-  </a>
-  
-  <a class="nd1 nds" href="javascript:void(0);" (click)="mostrarCrearcinta()">
-    <i class="fa-solid fa-tape fa-flip-horizontal fa-xl reminder"></i>
-    <span class="text">Nueva cinta</span>
-  </a>
-
-  <a id="floating-button">
-    <i class="plus fa-solid fa-plus fa-xl"></i>
-    <i class="edit fa-solid fa-pen fa-xl"></i>
-  </a>
+<div class="button" [ngClass]="{'button--overlay': showMenu}" (click)="closeButton($event)">
+  <button class="button__cta" (click)="toggleMenu()" aria-label="Abrir menú de opciones, crear nuevo lote y crear nueva cinta" >
+    <i class="button__icon fa-solid fa-plus fa-xl"></i>
+    <div class="button__options" *ngIf="showMenu">
+      <button class="button__option" (click)="createBatch()" aria-label="crear nuevo lote">
+        <span class="button__text">Nuevo lote</span>
+        <i class="button__icon button__icon--small fa-solid fa-plant-wilt" aria-hidden="true"></i>
+      </button>
+      <button class="button__option" (click)="createTape()" aria-label="crear nuevo cinta">
+        <span class="button__text">Nueva cinta</span>
+        <i class="button__icon button__icon--small fa-solid fa-tape fa-flip-horizontal" aria-hidden="true"></i>
+      </button>
+    </div>
+  </button>
 </div>
 
-<app-crear-lote (loteCreado)="View()" [crearLoteVisible]="crearLoteVisible" (cerrarCrearlote)="cerrarCrearlote()"></app-crear-lote>
+<app-crear-lote (batchCreated)="View()" [showCreateBatch]="showCreateBatch" (closeCreateBatch)="closeCreateBatch()"></app-crear-lote>
 
-<app-crear-cinta (cintaCreada)="View()" [crearCintaVisible]="crearCintaVisible" [lote]="lote" (cerrarCrearcinta)="cerrarCrearcinta()"></app-crear-cinta>
-
-<app-editar-eliminar-lote (loteEditado)="View()" (loteEditado)="cerrarEditarlote()" (cerrarModal)="cerrarModal()" [lote]="lote" [batchID]="batchID" [editarloteVisible]="editarloteVisible" (cerrarEditarlote)="cerrarEditarlote()" [accion]="accionSeleccionada"></app-editar-eliminar-lote>
+<app-crear-cinta (tapeCreated)="View()" [showCreateTape]="showCreateTape" [lote]="batches" (closeCreateTape)="closeCreateTape()"></app-crear-cinta>

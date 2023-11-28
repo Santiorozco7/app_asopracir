@@ -6,57 +6,92 @@ import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostList
   styleUrls: ['./modal-lotes.component.css']
 })
 export class ModalLotesComponent {
-  @Input() modalVisible: boolean = false;
-  @Input() cinta: any[] = [];
-  @Input() lote: any[] = [];
+  @Input() showModal: boolean = false;
+  @Input() tapes: any[] = [];
+  @Input() batches: any[] = [];
   @Input() batchID: string = "";
 
-  @Output() cerrarModal = new EventEmitter<void>();
-  @Output() editarLote = new EventEmitter<string>();
-
-  @Output() accionSeleccionada = new EventEmitter<string>();
+  @Output() closeModal = new EventEmitter<void>();
+  @Output() loteEditado = new EventEmitter<void>();
 
   menuVisible: boolean = false;
+  manageBatch =false;
+  action: string = "";
+  tapeID: string = "";
+  showCreateTape = false;
 
   constructor (private renderer: Renderer2, private el: ElementRef) {}
-
-  toggleMenu(): void {
-    this.menuVisible = !this.menuVisible;
-  }
-
-  emitirAccion(accion: string, batchID: string): void {
-    this.menuVisible = false;
-    this.cerrarModal.emit();
-    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-    this.accionSeleccionada.emit(accion);
-    this.editarLote.emit(batchID)
-  }
-
+  
   getSelectedBatchName(): string {
-    const selectedBatch = this.lote.find(item => item.batchID === this.batchID);
+    const selectedBatch = this.batches.find(item => item.batchID === this.batchID);
     return selectedBatch ? selectedBatch.batchName : '';
   }
 
   getFilteredCintas(): any[] {
-    return this.cinta.filter(cintaItem => cintaItem.batchID === this.batchID);
+    return this.tapes.filter(cintaItem => cintaItem.batchID === this.batchID);
   }
-
-  /*@HostListener('wheel', ['$event'])
-  @HostListener('touchmove', ['$event'])
-  onScroll(event: Event): void {
-    // Verifica si el modal está visible y se está haciendo scroll
-    if (this.modalVisible) {
-      setTimeout(() => {
-        this.cerrarModal.emit();
-        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      }, 100);
-    }
-  } */
 
   closeButton(event: Event): void {
     // Verifica si el clic se realizó fuera del contenido del modal
     if (event.target === event.currentTarget && this.menuVisible) {
       this.menuVisible = false;
     }
+  }
+
+  @HostListener('wheel', ['$event'])
+  @HostListener('touchmove', ['$event'])
+  onScroll(event: Event): void {
+    if (this.menuVisible) {
+      setTimeout(() => {
+        this.menuVisible = false;
+      }, 100);
+    } 
+  }
+  
+  // Crear Cinta -------------------------------------------------------  
+  createTape(){
+    this.showCreateTape = true;
+    this.renderer.addClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
+  }
+  closeCreateTape() {
+    this.showCreateTape = false;
+    this.loteEditado.emit();
+    this.renderer.removeClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
+  }
+
+  toggleMenu(): void {
+    this.menuVisible = !this.menuVisible;
+  }
+
+  emitAction(accion: string, batchID: string, event: Event): void {
+    this.menuVisible = false;
+    event.stopPropagation();
+    this.manageBatch =true;
+    this.renderer.addClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
+    this.action = accion;
+    this.batchID=batchID;
+  }
+
+  emitActionUpdateTape(accion: string, tapeID: string) {
+    this.manageBatch =true;
+    this.renderer.addClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
+    this.action = accion;
+    this.tapeID = tapeID;
+    console.log(this.tapeID)
+  }
+
+  closeManageBatch(){
+    this.manageBatch =false;
+    this.renderer.removeClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
+    this.menuVisible = false;
+    this.loteEditado.emit();
+  }
+
+  batchDeleted() {
+    this.manageBatch =false;
+    this.renderer.removeClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
+    this.menuVisible = false;
+    this.loteEditado.emit();
+    this.closeModal.emit();
   }
 }

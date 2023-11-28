@@ -8,16 +8,18 @@ import { AgricultorService } from '../../agricultor.service';
 })
 
 export class CreateOrderComponent {
-  @Input() createOrderVisible: boolean = false;
-  @Input() cinta: any[] = [];
-  @Input() ordenes: any[] = [];
+  @Input() showCreateOrder: boolean = false;
+  @Input() tape: any[] = [];
+  @Input() orders: any[] = [];
+  
+  @Output() orderCreated = new EventEmitter<void>();
+  @Output() closeCreateOrder = new EventEmitter<void>();
+
   ordenFiltrada: any[] = [];
+  showDialog = false;
+  message = '';
 
-  @Output() cerrarCrearOrden = new EventEmitter<void>();
-  @Output() actualizarOrden = new EventEmitter<void>();
-
-  constructor(private service: AgricultorService, private renderer: Renderer2, private el: ElementRef) {
-  }
+  constructor(private service: AgricultorService, private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnChanges() {
     // Llamar a filterCintaByDate cuando cinta cambie
@@ -29,13 +31,13 @@ export class CreateOrderComponent {
     const currentDate = new Date();
     this.ordenFiltrada = [];
   
-    this.cinta.forEach(itemCinta => {
+    this.tape.forEach(itemCinta => {
       const endDate = new Date(itemCinta.endDate);
       const timeDiff = endDate.getTime() - currentDate.getTime();
       const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
   
       // Verificar si el orderID no está presente en las órdenes
-      const orderIDNotInOrdenes = !this.ordenes.some(orden => orden.orderID === itemCinta.orderID);
+      const orderIDNotInOrdenes = !this.orders.some(orden => orden.orderID === itemCinta.orderID);
   
       if (daysRemaining <= 5 && orderIDNotInOrdenes) {
         this.ordenFiltrada.push(itemCinta);
@@ -43,37 +45,32 @@ export class CreateOrderComponent {
     });
   }
 
-  agregarOrden(tapeID:string){
-    console.log("orden agregada");
-    console.log(tapeID);
-    this.service.crearOrden(tapeID).subscribe(ordenCreada => {
-      if(ordenCreada['state'] === 'Ok') {
-        console.log(ordenCreada['state']);
-        // this.router.navigate(['/agricultor']);
-        this.cerrarCrearOrden.emit();
-        this.actualizarOrden.emit();
+  createOrder(tapeID:string){
+    this.service.createOrder(tapeID).subscribe(orderCreated => {
+      if (orderCreated['state'] === 'Ok') {
+        this.orderCreated.emit();
+        this.showNotification(`Se ha creado una nueva orden`);
+      } else {
+        this.orderCreated.emit();
+        this.showNotification(`¡Ha occurido un error!"`);
       }
     })
+    this.closeCreateOrder.emit();
   }
 
-  @HostListener('wheel', ['$event'])
-  @HostListener('touchmove', ['$event'])
-  onScroll(event: Event): void {
-    // Verifica si el modal está visible y se está haciendo scroll
-    if (this.createOrderVisible) {
-      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      setTimeout(() => {
-        this.cerrarCrearOrden.emit();
-        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      }, 200);
-    }
+  showNotification(message: string) {
+    this.showDialog = true;
+    this.message = message;
+    setTimeout(() => {
+      this.showDialog = false;
+    }, 3000);
   }
-  
-  cerrarDialogo(event: Event): void {
+
+  closeDialog(event: Event): void {
     // Verifica si el clic se realizó fuera del contenido del modal
     if (event.target === event.currentTarget) {
-      this.cerrarCrearOrden.emit();
-      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      this.closeCreateOrder.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
     }
   }
 }
