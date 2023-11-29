@@ -9,13 +9,26 @@ import { Router } from '@angular/router';
   styleUrls: ['./aviso.component.css']
 })
 export class AvisoComponent {
-  @Input() cinta: any[] = [];
-  // cintaProxima:any[] = this.cinta[1];
+  @Input() tapes: any[] = [];
+  @Input() batches: any[] = [];
+
   expirationDate: Date | undefined;
+  selectedTape: any | undefined;
 
   ngOnChanges() {
-    if (this.cinta.length > 0) {
-      this.expirationDate = new Date(this.cinta[0]?.endDate);
+    // Filtra las cintas que pertenecen a lotes activos
+    const activeTapes = this.tapes.filter(tape => this.batches.some(batch => batch.batchID === tape.batchID));
+
+    // Encuentra la cinta más próxima
+    if (activeTapes.length > 0) {
+      this.selectedTape = activeTapes.reduce((closest, current) => {
+        const closestDate = new Date(closest.endDate);
+        const currentDate = new Date(current.endDate);
+
+        return currentDate < closestDate ? current : closest;
+      });
+
+      this.expirationDate = new Date(this.selectedTape.endDate);
     } else {
       this.expirationDate = undefined;
     }
@@ -24,10 +37,36 @@ export class AvisoComponent {
   getDaysRemaining(): number | undefined {
     if (this.expirationDate) {
       const today = new Date();
-      const timeDiff = this.expirationDate.getTime() - today.getTime();
-      return Math.ceil(timeDiff / (1000 * 3600 * 24));
+      let timeDiff = this.expirationDate.getTime() - today.getTime();
+      let daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+      // Verifica si el número de días restantes es un entero positivo
+      if (daysRemaining < 0) {
+        // Si la fecha de corte ya pasó, busca la siguiente cinta más próxima
+        const activeTapes = this.tapes.filter(tape => this.batches.some(batch => batch.batchID === tape.batchID));
+        if (activeTapes.length > 0) {
+          this.selectedTape = activeTapes.reduce((closest, current) => {
+            const currentEndDate = new Date(current.endDate);
+            const currentDiff = currentEndDate.getTime() - today.getTime();
+
+            if (currentDiff > 0 && (closest === null || currentDiff < closest)) {
+              return current;
+            }
+
+            return closest;
+          });
+
+          this.expirationDate = new Date(this.selectedTape.endDate);
+
+          // Actualiza los días restantes con la nueva cinta más próxima
+          timeDiff = this.expirationDate.getTime() - today.getTime();
+          daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        }
+      }
+
+      return daysRemaining >= 0 ? daysRemaining : undefined;
     }
+
     return undefined;
   }
-
 }

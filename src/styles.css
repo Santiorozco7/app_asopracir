@@ -1,15 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
 @import url("assets/fontawesome/css/all.css");
 
 * {
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
 
 body {
   background-color: #f6f6f6;
+  font-size: 16px;
 }
 
-body.modal-open {
+body.modal--open {
   overflow: hidden;
 }

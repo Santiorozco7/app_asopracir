@@ -1,26 +1,44 @@
-<div class="modal-wrapper" [ngClass]="{'mostrar-modal': crearLoteVisible}" (click)="cerrarDialogo($event)">
-    <div class="modal-body card">
-      <div class="modal-header">
-        <h1 class="heading">Nuevo Lote</h1>
-        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarCrearlote.emit()"><i class="fa-solid fa-xmark"></i></a>
-      </div>
-      
-      <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <label for="batchName">Nombre del Lote</label>
-          <input type="text" id="batchName" formControlName="batchName" class="form-control" required>
-
-        </div>
-        <div class="form-group">
-          <label for="responsible">Responsable</label>
-          <input type="text" id="responsible" formControlName="responsible" class="form-control" required>
-        </div>
-        <div class="form-group">
-          <label for="mainVariety">Variedad Principal</label>
-          <input type="text" id="mainVariety" formControlName="mainVariety" class="form-control" required>
-        </div>
-        <button type="submit" [disabled]="loteForm.invalid" class="btn btn-primary">Crear Lote</button>
-      </form>  
+<div class="modal" [ngClass]="{'modal--show': showCreateBatch}" (click)="closeDialog($event)"
+  [attr.aria-hidden]="!showCreateBatch"
+  [attr.aria-modal]="showCreateBatch ? 'true' : 'false'" role="dialog" aria-labelledby="modalTitle">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h1 class="modal__heading" id="modalTitle">Crear nuevo lote</h1>
+      <a  class="modal__close" href="javascript:void(0);" role="button" (click)="closeCreateBatch.emit()" aria-label="Cerrar modal">
+        <i class="close__icon fa-solid fa-xmark" aria-hidden="true"></i>
+      </a>
     </div>
+    <div class="modal__content">
+      <div class="modal__description">
+        <p>Aquí puedes crear una nuevo lote. Completa la información y asegúrate de revisar cuidadosamente antes de aceptar.</p>
+      </div>
+      <form class="modal__form" [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+        <div class="form__item">
+          <label class="form__label" for="batchName">Nombre del Lote</label>
+          <input class="form__input" type="text" id="batchName" formControlName="batchName" autocomplete="off" required>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="responsible">Responsable</label>
+          <input class="form__input" type="text" id="responsible" formControlName="responsible" autocomplete="off" required>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="mainVariety">Variedad Principal</label>
+          <select class="form__input input--select" id="mainVariety" formControlName="mainVariety" required>
+            <option value="Hartón">Hartón</option>
+            <option value="Dominico">Dominico</option>
+            <option value="Dominico Hartón">Dominico Hartón</option>
+          </select>
+        </div>
+        <button class="button button--success" type="submit" [disabled]="!loteForm.valid">
+          <i [class]="'button__icon fa-solid ' + getCreateBatchIconClass()" aria-hidden="true"></i>
+          <span class="button__text">{{ getCreateBatchButtonMessage() }}</span>
+        </button>
+      </form>
+    </div>  
   </div>
-  
+</div>
+
+<div class="notification" *ngIf="showDialog">
+  <i class="notification__icon  fa-regular fa-circle-check"></i>
+  <span>{{ message }}</span>
+</div>

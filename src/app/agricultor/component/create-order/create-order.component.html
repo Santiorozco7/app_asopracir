@@ -1,17 +1,38 @@
-<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': createOrderVisible }" (click)="cerrarDialogo($event)">
-    <div class="modal-body card">
-      <div class="modal-header">
-        <h1 class="heading">Crear Orden</h1>
-        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarCrearOrden.emit()"><i class="fa-solid fa-xmark"></i></a>
-      </div>
-      <div *ngFor="let cintaItem of ordenFiltrada">
-        <div class="info-cinta">
-          <div class="color-cinta" [style.background-color]="cintaItem.color"></div>
-          <div class="tipo-platano">{{ cintaItem.variety }}</div>
-          <div class="cantidad-platano">{{ cintaItem.numBunches }}</div>
-          <div class="fecha-final">{{ cintaItem.endDate }}</div>
-          <div><button (click)="agregarOrden(cintaItem.tapeID)">Agregar Orden</button></div>
-        </div>
-      </div>
+<div class="modal" [ngClass]="{'modal--show': showCreateOrder}" (click)="closeDialog($event)"
+  [attr.aria-hidden]="!showCreateOrder"
+  [attr.aria-modal]="showCreateOrder? 'true' : 'false'" role="dialog" aria-labelledby="modalTitle">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h1 class="modal__heading" id="modalTitle">Crear nueva orden</h1>
+      <a  class="modal__close" href="javascript:void(0);" role="button" (click)="closeCreateOrder.emit()" aria-label="Cerrar modal">
+        <i class="close__icon fa-solid fa-xmark" aria-hidden="true"></i>
+      </a>
     </div>
+    <div class="modal__content" *ngFor="let cintaItem of ordenFiltrada">
+      <div class="form__item">
+        <span class="form__label">Color del encinte</span>
+        <span class="form__input input--color"><div  [style.backgroundColor]="cintaItem.color"></div> </span>
+      </div>
+      <div class="form__item">
+        <span class="form__label">Variedad de racimos</span>
+        <span class="form__input input--truncated">{{cintaItem.variety}}</span>
+      </div>
+      <div class="form__item">
+        <span class="form__label">Número de racimos</span>
+        <span class="form__input input--truncated">{{cintaItem.numBunches}}</span>
+      </div>
+      <div class="form__item">
+        <span class="form__label">Fecha de corte</span>
+        <span class="form__input input--truncated">{{cintaItem.endDate}}</span>
+      </div>
+      <button class="button button--success" (click)="createOrder(cintaItem.tapeID)">
+        <i class="button__icon fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+        <span class="button__text">Agregar orden</span>
+      </button>
+    </div> 
   </div>
+</div>
+<div class="notification" *ngIf="showDialog">
+  <i class="notification__icon  fa-regular fa-circle-check"></i>
+  <span>{{ message }}</span>
+</div>

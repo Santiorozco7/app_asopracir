@@ -7,59 +7,46 @@ import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostList
 })
 
 export class ModalOrderComponent {
-  @Input() orderVisible: boolean = false;
+  @Input() showModalOrder: boolean = false;
   @Input() order: any = {};
   @Input() orderID: string = "";
+
+  @Output() closeModalOrder = new EventEmitter<void>();
+
   state: number = 0;
-  paso:string = "";
-
-  @Output() cerrarOrder = new EventEmitter<void>();
-
-  constructor(private renderer: Renderer2, private el: ElementRef) {
-  }
+  step:string = "";
+  
+  constructor(private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnChanges() {
     this.state = Number(this.order.state); // Convierte el valor de "state" a número
-    this.paso = this.getTextForState(this.state);
+    this.step = this.getTextForState(this.state);
   }
 
   getTextForState(state: number): string {
     switch (state) {
       case 1:
-        return 'Agendada';
+        return 'Tu cosecha ha sido <strong> agendada</strong>';
       case 2:
-        return 'En ruta';
+        return 'Tu cosecha está en <strong> ruta</strong>';
       case 3:
-        return 'En recolección';
+        return 'Tu cosecha está en <strong> recolección</strong>';
       case 4:
-        return 'Recogida';
+        return 'Tu cosecha ha sido <strong> recogida</strong>';
       case 5:
-        return 'Facturada';
+        return 'Tu cosecha ha sido <strong> facturada</strong>';
       case 6:
-        return 'Pagada';
+        return 'Tu cosecha ha sido <strong> pagada</strong>';
       default:
-        return 'En espera de agendar';
+        return 'Tu cosecha está <strong> en espera de agendar</strong>';
     }
   }
 
-  @HostListener('wheel', ['$event'])
-  @HostListener('touchmove', ['$event'])
-  onScroll(event: Event): void {
-    // Verifica si el modal está visible y se está haciendo scroll
-    if (this.orderVisible) {
-      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      setTimeout(() => {
-        this.cerrarOrder.emit();
-        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      }, 200);
-    }
-  }
-  
-  cerrarDialogo(event: Event): void {
+  closeDialog(event: Event): void {
     // Verifica si el clic se realizó fuera del contenido del modal
     if (event.target === event.currentTarget) {
-      this.cerrarOrder.emit();
-      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      this.closeModalOrder.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
     }
   }
 }

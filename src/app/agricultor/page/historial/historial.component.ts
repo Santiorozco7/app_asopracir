@@ -8,11 +8,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./historial.component.css']
 })
 export class HistorialComponent {
-  historial: any[] = [];
-  detallesHistorial: any = {};
+  history: any[] = [];
+  historyDetails: any = {};
 
-  constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
-  }
+  showModalHistory = false;
+
+  constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnInit(): void{
     this.View();
@@ -20,11 +21,11 @@ export class HistorialComponent {
 
   // Se cambio el View
   View() {
-    this.service.historial().subscribe(HT => {
+    this.service.getStats().subscribe(HT => {
       if (HT['state'] === 'Fail') {
         this.router.navigate(['/']);
       }
-      this.historial = HT.data;
+      this.history = HT.data;
     });  
   }
 
@@ -35,18 +36,15 @@ export class HistorialComponent {
     ];
     return months[monthNumber - 1]; // Restamos 1 porque los meses en JavaScript comienzan desde 0
   }
-  
-  // Modal -----------------------------------------------------------
-  historialVisible = false;
 
-  mostrarHistorial(detallesHistorial:string) {
-    this.historialVisible = true;
-    this.detallesHistorial = detallesHistorial;
-    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
+  modalHistory(historyDetails:string) {
+    this.showModalHistory = true;
+    this.historyDetails = historyDetails;
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal--open'); 
   }
 
-  cerrarHistorial() {
-    this.historialVisible = false;
-    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
+  closeModalHistory() {
+    this.showModalHistory = false;
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
   }
 }

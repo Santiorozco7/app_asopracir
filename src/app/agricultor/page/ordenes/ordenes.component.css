@@ -1,87 +1,87 @@
-* {
+button {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
   padding: 0;
-  margin: 0;
+  cursor: pointer;
+  border: none;
+  color: inherit;
+  font: inherit;
 }
 
-.ruta {
-  background-color: #D0EFDB;
-  margin: 5%;
-  border-radius: 50px;
-  overflow: hidden;
-}
-
-.ruta a {
-  padding: 10px 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-section {
+.orders {
   background-color: rgb(246, 246, 246);
-  margin: 40px 0 50px 0;
-}
-
-.produccion {
+  margin: 2.5rem 5%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   width: 90%;
-  margin: 5%;
 }
 
-.tarjeta {
+.order {
   background-color: rgb(242, 242, 242);
-  width: 47.5%; /*160px*/
-  min-height: 170px;
-  border-radius: 15px;
-  margin: 10px 0;
+  width: 47.5%;
+  min-height: 10.625rem;
+  border-radius: 1rem;
+  margin-bottom: 1.2rem;
   overflow: hidden;
   box-shadow: rgba(149, 157, 165, 0.35) 0px 10px 15px;
 }
 
-.tarjeta a {
+.order__link {
   display: block;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-a {
   color: black;
   text-decoration: none;
 }
 
-.tarjeta a h2 {
-  padding-top: 15px;
+.order__color {
+  background-color: #DDDDDD;
+  height: 0.7rem;
+  width: 70%;
+  margin: auto;
+  border-radius: 0px 0px 0.5rem 0.5rem;
+}
+
+.order__title {
+  padding: 1rem;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.125rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-a ul {
-  padding: 10px;
+.order__info {
+  padding: 0.625rem;
   list-style: none;
 }
 
-li {
+.order__item {
   list-style: none;
-  margin-bottom: 5px;
+  margin-bottom: 0.3125rem;
   display: flex;
   align-items: center;
 }
 
-li i {
-  width: 22px; 
-  margin-right: 8px; 
+.order__icon {
+  width: 1.375rem; 
+  margin-right: 0.5rem; 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-li img {
-  width: 16px;
+.order__icon img {
+  width: 1rem;
+}
+
+.order__text {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .truncate-text {

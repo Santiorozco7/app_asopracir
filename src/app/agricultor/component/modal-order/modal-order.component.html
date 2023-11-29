@@ -1,30 +1,62 @@
-<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': orderVisible }" (click)="cerrarDialogo($event)">
-  <div class="modal-body card">
-    <div class="modal-header">
-      <h1 class="heading">Detalles de la Orden</h1>
-      <a href="javascript:void(0);" role="button" class="close" (click)="cerrarOrder.emit()"><i class="fa-solid fa-xmark"></i></a>
+<div class="modal" [ngClass]="{'modal--show': showModalOrder}" (click)="closeDialog($event)"
+  [attr.aria-hidden]="!showModalOrder"
+  [attr.aria-modal]="showModalOrder? 'true' : 'false'" role="dialog" aria-labelledby="modalTitle">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h1 class="modal__heading" id="modalTitle">Detalles de la orden</h1>
+      <a  class="modal__close" href="javascript:void(0);" role="button" (click)="closeModalOrder.emit()" aria-label="Cerrar modal">
+        <i class="close__icon fa-solid fa-xmark" aria-hidden="true"></i>
+      </a>
     </div>
-    <div class="info-cinta">
-        <p> Colaborador: <span>{{ order.collaborator }}</span></p>
-        <p> Fecha de la orden: <span>{{ order.startDate }}</span></p>
-        <p> Estimación de racimos: <span>{{ order.estBunches }}</span></p>
-        <p> Racimos cosechados: <span>{{ order.numBunches }}</span></p>
-        <p> Fecha de la cosecha: <span>{{ order.pickupDate }}</span></p>
-        <p> peso: <span>{{ order.weight }}Kg</span></p>
-        <p> Pago de la cosecha: $<span>{{ order.payAmount }}</span></p>
-        <!-- <p> Fecha del pago: <span>{{ order.weight }}</span></p> -->
-        <p> Recibido por: <span>{{ order.signedBy }}</span></p>
-        <p> Transportado por: <span>{{ order.transporter }}</span></p>
-    </div>
-
-    <!-- aqui inicia la visualización de los pasos -->
-    <div class="alertaProgreso">
-      <span>{{paso}}</span>
-    </div>
-    <div class="progress-bar">
-      <div *ngFor="let step of [1,2,3,4,5,6]" class="step" [ngClass]="{'active': step <= state, 'current': step === state}">
-        <span>{{ step }}</span>
+    <div class="modal__content">
+      <div class="form__item">
+        <label class="form__label" for="collaborator">Colaborador</label>
+        <input class="form__input input--truncated" id="collaborator" [value]="order.collaborator" disabled>
       </div>
-    </div>    
+      <div class="form__item">
+        <label class="form__label" for="startDate">Fecha de la orden</label>
+        <input class="form__input input--truncated" id="startDate" [value]="order.startDate" disabled>
+      </div>
+      <div class="form__item">
+        <label class="form__label" for="estBunches">Estimación de racimos</label>
+        <input class="form__input input--truncated" id="estBunches" [value]="order.estBunches" disabled>
+      </div>
+      <div class="form__item">
+        <label class="form__label" for="numBunches">Racimos cosechados</label>
+        <input class="form__input input--truncated" id="numBunches" [value]="order.numBunches" disabled>
+      </div>
+      <div class="form__item">
+        <label class="form__label" for="pickupDate">Fecha de la cosecha</label>
+        <input class="form__input input--truncated" id="pickupDate" [value]="order.pickupDate" disabled>
+      </div>
+      <div class="form__item">
+        <label class="form__label" for="weight">Peso</label>
+        <input class="form__input input--truncated" id="weight" [value]="order.weight" disabled>
+      </div>
+      <div class="form__item">
+        <label class="form__label" for="payAmount">Pago por la cosecha</label>
+        <input class="form__input input--truncated" id="payAmount" [value]="order.payAmount" disabled>
+      </div>
+      <div class="form__item">
+        <label class="form__label" for="signedBy">Recibido por</label>
+        <input class="form__input input--truncated" id="signedBy" [value]="order.signedBy" disabled>
+      </div>
+      <div class="form__item">
+        <label class="form__label" for="transporter">Transportado por</label>
+        <input class="form__input input--truncated" id="transporter" [value]="order.transporter" disabled>
+      </div>
+    </div>  
+    <div class="step-progress">
+      <div class="alertaProgreso" [innerHTML]="step"></div>
+      <div class="progress-bar">
+        <ng-container *ngFor="let step of [1,2,3,4,5,6]; let last = last">
+          <div class="step" [ngClass]="{'active': step <= state, 'current': step === state}">
+            <span>{{ step }}</span>
+          </div>
+          <div class="line" *ngIf="!last" [ngClass]="{'active': step < state, 'current': step === state - 1}">
+          </div>
+        </ng-container>
+      </div>    
+    </div>
   </div>
 </div>

@@ -1,52 +1,58 @@
-* {
+button {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
   padding: 0;
-  margin: 0;
+  cursor: pointer;
+  border: none;
+  color: inherit;
+  font: inherit;
 }
 
-section {
+.orders {
   background-color: rgb(246, 246, 246);
-  /* margin: 40px 0 50px 0; */
-}
-
-.historial {
+  margin: 2.5rem 5%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   width: 90%;
-  margin: 5%;
 }
 
-.tarjeta {
+.order {
   background-color: rgb(242, 242, 242);
-  width: 47.5%; /*160px*/
-  min-height: 170px;
-  border-radius: 15px;
-  margin-bottom: 10px;
+  width: 47.5%;
+  min-height: 10.625rem;
+  border-radius: 1rem;
+  margin-bottom: 1.2rem;
   overflow: hidden;
   box-shadow: rgba(149, 157, 165, 0.35) 0px 10px 15px;
 }
 
-.tarjeta a {
+.order__link {
   display: block;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-
-a {
   color: black;
   text-decoration: none;
 }
 
-a h2 {
-  padding-top: 15px;
+.order__title {
+  padding: 1rem;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.125rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-a .imagenContainer {
+.truncate-text {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos (...) si el texto se trunca */
+}
+
+.imagenContainer {
   position: relative;
 }
 
@@ -54,14 +60,15 @@ a .imagenContainer {
   text-align: center;
 }
 
-a .imagen img {
+.imagen img {
   height: 85px;
   width: 85px;
   border-radius: 50%;
-  border: 1px solid #000; /* Borde sólido de 1 px */
+  mix-blend-mode: darken;
+  border: 1px solid #000; 
 }
 
-a .circuloNumBunches {
+.circuloNumBunches {
   position: absolute;
   bottom: 5px;
   right: 25px;
@@ -75,13 +82,6 @@ a .circuloNumBunches {
   justify-content: center;
 }
 
-a .circuloNumBunches span {
+.circuloNumBunches span {
   font-size: 12px;
-}
-
-.truncate-text {
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis; /* Agrega puntos suspensivos (...) si el texto se trunca */
 }

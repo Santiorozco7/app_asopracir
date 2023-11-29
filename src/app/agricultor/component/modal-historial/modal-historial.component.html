@@ -1,14 +1,27 @@
-<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': historialVisible }" (click)="cerrarDialogo($event)">
-    <div class="modal-body card">
-      <div class="modal-header">
-        <h1 class="heading">Detalles del Historial</h1>
-        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarHistorial.emit()"><i class="fa-solid fa-xmark"></i></a>
+<div class="modal" [ngClass]="{'modal--show': showModalHistory}" (click)="closeDialog($event)"
+  [attr.aria-hidden]="!showModalHistory"
+  [attr.aria-modal]="showModalHistory? 'true' : 'false'" role="dialog" aria-labelledby="modalTitle">
+  <div class="modal__card">
+      <div class="modal__header">
+        <h1 class="modal__heading" id="modalTitle">Historial mes </h1>
+        <a  class="modal__close" href="javascript:void(0);" role="button" (click)="closeModalHistory.emit()" aria-label="Cerrar modal">
+          <i class="close__icon fa-solid fa-xmark" aria-hidden="true"></i>
+        </a>
       </div>
-      <div class="info-cinta">
-          <p> Cantidad de racimos cosechados en el mes: <span>{{ detallesHistorial.numBunches }}</span></p>
-          <p> Peso total de la cosecha del mes: <span>{{ detallesHistorial.weight }}Kg</span></p>
-          <p> Pago de la cosecha del mes: <span>${{ detallesHistorial.payAmount }}</span></p>
-      </div>
+      <div class="modal__content">
+        <div class="form__item">
+          <label class="form__label" for="numBunches">Racimos cosechados en el mes</label>
+          <input class="form__input input--truncated" id="numBunches" [value]="historyDetails.numBunches" disabled>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="weight">Peso total de la cosecha del mes</label>
+          <input class="form__input input--truncated" id="weight" [value]="historyDetails.weight" disabled>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="payAmount">Pago de la cosecha del mes</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount" disabled>
+        </div>
+      </div> 
     </div>
   </div>
   

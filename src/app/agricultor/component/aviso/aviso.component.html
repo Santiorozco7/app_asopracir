@@ -1,14 +1,14 @@
-<div class="aviso">
-    <div class="info" *ngIf="cinta.length > 0">
-        <h3>Nuevo</h3>
-        <span *ngIf="expirationDate != undefined">{{ getDaysRemaining() }}</span>
-    </div>
-    <div class="info" *ngIf="cinta.length > 0">
-        <h3>Lote</h3>
-        <span *ngIf="cinta[0]?.batchName">{{ cinta[0]?.batchName }}</span>
-    </div>
-    <div class="info" *ngIf="cinta.length > 0">
-        <h3>Racimos</h3>
-        <span *ngIf="cinta[0]?.numBunches">{{ cinta[0]?.numBunches }}</span>
-    </div>
+<div class="alert">
+  <div class="alert__item" *ngIf="selectedTape">
+    <h3 class="alert__title">Nuevo</h3>
+    <p class="alert__text" *ngIf="expirationDate != undefined">{{ getDaysRemaining() }} días</p>
+  </div>
+  <div class="alert__item" *ngIf="selectedTape">
+    <h3 class="alert__title">Lote</h3>
+    <p class="alert__text" *ngIf="selectedTape.batchName">{{ selectedTape.batchName }}</p>
+  </div>
+  <div class="alert__item" *ngIf="selectedTape">
+    <h3 class="alert__title">Racimos</h3>
+    <p class="alert__text" *ngIf="selectedTape.numBunches">{{ selectedTape.numBunches }}</p>
+  </div>
 </div>

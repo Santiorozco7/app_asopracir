@@ -1,20 +1,28 @@
-<section>
-  <div class="produccion">
-    <div class="tarjeta" *ngFor="let item of ordenes">
-      <a href="javascript:void(0);" (click)="mostrarOrder(item.orderID)">
-        <h2>{{ getFormattedDate(item.startDate) }}</h2>
-        <ul>
-          <li><i class="fa-solid fa-sun-plant-wilt"></i><span class="truncate-text">{{ item.batchName || '------------' }}</span></li>
-          <li><i><img src="../../../../assets/fontawesome/platano.png"></i><span class="truncate-text">{{ item.estBunches || '------------' }} Racimos</span></li>
-          <li><i class="fa-solid fa-user"></i><span class="truncate-text">{{ item.signedBy || '------------' }}</span></li>
+<section class="orders">
+  <div class="order" *ngFor="let item of orders">
+    <button class="order__link" href="javascript:void(0);" (click)="modalOrder(item.orderID)" aria-label="Abrir detalles de la orden" >
+        <h2 class="order__title">{{ getFormattedDate(item.startDate) }}</h2>
+        <ul class="order__info">
+          <li class="order__item">
+            <i class="order__icon fa-solid fa-sun-plant-wilt" aria-hidden="true"></i>
+            <span class="order__text truncate-text">{{ item.batchName || '------------' }}</span>
+          </li>
+          <li class="order__item">
+            <i class="order__icon" aria-hidden="true"><img src="../../../../assets/fontawesome/platano.png" alt="Icono de racimos de plátano"></i>
+            <span class="order__text truncate-text">{{ item.estBunches || '------------' }} Racimos</span>
+          </li>
+          <li class="order__item">
+            <i class="order__icon fa-solid fa-user" aria-hidden="true"></i>
+            <span class="order__text truncate-text">{{ item.signedBy || '------------' }}</span>
+          </li>
         </ul>
-      </a>
-    </div>
+    </button>
   </div>
 </section>
 
+
 <div id="container-floating"> 
-  <a class="nd1 nds" href="javascript:void(0);" (click)="mostrarCrearOrden()">
+  <a class="nd1 nds" href="javascript:void(0);" (click)="createOrder()">
     <i class="fa-solid fa-handshake fa-xl reminder"></i>
     <span class="text">Crear Orden</span>
   </a>
@@ -25,6 +33,18 @@
   </a>
 </div>
 
-<app-modal-order [orderVisible]="orderVisible" [order]="order" [orderID]="orderID" (cerrarOrder)="cerrarOrder()"></app-modal-order>
+<!-- <div class="button" [ngClass]="{'button--overlay': showMenu}" (click)="closeButton($event)">
+  <button class="button__cta" (click)="toggleMenu()" aria-label="Abrir menú de opciones, crear nueva orden" >
+    <i class="button__icon fa-solid fa-plus fa-xl"></i>
+    <div class="button__options" *ngIf="showMenu">
+      <button class="button__option" (click)="createBatch()" aria-label="crear nuevo lote">
+        <span class="button__text">Crear orden</span>
+        <i class="button__icon button__icon--small fa-solid fa-plant-wilt" aria-hidden="true"></i>
+      </button>
+    </div>
+  </button>
+</div>
+ -->
+<app-modal-order [showModalOrder]="showModalOrder" [order]="order" [orderID]="orderID" (closeModalOrder)="closeModalOrder()"></app-modal-order>
 
-<app-create-order [createOrderVisible]="createOrderVisible" [cinta]="cinta" [ordenes]="ordenes" (cerrarCrearOrden)="cerrarCrearOrden()" (actualizarOrden)="View()"></app-create-order>
+<app-create-order [showCreateOrder]="showCreateOrder" [tape]="tape" [orders]="orders" (orderCreated)="View()" (closeCreateOrder)="closeCreateOrder()"></app-create-order>

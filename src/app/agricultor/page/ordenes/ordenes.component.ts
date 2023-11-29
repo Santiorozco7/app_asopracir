@@ -8,12 +8,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./ordenes.component.css']
 })
 export class OrdenesComponent {
-  ordenes: any[] = [];
+  orders: any[] = [];
   order: any = {};
-  cinta: any[] = [];
+  tape: any[] = [];
 
-  constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
-  }
+  showModalOrder = false;
+  orderID?: any;
+  showCreateOrder = false;
+
+  constructor(private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnInit(): void{
     this.View();
@@ -21,13 +24,13 @@ export class OrdenesComponent {
 
   // Se cambio el View
   View() {
-    this.service.ordenes().subscribe(OD => {
+    this.service.getOrders().subscribe(OD => {
       if (OD['state'] === 'Fail') {
         this.router.navigate(['/']);
       }
-      this.ordenes = OD.data;
-      this.service.cinta().subscribe(cintas => {
-        this.cinta = cintas.data;
+      this.orders = OD.data;
+      this.service.getTapes().subscribe(tape => {
+        this.tape = tape.data;
       });
     });
     
@@ -39,34 +42,28 @@ export class OrdenesComponent {
     return date.toLocaleDateString('es-ES', options);
   }
 
-  // Modal -----------------------------------------------------------
-  orderVisible = false;
-  orderID?: any;
-  primerCumplimiento: boolean = false;
-
-  mostrarOrder(orderID:string) {
+  modalOrder(orderID:string) {
+    console.log(orderID)
     this.orderID = orderID;
-    this.orderVisible = true;
-    this.service.orden(orderID).subscribe(orden => {
+    this.showModalOrder = true;
+    this.service.getOrder(orderID).subscribe(orden => {
       this.order = orden.data;
     })
-    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
   }
 
-  cerrarOrder() {
-    this.orderVisible = false;
-    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
+  closeModalOrder() {
+    this.showModalOrder = false;
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
   }
-
-  // Crear Orden -------------------------------------------------------
-  createOrderVisible = false;
   
-  mostrarCrearOrden(){
-    this.createOrderVisible = true;
-    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
+  createOrder(){
+    this.showCreateOrder = true;
+    this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
   }
-  cerrarCrearOrden() {
-    this.createOrderVisible = false;
-    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Elimina la clase al cerrar
+  
+  closeCreateOrder() {
+    this.showCreateOrder = false;
+    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open'); 
   }
 }

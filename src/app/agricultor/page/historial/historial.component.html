@@ -1,7 +1,7 @@
-<section>
+<!-- <section>
   <div class="historial">
     <div class="tarjeta" *ngFor="let item of historial">
-      <a href="javascript:void(0);" (click)="mostrarHistorial(item)">
+      <a href="javascript:void(0);" (click)="showModal(item)">
         <h2>{{ getMonthName(item.Month) }} {{ item.Year }}</h2>
         <div class="imagenContainer">
           <div class="imagen">
@@ -14,6 +14,22 @@
       </a>
     </div>
   </div>
+</section> -->
+
+<section class="orders">
+  <div class="order" *ngFor="let item of history">
+    <button class="order__link" href="javascript:void(0);" (click)="modalHistory(item)" aria-label="Abrir detalles de la orden" >
+        <h2 class="order__title">{{ getMonthName(item.Month) }} {{ item.Year }}</h2>
+        <div class="imagenContainer">
+          <div class="imagen">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQinYs6MdyYKOVgilhkNrD6TFD1TnMhdNO7GA&usqp=CAU" alt="imagen de platano">
+          </div>
+          <div class="circuloNumBunches">
+            <span class="truncate-text">{{ item.numBunches || '00' }}</span>
+          </div>
+        </div>
+    </button>
+  </div>
 </section>
 
-<app-modal-historial [historialVisible]="historialVisible" [detallesHistorial]="detallesHistorial" (cerrarHistorial)="cerrarHistorial()"></app-modal-historial>
+<app-modal-historial [showModalHistory]="showModalHistory" [historyDetails]="historyDetails" (closeModalHistory)="closeModalHistory()"></app-modal-historial>

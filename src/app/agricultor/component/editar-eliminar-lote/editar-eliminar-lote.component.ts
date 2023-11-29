@@ -9,110 +9,148 @@ import { Router } from '@angular/router';
   styleUrls: ['./editar-eliminar-lote.component.css']
 })
 export class EditarEliminarLoteComponent implements OnChanges {
-  @Input() editarloteVisible: boolean = false;
-  @Output() loteEditado = new EventEmitter<void>();
-  @Output() cerrarEditarlote = new EventEmitter<void>();
-  @Output() cerrarModal = new EventEmitter<void>();
-  @Output() cerrar = new EventEmitter<void>();
-  @Input() lote: any[] = [];
+  @Input() batches: any[] = [];
   @Input() batchID: string = "";
-  @Input() accion: string = "";  // Nueva entrada para recibir la acción
-  editareliminar: boolean = false;
-  formularioValido = false;
+  @Input() tapes: any[] = [];
+  @Input() tapeID: string = "";
+  @Input() action: string = ""; 
+  @Input() manageBatch: boolean = false;
 
-  // Cuadro de diálogo de confirmación
-  mostrarDialogo = false;
-  mensaje = '';
+  @Output() batchEdited = new EventEmitter<void>();
+  @Output() batchDeleted = new EventEmitter<void>();
+  @Output() closeManageBatch = new EventEmitter<void>();
+
+  isValidForm = false;
+  showDialog = false;
+  message = '';
   originData: any;
-  confirmCallback: (() => void) | null = null;
+  originDataTape: any;
 
-  loteForm = this.formBuilder.group({
+  batchForm = this.formBuilder.group({
     batchName: ['', [Validators.required]],
     responsible: ['', [Validators.required]],
     mainVariety: ['', [Validators.required]]
   });
 
+  tapeForm = this.formBuilder.group({
+    numBunches: [0, [Validators.required, Validators.pattern(/^\d+$/)]],
+    variety: ['', [Validators.required]],
+    color: ['', [Validators.required]]
+  });
+  
   deleteBatch = this.formBuilder.group({
     confirmationText: [
       '',
-      [Validators.required, (control: AbstractControl) => (control.value && control.value.toLowerCase() === 'eliminar' ? null : { incorrectConfirmation: true })],
+      [Validators.required, (control: AbstractControl) => {
+        const userInput = control.value && control.value.toLowerCase();
+        const isValid = userInput === 'eliminar' || userInput === 'eliminar ';
+        return isValid ? null : { incorrectConfirmation: true };
+      }],
     ],
     confirmationIsValid: [false],
   });
 
-  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
-    this.loteForm.valueChanges.subscribe(() => {
-      this.actualizarEstadoFormulario();
-    });
+  constructor(
+    private formBuilder: FormBuilder, 
+    private service: AgricultorService, 
+    private router: Router, 
+    private renderer: Renderer2, 
+    private el: ElementRef) {
+    this.batchForm.valueChanges.subscribe(() => this.updateBatchFormValidity());
+    this.tapeForm.valueChanges.subscribe(() => this.updateTapeFormValidity());
   }
 
-  private actualizarEstadoFormulario(): void {
-    const currentFormValues = this.loteForm.value;
+  private updateBatchFormValidity(): void {
+    const currentFormValues = this.batchForm.value;
 
-    this.formularioValido = (
+    this.isValidForm = (
       currentFormValues.batchName !== this.originData.batchName ||
       currentFormValues.responsible !== this.originData.responsible ||
       currentFormValues.mainVariety !== this.originData.mainVariety
-    ) && this.loteForm.valid;
+    ) && this.batchForm.valid;
   }
 
-  cerrarTodo() {
-    this.cerrar.emit();
-    this.cerrarEditarlote.emit();
+  private updateTapeFormValidity(): void {
+    const currentFormValues = this.tapeForm.value;
+    const currentNumBunches = currentFormValues.numBunches != null ? +currentFormValues.numBunches : 0;
+    const originNumBunches = this.originDataTape.numBunches != null ? +this.originDataTape.numBunches : 0;
+
+    this.isValidForm = (
+      currentNumBunches !== originNumBunches ||
+      currentFormValues.variety !== this.originDataTape.variety ||
+      currentFormValues.color !== this.originDataTape.color
+    ) && this.tapeForm.valid;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Detecta cambios en batchID y actualiza el formulario cuando coincida con itemLote.
-    const itemLote = this.lote.find(item => item['batchID'] === this.batchID);
+    const itemLote = this.batches.find(item => item['batchID'] === this.batchID);
+    const itemTape = this.tapes.find(item => item['tapeID'] === this.tapeID);
     if (itemLote) {
       this.originData = {...itemLote};
-      this.loteForm.patchValue({
+      this.batchForm.patchValue({
         batchName: itemLote.batchName,
         responsible: itemLote.responsible,
         mainVariety: itemLote.mainVariety
       });
     }
-  
+    if (itemTape) {
+      this.originDataTape = {...itemTape};
+      this.tapeForm.patchValue({
+        numBunches: itemTape.numBunches,
+        variety: itemTape.variety,
+        color: itemTape.color
+      });
+    }
   }
 
   onSubmit(): void {
-    if (this.loteForm.valid && this.accion === 'editar') {
-      const formData = this.loteForm.value;
+    if (this.batchForm.valid && this.action === 'updateBatch') {
+      const formData = this.batchForm.value;
       const batchName: string = formData.batchName ?? "";
       const responsible: string = formData.responsible ?? "";
       const mainVariety: string = formData.mainVariety ?? "";
-
-      // Llama a mostrarConfirmacion antes de realizar la edición
-      this.mostrarConfirmacion('¿Estás seguro de editar el lote ', this.getSelectedBatchName(), () => {
-        this.service.editarLote(this.batchID, batchName, responsible, mainVariety).subscribe(loteEditado => {
-          if (loteEditado['state'] === 'Ok') {
-            console.log(loteEditado['state']);
-            this.cerrar.emit();
-            this.loteEditado.emit();
-            this.cerrarModal.emit();
-          }
-        });
+      this.service.updateBatch(this.batchID, batchName, responsible, mainVariety).subscribe(batchEdited => {
+        if (batchEdited['state'] === 'Ok') {
+          this.batchEdited.emit();
+          this.showNotification(`Se editó el lote correctamente`);
+        } else {
+          this.batchEdited.emit();
+          this.showNotification(`¡Ha ocurrido un error!`);
+        }
       });
     }
-    this.cerrarEditarlote.emit();
-    this.cerrarModal.emit();
-    //this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
+    if (this.tapeForm.valid && this.action === 'updateTape') {
+      const formDataTapes = this.tapeForm.value;
+      const numBunches: number = formDataTapes.numBunches != null ? +formDataTapes.numBunches : 0;
+      const variety: string = formDataTapes.variety ?? "";
+      const colorValue: any = formDataTapes.color ?? "";
+      const colorWithoutHash: string = colorValue.startsWith('#') ? colorValue.substring(1) : colorValue;
+      this.service.updateTape(this.tapeID, numBunches, variety, colorWithoutHash).subscribe(tapeUpdated => {
+        if (tapeUpdated['state'] === 'Ok') {
+          this.batchEdited.emit();
+          this.showNotification(`Se ha actualizado la cinta`);
+        } else {
+          this.batchEdited.emit();
+          this.showNotification(`¡Ha ocurrido un error!`);
+        }
+      });
+    }
+    this.closeManageBatch.emit();
   }
 
-  eliminarLote() {
+  removeBatch() {
     this.deleteBatch.reset();
-    this.service.eliminarLote(this.batchID).subscribe(loteEliminado => {
-      if (loteEliminado['state'] === 'Ok') {
-        console.log(loteEliminado['state']);
-        this.cerrar.emit();
-        this.loteEditado.emit();
-        this.cerrarModal.emit();
+    this.service.removeBatch(this.batchID).subscribe(batchDeleted => {
+      if (batchDeleted['state'] === 'Ok') {
+        this.batchDeleted.emit();
+        this.showNotification(`Se ha eliminado el lote "${this.getSelectedBatchName()}"`);
+      } else {
+        this.batchDeleted.emit();
+        this.showNotification(`¡Ha occurido un error!"`);
       }
-    });
-    
-    this.cerrarEditarlote.emit();
-    this.cerrarModal.emit();
-    //this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open'); // Agrega la clase al body
+    });    
+    this.closeManageBatch.emit();
   }
 
   onConfirmationTextChange(): void {
@@ -124,6 +162,19 @@ export class EditarEliminarLoteComponent implements OnChanges {
     }
   }
   
+  getModalTitle(): string {
+    switch (this.action) {
+      case 'updateBatch':
+        return 'Editar Lote';
+      case 'deleteBatch':
+        return 'Eliminar Lote';
+      case 'updateTape':
+        return 'Actualizar Cinta';
+      default:
+        return ''; 
+    }
+  }
+
   getDeleteButtonMessage(): string {
     return this.deleteBatch.get('confirmationIsValid')?.value ? 'Eliminar lote permanentemente' : 'Bloqueado';
   }
@@ -133,68 +184,38 @@ export class EditarEliminarLoteComponent implements OnChanges {
   }
 
   getEditButtonMessage(): string {
-    return this.formularioValido ? 'Editar este lote' : 'Bloqueado';
+    return this.isValidForm ? 'Editar este lote' : 'Bloqueado';
   }
 
   getEditButtonIconClass(): string {
-    return this.formularioValido? 'fa-triangle-exclamation' : 'fa-lock';
+    return this.isValidForm? 'fa-triangle-exclamation' : 'fa-lock';
+  }
+
+  getUpdateTapeButtonMessage(): string {
+    return this.isValidForm ? 'Actualizar esta cinta' : 'Bloqueado';
+  }
+
+  getUpdateTapeButtonIconClass(): string {
+    return this.isValidForm ? 'fa-triangle-exclamation' : 'fa-lock';
   }
 
   getSelectedBatchName(): string {
-    const selectedBatch = this.lote.find(item => item.batchID === this.batchID);
+    const selectedBatch = this.batches.find(item => item.batchID === this.batchID);
     return selectedBatch ? selectedBatch.batchName : '';
   }
-  
-  editarEliminar() {
-    this.editareliminar = !this.editareliminar;
+
+  showNotification(message: string) {
+    this.showDialog = true;
+    this.message = message;
+    setTimeout(() => {
+      this.showDialog = false;
+    }, 3000);
   }
 
-  // Función para mostrar el cuadro de diálogo de confirmación
-  mostrarConfirmacion(mensaje: string, batchName: string, callback: () => void) {
-    this.mensaje = `${mensaje} ${batchName} ?`;
-    this.mostrarDialogo = true;
-    this.confirmCallback = callback; // Almacenamos el callback para llamarlo después
-  }
-
-  // Función para confirmar la acción
-  confirmarAccion() {
-    // Ejecuta el callback almacenado antes de cerrar el cuadro de diálogo
-    if (this.confirmCallback) {
-      this.confirmCallback();
-    }
-    this.mostrarDialogo = false;
-    this.confirmCallback = null; // Limpia el callback después de ejecutarlo o cancelarlo    
-    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-  }
-
-  // Función para cancelar la acción
-  cancelarAccion() {
-    // Restablece confirmCallback a null
-    this.confirmCallback = null;
-    this.mostrarDialogo = false;    
-    this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-  }
-
-  @HostListener('wheel', ['$event'])
-  @HostListener('touchmove', ['$event'])
-  onScroll(event: Event): void {
-    // Verifica si el modal está visible y se está haciendo scroll
-    if (this.mostrarDialogo || this.editarloteVisible) {
-      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      this.mostrarDialogo = false;
-      setTimeout(() => {
-        this.cerrarEditarlote.emit();
-        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      }, 200);
-    }
-  }
-  
-  cerrarDialogo(event: Event): void {
+  closeDialog(event: Event): void {
     // Verifica si el clic se realizó fuera del contenido del modal
     if (event.target === event.currentTarget) {
-      this.mostrarDialogo = false;
-      this.cerrarEditarlote.emit();
-      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      this.closeManageBatch.emit();
     }
   }
 }

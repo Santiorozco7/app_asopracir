@@ -9,13 +9,15 @@ import { Router } from '@angular/router';
   styleUrls: ['./crear-cinta.component.css']
 })
 export class CrearCintaComponent {
-  @Input() crearCintaVisible: boolean = false;
-  @Output() cintaCreada = new EventEmitter<void>();
-  @Output() cerrarCrearcinta = new EventEmitter<void>();
   @Input() lote: any[] = [];
+  @Input() showCreateTape: boolean = false;
+  @Output() tapeCreated = new EventEmitter<void>();
+  @Output() closeCreateTape = new EventEmitter<void>();
 
-  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
-  }
+  showDialog = false;
+  message = '';
+  
+  constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {}
 
   loteForm = this.formBuilder.group({
     batchID: ['', [Validators.required]],
@@ -30,44 +32,44 @@ export class CrearCintaComponent {
       const batchID: any = formData.batchID ?? "";
       const numBunches: any = formData.numBunches ?? "";
       const variety: string = formData.variety ?? "";
-  
       // Obtén el valor del campo "color" y quita el símbolo '#' si está presente
       const colorValue: any = formData.color ?? "";
       const colorWithoutHash: string = colorValue.startsWith('#') ? colorValue.substring(1) : colorValue;
-  
-      console.log(formData);
-  
       // Utiliza colorWithoutHash en tu solicitud al servidor
-      this.service.crearCinta(batchID, numBunches, variety, colorWithoutHash).subscribe(cintacreado => {
-        if (cintacreado['state'] === 'Ok') {
-          console.log(cintacreado['state']);
-          // this.router.navigate(['/agricultor']);
-          // this.cerrarCrearcinta.emit();
-          this.cintaCreada.emit(); // Envia el evento al componente de Lotes
+      this.service.createTape(batchID, numBunches, variety, colorWithoutHash).subscribe(tapeCreated => {
+        if (tapeCreated['state'] === 'Ok') {
+          this.tapeCreated.emit();
+          this.showNotification(`Se ha creado una nueva cinta`);
+        } else {
+          this.tapeCreated.emit();
+          this.showNotification(`¡Ha occurido un error!"`);
         }
       });
     }
-    this.cerrarCrearcinta.emit();
+    this.closeCreateTape.emit();
   }
 
-  @HostListener('wheel', ['$event'])
-  @HostListener('touchmove', ['$event'])
-  onScroll(event: Event): void {
-    // Verifica si el modal está visible y se está haciendo scroll
-    if (this.crearCintaVisible) {
-      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      setTimeout(() => {
-        this.cerrarCrearcinta.emit();
-        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
-      }, 200);
-    }
+  getCreateTapeIconClass(): string {
+    return this.loteForm.valid? 'fa-triangle-exclamation' : 'fa-lock';
   }
   
-  cerrarDialogo(event: Event): void {
+  getCreateTapeButtonMessage(): string {
+    return this.loteForm.valid? 'Crear cinta' : 'Bloqueado';
+  }
+
+  showNotification(message: string) {
+    this.showDialog = true;
+    this.message = message;
+    setTimeout(() => {
+      this.showDialog = false;
+    }, 3000);
+  }
+
+  closeDialog(event: Event): void {
     // Verifica si el clic se realizó fuera del contenido del modal
     if (event.target === event.currentTarget) {
-      this.cerrarCrearcinta.emit();
-      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal-open');
+      this.closeCreateTape.emit();
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
     }
   }
 }

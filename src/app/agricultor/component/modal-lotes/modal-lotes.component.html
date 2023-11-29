@@ -1,35 +1,57 @@
-<div class="modal-wrapper" [ngClass]="{'mostrar-modal': modalVisible}">
-  <div class="modal-body card">
-      <div class="modal-header">
-        <h1 class="heading">Cintas - {{getSelectedBatchName()}}</h1>
-        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarModal.emit()"><i class="fa-solid fa-xmark"></i></a>
-      </div>
-      <div class="tapes-section">
-        <div *ngFor="let cintaItem of getFilteredCintas()">
-          <div class="info-cinta">
-            <div class="color-cinta" [style.background-color]="cintaItem.color"></div>
-            <div class="tipo-platano">{{ cintaItem.variety }}</div>
-            <div class="cantidad-platano">{{ cintaItem.numBunches }}</div>
-            <div class="fecha-inicio">{{ cintaItem.startDate }}</div>
-            <div class="fecha-final">{{ cintaItem.endDate }}</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="button-container" [ngClass]="{'overlay': menuVisible}" (click)="closeButton($event)">
-        <button class="edit-button" (click)="toggleMenu()">
-          <i class="edit fa-solid fa-pen fa-xl"></i>
-          <div *ngIf="menuVisible" class="menu-options">
-            <div (click)="emitirAccion('editar', batchID)">
-              <span>Editar</span>
-              <i class="fa-solid fa-pen-to-square"></i>
-            </div>
-            <div (click)="emitirAccion('eliminar', batchID)">
-              <span>Eliminar</span>
-              <i class="fa-solid fa-trash"></i>
-            </div>
-          </div>
-        </button>
-      </div>
+<div class="modal" [ngClass]="{'modal--show': showModal}" aria-modal="true" role="dialog" aria-labelledby="modalTitle">
+  <div class="modal__card">
+    <div class="modal__header">
+      <h1 class="modal__heading" id="modalTitle">Cintas - {{getSelectedBatchName()}}</h1>
+      <a  class="modal__close" href="javascript:void(0);" role="button" (click)="closeModal.emit()" aria-label="Cerrar modal">
+        <i class="close__icon fa-solid fa-xmark" aria-hidden="true"></i>
+      </a>
     </div>
-  </div>  
+    <table class="tape__table">
+      <thead>
+        <tr class="tape__item tape__header">
+          <th>Col</th>
+          <th>Variedad</th>
+          <th>Cant</th>
+          <th>Corte</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="getFilteredCintas().length; else notTapes">
+          <tr class="tape__item" *ngFor="let cintaItem of getFilteredCintas()" (click)="emitActionUpdateTape('updateTape',cintaItem.tapeID)" aria-label="Editar esta cinta">
+            <td class="tape__color" [style.background-color]="cintaItem.color"></td>
+            <td class="tape__type">{{ cintaItem.variety }}</td>
+            <td class="tape__quantity">{{ cintaItem.numBunches }}</td>
+            <td class="tape__end-date">{{ cintaItem.endDate }}</td>
+          </tr>
+        </ng-container>
+        <ng-template #notTapes>
+          <tr class="tape__item item--notTapes">
+            <td>Aún no tienes cintas agregadas a este lote.
+              <button class="button--newTape" (click)="createTape()" aria-label="crear nuevo cinta">
+                <i class="fa-solid fa-tape fa-flip-horizontal" aria-hidden="true"></i>
+                <span class="button__text">Crear nueva cinta</span>
+              </button>
+            </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+    <div class="button" [ngClass]="{'button--overlay': menuVisible}" (click)="closeButton($event)">
+      <button class="button__cta" (click)="toggleMenu()" aria-label="Abrir menú de opciones, editar y eliminar lote">
+        <i class="button__icon fa-solid fa-pen fa-xl"></i>
+        <div class="button__options" *ngIf="menuVisible">
+          <button class="button__option" (click)="emitAction('updateBatch', batchID, $event)" aria-label="Editar este lote">
+            <span class="button__text">Editar lote</span>
+            <i class="button__icon button__icon--small fa-solid fa-pen-to-square" aria-hidden="true"></i>
+          </button>
+          <button class="button__option" (click)="emitAction('deleteBatch', batchID, $event)" aria-label="Eliminar este lote">
+            <span class="button__text">Eliminar lote</span>
+            <i class="button__icon button__icon--small fa-solid fa-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>  
+<app-editar-eliminar-lote [batches]="batches" [batchID]="batchID" [tapes]="tapes" [tapeID]="tapeID" [action]="action" [manageBatch]="manageBatch" (batchEdited)="closeManageBatch()" (batchDeleted)="batchDeleted()" (closeManageBatch)="closeManageBatch()"></app-editar-eliminar-lote>
+<app-crear-cinta (tapeCreated)="closeCreateTape()" [showCreateTape]="showCreateTape" [lote]="batches" (closeCreateTape)="closeCreateTape()"></app-crear-cinta>

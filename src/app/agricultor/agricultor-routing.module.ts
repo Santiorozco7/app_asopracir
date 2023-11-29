@@ -10,8 +10,8 @@ const routes: Routes = [
     path: '',
     component: AgricultorLayoutComponent,
     children: [
-      { path: '', redirectTo: 'inicio', pathMatch: 'full', data: { title: 'Inicio' } },
-      { path: 'inicio', component: LotesComponent, data: { title: 'Inicio' } },
+      { path: '', redirectTo: 'lotes', pathMatch: 'full', data: { title: 'Lotes' } },
+      { path: 'lotes', component: LotesComponent, data: { title: 'Lotes' } },
       { path: 'ordenes', component: OrdenesComponent, data: { title: 'Órdenes' } },
       { path: 'historial', component: HistorialComponent, data: { title: 'Historial' } },
     ],

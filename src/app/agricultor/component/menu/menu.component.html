@@ -1,7 +1,22 @@
-<nav class="bottom-nav" role="navigation">
-  <ul>
-    <li><a routerLink="inicio" aria-label="Inicio"><i class="fa-solid fa-house fa-xl" style="color:#252525;"></i></a></li>
-    <li><a routerLink="ordenes" aria-label="Órdenes"><i class="fa-solid fa-truck fa-xl" style="color:#252525;"></i></a></li>
-    <li><a routerLink="historial" aria-label="Historial"><i class="fa-solid fa-chart-simple fa-xl" style="color:#252525;"></i></a></li>
+<nav class="nav" role="navigation" aria-label="Menú de Navegación">
+  <ul class="nav__list">
+    <li class="nav__item">
+      <a class="nav__link" routerLink="lotes" routerLinkActive="nav__link--active" aria-label="Ir a la página de Inicio">
+        <i class="nav__icon fa-solid fa-house fa-xl" aria-hidden="true"></i>
+        <div class="nav__text">Lotes</div>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" routerLink="ordenes" routerLinkActive="nav__link--active" aria-label="Ir a la página de Órdenes">
+        <i class="nav__icon fa-solid fa-truck fa-xl" aria-hidden="true"></i>
+        <div class="nav__text">Órdenes</div>
+      </a>
+    </li>
+    <li class="nav__item">
+      <a class="nav__link" routerLink="historial" routerLinkActive="nav__link--active" aria-label="Ir a la página de Historial">
+        <i class="nav__icon fa-solid fa-chart-simple fa-xl" aria-hidden="true"></i>
+        <div class="nav__text">Historial</div>
+      </a>
+    </li>
   </ul>
 </nav>
