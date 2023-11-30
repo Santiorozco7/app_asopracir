@@ -1,6 +1,5 @@
 <div class="header">
     <h1>Ordenes</h1>
-    <!-- <a href="javascript:void(0);" (click)="mostrarcreateVehicle()">Crear Vehículo</a> -->
 </div>
 
 <h2>Órdenes pendientes por programar ruta de recolección</h2>
@@ -18,24 +17,30 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let Transporter of Transporters">
-            <td>{{ Transporter.valid }}</td>
-            <td>{{ Transporter.plate }}</td>
-            <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
-            <td>{{ Transporter.docNumber }}</td>
-            <td>{{ typeSelect[Transporter.type] }}</td>
-            <td>{{ Transporter.capacity }}</td>
-            <td>{{ Transporter.phoneNumber }}</td>
+        <tr *ngFor="let order of orders">
+            <td>{{ order.orderDate }}</td>
+            <td>{{ order.farmName }}</td>
+            <td>{{ order.zoneName }}</td>
+            <td>{{ order.estBunches }}</td>
+            <td>{{ order.names }} {{order.firstLastname }}</td>
+            <td>{{ order.phoneNumber }}</td>
+            <td>{{ order.email }}</td>
             <td>
-                <a href="javascript:void(0);">
-                    Editar
+                <a href="javascript:void(0);" (click)="addRoute(order.orderID)">
+                    Agendar ruta
                 </a>
             </td>
         </tr>
     </tbody>
 </table>
 
-<h2>Futuras cosechas sin generar orden ni ruta</h2>
+<div>
+    <h2>Futuras cosechas sin generar orden ni ruta</h2>
+    <div>
+        <label>Meses atrás</label>
+        <input type="number" [(ngModel)]="months" (keyup.enter)="onEnterPressed()"/>
+    </div>
+</div>
 
 <table class="farm-table">
     <thead>
@@ -50,25 +55,34 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let Transporter of Transporters">
-            <td>{{ Transporter.valid }}</td>
-            <td>{{ Transporter.plate }}</td>
-            <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
-            <td>{{ Transporter.docNumber }}</td>
-            <td>{{ typeSelect[Transporter.type] }}</td>
-            <td>{{ Transporter.capacity }}</td>
-            <td>{{ Transporter.phoneNumber }}</td>
+        <tr *ngFor="let tape of tapes">
+            <td>{{ tape.startDate }}</td>
+            <td>{{ tape.farmName }}</td>
+            <td>{{ tape.zoneName }}</td>
+            <td>{{ tape.estBunches }}</td>
+            <td>{{ tape.names }} {{tape.firstLastname }}</td>
+            <td>{{ tape.phoneNumber }}</td>
+            <td>{{ tape.email }}</td>
             <td>
-                <a href="javascript:void(0);">
-                    Editar
+                <a href="javascript:void(0);" (click)="generateOrder(tape.farmID, tape.tapeID)">
+                    Generar Orden
                 </a>
             </td>
         </tr>
     </tbody>
 </table>
+<span *ngIf="tapesAlert">Este mes no hay para agendar orden ni ruta</span>
 
 <h2>Órdenes programadas</h2>
-
+<select name="select" id="userType" (change)="onSelectFilter($event)">
+    <option value="0">Preparación</option>
+    <option value="1">Agendada</option>
+    <option value="2">En ruta</option>
+    <option value="3">En recolección</option>
+    <option value="4">Recogida</option>
+    <option value="5">Facturada</option>
+    <option value="6">Pagada</option>
+  </select>
 <table class="farm-table">
     <thead>
         <tr>
@@ -83,20 +97,25 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let Transporter of Transporters">
-            <td>{{ Transporter.valid }}</td>
-            <td>{{ Transporter.plate }}</td>
-            <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
-            <td>{{ Transporter.docNumber }}</td>
-            <td>{{ typeSelect[Transporter.type] }}</td>
-            <td>{{ Transporter.capacity }}</td>
-            <td>{{ Transporter.phoneNumber }}</td>
-            <td>{{ Transporter.phoneNumber }}</td>
+        <tr *ngFor="let orderFilter of ordersFilter">
+            <td>{{ typeFilter[orderFilter.state] }}</td>
+            <td>{{ orderFilter.orderDate }}</td>
+            <td>{{ orderFilter.farmName }}</td>
+            <td>{{ orderFilter.zoneName }}</td>
+            <td>{{ orderFilter.estBunches }}</td>
+            <td>{{ orderFilter.names }} {{orderFilter.firstLastname }}</td>
+            <td>{{ orderFilter.phoneNumber }}</td>
+            <td>{{ orderFilter.email }}</td>
             <td>
-                <a href="javascript:void(0);">
-                    Editar
+                <a href="javascript:void(0);" (click)="seeOrder(orderFilter.orderID)">
+                    Ver
                 </a>
             </td>
         </tr>
     </tbody>
 </table>
+<span *ngIf="ordersAlert">No hay ordenes que esten: {{ typeFilter[selectedValueAux] }}</span>
+
+<app-add-route [addRouteVisible]="addRuteVisible" (cerrarModal)="cerrarAddRoute()" [orderID]="addOrderID"></app-add-route>
+
+<app-see-order [seeOrderVisible]="seeOrderVisible" (cerrarModal)="cerrarseeOrder()" [orderID]="seeOrderID"></app-see-order>

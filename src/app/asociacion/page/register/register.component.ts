@@ -123,7 +123,7 @@ export class RegisterComponent {
       //Datos de la fica
       const GPSposition: string = formData.GPSposition ?? "";
       const area: string = formData.area ?? "";
-      const cityFarm: string = formData.city ?? "";
+      const cityFarm: string = formData.cityFarm ?? "";
       const farmName: string = formData.farmName ?? "";
       const fileOwnerCertificate: string = formData.fileOwnerCertificate ?? "";
       const zoneName: string = formData.zoneName ?? "";
@@ -161,6 +161,7 @@ export class RegisterComponent {
           console.log('Usuario creado con id:', resultUser.data.userID);
           if (this.selectRegister) {  //Crear Agricultor
             console.log("Creando agricultor.....................");
+            console.log(farmName,' ',zoneName,' ',cityFarm,' ',area,' ',GPSposition);
             this.service.createFarm(
               farmName,
               zoneName,
@@ -175,7 +176,7 @@ export class RegisterComponent {
                     console.log('Agricultor fue creado');
                     this.View(); 
                   } if(resultFarmer['state'] === 'Fail') {
-                    console.log('Agricultor no fue creado');
+                    console.log('Agricultor no fue creado',resultFarm);
                   }
                 })
               } if(resultFarm['state'] === 'Fail') {

@@ -6,6 +6,7 @@ import { TransportComponent } from './page/transport/transport.component';
 import { ProductionComponent } from './page/production/production.component';
 import { OrdersComponent } from './page/orders/orders.component';
 import { RegisterComponent } from './page/register/register.component';
+import { RoutesComponent } from './page/routes/routes.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'produccion', component: ProductionComponent, data: { title: 'Producción' } },
       { path: 'ordenes', component: OrdersComponent, data: { title: 'Ordenes' } },
       { path: 'registrar', component: RegisterComponent, data: { title: 'Registro' } },
+      { path: 'rutas', component: RoutesComponent, data: { title: 'Rutas' } },
     ],
   },
 ];

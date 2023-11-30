@@ -1,0 +1,46 @@
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': seeOrderVisible }">
+  <div class="modal-body card">
+    <div class="modal-header">
+      <h1 class="heading">Ver Orden</h1>
+      <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i>X</a>
+    </div>
+    <section *ngFor="let order of orderData">
+        <div>
+            <div class="cosecha">
+                <p>Fecha orden: {{ order.order.orderDate }}</p>
+                <p>Estado: {{ typeFilter[order.order.state] }}</p>
+                <p>Finca: {{ order.order.farmName }}</p>
+                <p>Vereda: {{ order.order.zoneName }}</p>
+                <p>Agricultor: {{ order.order.names }} {{ order.order.firstLastname }}</p>
+                <p>Teléfono: {{ order.order.phoneNumber }}</p>
+                <p>Email: {{ order.order.email }}</p>
+                <p>Peso (Kg): {{ order.order.weight }}</p>
+                <p>Número estimado recimos: {{ order.order.estBunches }}</p>
+                <p>Número racimos recolectados: {{ order.order.numBunches }}</p>
+                <p>Valor pagado: {{ order.order.payAmount }}</p>
+                <p>Fecha de pago: {{ order.order.payDate }}</p>
+                <p>Persona que aceptó orden</p>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="ruta">
+                <p>Fecha recolección: {{order?.route?.pickupDate}}</p>
+                <p>Estado ruta: {{ routeState[routeStateAUX] }}</p>
+            </div>
+            <div class="transportador">
+                <p>Placas: {{ order?.route?.plate }}</p>
+                <p>Nombre transportador: {{ order?.route?.transporter?.names }} {{ order?.route?.transporter?.firstLastname }}</p>
+                <p>Documento transportador: {{ order?.route?.transporter?.docNumber }}</p>
+                <p>Teléfono: {{ order?.route?.transporter?.phoneNumber }}</p>
+                <p>Email: {{ order?.route?.transporter?.email }}</p>
+            </div>
+            <div class="encargo">
+                <p>Nombre colaborador: {{ order?.route?.collab?.names }} {{ order?.route?.collab?.firstLastname }}</p>
+                <p>Documeto colaborador: {{ order?.route?.collab?.docNumber }}</p>
+                <p>Teléfono: {{ order?.route?.collab?.phoneNumber }}</p>
+                <p>Email: {{ order?.route?.collab?.email }}</p>
+            </div>
+        </div>
+    </section>
+  </div>
+</div>

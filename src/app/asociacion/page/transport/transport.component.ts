@@ -34,7 +34,7 @@ export class TransportComponent {
   }
 
   View() {
-    this.service.getTransporters().subscribe(Transporters => {
+    this.service.getTransporters('all').subscribe(Transporters => {
       if (Transporters['state'] === 'Fail') {
         this.router.navigate(['/']);
       } else {

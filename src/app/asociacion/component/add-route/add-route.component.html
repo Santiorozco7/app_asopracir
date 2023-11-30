@@ -1,0 +1,40 @@
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': addRouteVisible }">
+    <div class="modal-body card">
+      <div class="modal-header">
+        <h1 class="heading">Asignar Ruta</h1>
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i>X</a>
+      </div>
+      <table class="farm-table">
+        <thead>
+            <tr>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Placa Vehículo</th>
+                <th>Conductor</th>
+                <th>Tel. Conductor</th>
+                <th>Colaborador</th>
+                <th>Finca</th>
+                <th>No. Racimos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let route of routes">
+                <td>{{ routeState[route.routeState] }}</td>
+                <td>{{ route.pickupDate }}</td>
+                <td>{{ route.plate }}</td>
+                <td>{{ route.transporter.names }} {{ route.transporter.firstLastname }}</td>
+                <td>{{ route.transporter.phoneNumber }}</td>
+                <td>{{ route.collab.names }} {{ route.collab.firstLastname }}</td>
+                <td>{{ route.orders[0].farmName }}</td>
+                <td>{{ route.totalBunches }}</td>
+                <td>
+                    <a href="javascript:void(0);" (click)="addOrderToRoute(route.routeID)">
+                        Seleccionar
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+  </div>
+  
