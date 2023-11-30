@@ -1,0 +1,88 @@
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': routesManagementVisible }">
+    <div class="modal-body card">
+      <div class="modal-header">
+        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i>X</a>
+      </div>
+      <section >
+          <div class="transportador" *ngIf="transportersFlag">
+            <table class="farm-table">
+              <thead>
+                  <tr>
+                      <th>Placa</th>
+                      <th>Nombre</th>
+                      <th>Tel.</th>
+                      <th>Email</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let transporter of transporters">
+                      <td>{{transporter.plate}}</td>
+                      <td>{{transporter.names}} {{transporter.firstLastname}}</td>
+                      <td>{{transporter.phoneNumber}}</td>
+                      <td>{{transporter.email}}</td>
+                      <td>
+                          <a href="javascript:void(0);" (click)="updateTransporter(transporter.transID, transporter.vehID, transporter)">
+                              Seleccionar
+                          </a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+          </div>
+          <div class="colaborador" *ngIf="collaboratorsFlag">
+            <table class="farm-table">
+              <thead>
+                  <tr>
+                      <th>Nombre</th>
+                      <th>Tel.</th>
+                      <th>Email</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let collabotor of collabotors">
+                      <td>{{collabotor.names}} {{collabotor.firstLastname}}</td>
+                      <td>{{collabotor.phoneNumber}}</td>
+                      <td>{{collabotor.email}}</td>
+                      <td>
+                          <a href="javascript:void(0);" (click)="updateCollabotor(collabotor.collabID, collabotor)">
+                              Seleccionar
+                          </a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+          </div>
+          <div class="ordenes" *ngIf="ordersFlag">
+            <table class="farm-table scrollable-table">
+              <thead>
+                  <tr>
+                    <th>Fecha Orden</th>
+                    <th>Finca</th>
+                    <th>Vereda</th>
+                    <th>Cantidad Racimos</th>
+                    <th>Nombre Agricultor</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let order of orders">
+                    <td>{{ order.orderDate }}</td>
+                    <td>{{ order.farmName }}</td>
+                    <td>{{ order.zoneName }}</td>
+                    <td>{{ order.estBunches }}</td>
+                    <td>{{ order.names }} {{order.firstLastname }}</td>
+                    <td>{{ order.phoneNumber }}</td>
+                    <td>{{ order.email }}</td>
+                      <td>
+                          <a href="javascript:void(0);" (click)="addOrderToRoute(order.orderID)">
+                              Añadir orden
+                          </a>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+          </div>
+      </section>
+    </div>
+  </div>

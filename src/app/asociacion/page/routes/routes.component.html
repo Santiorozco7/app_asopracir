@@ -1,0 +1,48 @@
+<div class="header">
+    <h1>Rutas</h1>
+</div>
+
+<table class="farm-table">
+    <thead>
+        <tr>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Placa Vehículo</th>
+            <th>Conductor</th>
+            <th>Tel. Conductor</th>
+            <th>Colaborador</th>
+            <th>Finca</th>
+            <th>No. Racimos</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let route of routes">
+            <td>{{ routeState[route.routeState] }}</td>
+            <td>{{ route.pickupDate }}</td>
+            <td>{{ route.plate }}</td>
+            <td>{{ route.transporter.names }} {{ route.transporter.firstLastname }}</td>
+            <td>{{ route.transporter.phoneNumber }}</td>
+            <td>{{ route.collab.names }} {{ route.collab.firstLastname }}</td>
+            <td><p *ngIf="route.orders[0]">{{ route.orders[0].farmName }}</p></td>
+            <td>{{ route.totalBunches }}</td>
+            <td>
+                <a href="javascript:void(0);" (click)="abrirmodalRutas(route.routeID, true)">
+                    Agendar ruta
+                </a>
+                <a href="javascript:void(0);" (click)="cancelRoute(route.routeID)">
+                    Borrar
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    <a href="javascript:void(0);" (click)="abrirCrearRuta(false)">
+        Crear ruta
+    </a>
+</div>
+
+<app-modal-routes [rutasVisible]="rutasVisible" [managementFlag]="managementFlag" [routeID]="routesAUX"  (cerrarModal)="cerrarmodalRutas()" *ngIf="managementFlag"></app-modal-routes>
+
+<app-modal-routes [rutasVisible]="rutasVisible" [managementFlag]="managementFlag" (cerrarModal)="cerrarmodalRutas()" *ngIf="!managementFlag"></app-modal-routes>

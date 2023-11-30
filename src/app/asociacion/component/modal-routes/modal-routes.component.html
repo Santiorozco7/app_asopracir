@@ -1,0 +1,76 @@
+<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': rutasVisible }">
+  <div class="modal-body card">
+    <div class="modal-header">
+      <h1 class="heading">Gestion de rutas</h1>
+      <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i>X</a>
+    </div>
+    <section >
+        <div class="transportador">
+          <div class="transportManagement">
+            <h2>Transportador</h2>
+            <button (click)="openRoutesManagement(1)"><p *ngIf="managementFlag">Editar</p><p *ngIf="!managementFlag">Agregar</p></button>
+          </div>
+          <div *ngIf="managementFlag">
+            <p>Placa: {{routesData?.plate}}</p>
+            <p>Nombre: {{routesData?.transporter?.names}} {{routesData?.transporter?.firstLastname}}</p>
+            <p>Teléfono: {{routesData?.transporter?.phoneNumber}}</p>
+          </div>
+          <div *ngIf="!managementFlag">
+            <p>Placa: {{transporter?.plate}}</p>
+            <p>Nombre: {{transporter?.names}} {{transporter?.firstLastname}}</p>
+            <p>Teléfono: {{transporter?.phoneNumber}}</p>
+          </div>
+        </div>
+        <div class="colaborador">
+          <div class="transportManagement">
+            <h2>Colaborador</h2>
+            <button (click)="openRoutesManagement(2)"><p *ngIf="managementFlag">Editar</p><p *ngIf="!managementFlag">Agregar</p></button>
+          </div>
+          <div *ngIf="managementFlag">
+            <p>Nombre: {{routesData?.collab?.names}} {{routesData?.collab?.firstLastname}}</p>
+            <p>Teléfono: {{routesData?.collab?.phoneNumber}}</p>
+          </div>
+          <div *ngIf="!managementFlag">
+            <p>Nombre: {{collabotor?.names}} {{collabotor?.firstLastname}}</p>
+            <p>Teléfono: {{collabotor?.phoneNumber}}</p>
+          </div>
+        </div>
+        <div class="ordenes" *ngIf="managementFlag">
+          <div class="transportManagement">
+            <h2>Ordenes</h2>
+            <button (click)="openRoutesManagement(3)"><p *ngIf="managementFlag">Editar</p><p *ngIf="!managementFlag">Agregar</p></button>
+          </div>
+          <table class="farm-table">
+            <thead>
+                <tr>
+                    <th>Fecha Orden</th>
+                    <th>Finca</th>
+                    <th>Vereda</th>
+                    <th>Nombre</th>
+                    <th>Tel.</th>
+                    <th>No. Racimos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let route of routesData?.orders">
+                    <td>{{ routesData?.pickupDate }} Verificar fecha</td>
+                    <td>{{ route.farmName }}</td>
+                    <td>{{ route.zoneName }}</td>
+                    <td>Verificar nombre</td>
+                    <td>Verificar teléfono</td>
+                    <td>{{ route.numBunches }}</td>
+                    <td>
+                        <a href="javascript:void(0);" (click)="removeOrderFromRoute(route.orderID)">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+        <button (click)="crearRuta()" *ngIf="!managementFlag && collabotor && transporter">Crear Ruta</button>
+    </section>
+  </div>
+</div>
+
+<app-routes-management [routesManagementVisible]="routesManagementVisible" [managementFlag]="managementFlag" [actionFilter]="actionFilter" [routeID]="routeID" (transporter)="obtenerTransportador($event)" (collabotor)="obtenerColaborador($event)" (cerrarModal)="closeRoutesManagement()"></app-routes-management>

@@ -1,0 +1,37 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+a {
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #ffffff;
+    border-radius: 5px;
+  }
+
+.farm-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.farm-table th, .farm-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.farm-table th {
+    background-color: #333;
+    color: white;
+}
+
+.farm-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.farm-table tbody tr:hover {
+    background-color: #ddd;
+}

@@ -14,12 +14,52 @@ export class AsociacionService {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getFarms&token=${localStorage.getItem('token')}`);
   }
 
-  public getTransporters(): Observable<any> {
-    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getTransporters&token=${localStorage.getItem('token')}&filter=all`);
+  public getTransporters(filter:string): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getTransporters&token=${localStorage.getItem('token')}&filter=${filter}`);
+  }
+
+  public getCollaborators(): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getCollaborators&token=${localStorage.getItem('token')}`);
   }
 
   public getPendingOrders(): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getPendingOrders&token=${localStorage.getItem('token')}`);
+  }
+
+  public getPendingTapes(months:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getPendingTapes&token=${localStorage.getItem('token')}&months=${months}`);
+  }
+
+  public getOrders(filter:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getOrders&token=${localStorage.getItem('token')}&filter=${filter}`);
+  }
+
+  public getOrder(orderID:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getOrder&token=${localStorage.getItem('token')}&orderID=${orderID}`);
+  }
+
+  public getRoutes(filter?:number, limit?:string, offset?:string): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getRoutes`;
+
+    if (filter) {
+      url += `&filter=${filter}`;
+    }
+    if (limit) {
+      url += `&limit=${limit}`;
+    }
+    if (offset) {
+      url += `&offset=${offset}`;
+    }
+
+    url += `&token=${token}`;
+
+    return this.http.get(url);
+  }
+
+  public getRoute(routeID?:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getRoute&token=${localStorage.getItem('token')}&routeID=${routeID}`);
   }
 
   public getFarmer(docType:number, docNumber:number): Observable<any> {
@@ -36,6 +76,14 @@ export class AsociacionService {
 
   public createFarmer(userID:number, farmID:number): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createFarmer&token=${localStorage.getItem('token')}&userID=${userID}&farmID=${farmID}`);
+  }
+
+  public createOrder(farmID:number, tapeID:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createOrder&token=${localStorage.getItem('token')}&farmID=${farmID}&tapeID=${tapeID}`);
+  }
+
+  public createRoute(transID?:number, vehID?:number, collabID?:number, pickupDate?:string): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createRoute&token=${localStorage.getItem('token')}&transID=${transID}&vehID=${vehID}&collabID=${collabID}&pickupDate=${pickupDate}`);
   }
 
   public createTransporter(userID:string, vehID:string, licenseType:string, licenseExpiration:string): Observable<any> {
@@ -146,7 +194,7 @@ export class AsociacionService {
     farmName: string,
     zoneName: string,
     city: string,
-    area: string,
+    area?: string,
     GPSposition?: string
   ): Observable<any> {
     const token = localStorage.getItem('token');
@@ -325,7 +373,60 @@ export class AsociacionService {
     return this.http.get(url);
   }
 
+  public updateRoute(
+    routeID: number,
+    pickupDate?: string,
+    startWeight?: string,
+    endWeight?: string,
+    state?: string,
+    transID?: number,
+    vehID?: number,
+    collabID?: number
+  ): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    let url = `${this.API_ASOPRACIR}assoc.php?do=updateRoute&routeID=${routeID}`;
+
+    if (pickupDate) {
+      url += `&pickupDate=${pickupDate}`;
+    }
+    if (startWeight) {
+      url += `&startWeight=${startWeight}`;
+    }
+    if (endWeight) {
+      url += `&endWeight=${endWeight}`;
+    }
+    if (state) {
+      url += `&state=${state}`;
+    }
+    if (transID) {
+      url += `&transID=${transID}`;
+    }
+    if (vehID) {
+      url += `&vehID=${vehID}`;
+    }
+    if (collabID) {
+      url += `&collabID=${collabID}`;
+    }
+
+    url += `&token=${token}`;
+
+    return this.http.get(url);
+  }
+
   public updateTransporter(transID:string, licenseType:string, licenseExpiration:string, comments:string): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=updateTransporter&token=${localStorage.getItem('token')}&transID=${transID}&licenseType=${licenseType}&licenseExpiration=${licenseExpiration}&comments=${comments}`);
+  }
+
+  public appendOrderToRoute(routeID:number, orderID:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=appendOrderToRoute&token=${localStorage.getItem('token')}&routeID=${routeID}&orderID=${orderID}`);
+  }
+
+  public removeOrderFromRoute(orderID:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=removeOrderFromRoute&token=${localStorage.getItem('token')}&orderID=${orderID}`);
+  }
+
+  public cancelRoute(routeID:number): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=cancelRoute&token=${localStorage.getItem('token')}&routeID=${routeID}`);
   }
 }

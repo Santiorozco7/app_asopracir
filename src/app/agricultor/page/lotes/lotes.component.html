@@ -1,6 +1,6 @@
-<app-aviso [tapes]="tapes" [batches]="batches"></app-aviso>
+<app-aviso [tapes]="tapes" [batches]="batches" *ngIf="!verificacionInfo"></app-aviso>
 
-<section class="batches">
+<section class="batches" *ngIf="!verificacionInfo">
   <div class="batch" *ngFor="let item of batches">
     <button class="batch__link" href="javascript:void(0);" (click)="modal(item.batchID)" [attr.aria-label]="'Abrir detalles del lote: ' + (item.batchName)" >
       <ng-container *ngIf="getFirstTapeByBatch(item.batchID) as tape;">
@@ -27,6 +27,10 @@
       </ng-container>
     </button>
   </div>
+</section>
+
+<section *ngIf="verificacionInfo">
+  <span>No hay información para mostrar</span>
 </section>
 
 <app-modal-lotes [showModal]="showModal" [tapes]="tapes" [batches]="batches" [batchID]="batchID" (closeModal)="closeModal()" (loteEditado)="View()"></app-modal-lotes>

@@ -1,4 +1,4 @@
-<section class="orders">
+<section class="orders" *ngIf="!verificacionOrden">
   <div class="order" *ngFor="let item of orders">
     <button class="order__link" href="javascript:void(0);" (click)="modalOrder(item.orderID)" aria-label="Abrir detalles de la orden" >
         <h2 class="order__title">{{ getFormattedDate(item.startDate) }}</h2>
@@ -20,6 +20,9 @@
   </div>
 </section>
 
+<section *ngIf="verificacionOrden">
+  <span>No hay ordenes asignadas</span>
+</section>
 
 <div id="container-floating"> 
   <a class="nd1 nds" href="javascript:void(0);" (click)="createOrder()">
