@@ -11,6 +11,7 @@ export class OrdenesComponent {
   orders: any[] = [];
   order: any = {};
   tape: any[] = [];
+  verificacionOrden:boolean = false;
 
   showModalOrder = false;
   orderID?: any;
@@ -26,14 +27,17 @@ export class OrdenesComponent {
   View() {
     this.service.getOrders().subscribe(OD => {
       if (OD['state'] === 'Fail') {
-        this.router.navigate(['/']);
+        this.verificacionOrden = true;
+        console.log("No hay información de ordenes",OD)
       }
-      this.orders = OD.data;
-      this.service.getTapes().subscribe(tape => {
-        this.tape = tape.data;
-      });
+      if (OD['state'] === 'Ok') {
+        this.verificacionOrden = false;
+        this.orders = OD.data;
+        this.service.getTapes().subscribe(tape => {
+          this.tape = tape.data;
+        });
+      }
     });
-    
   }
   
   getFormattedDate(dateString: string): string {

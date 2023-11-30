@@ -32,4 +32,8 @@
   </div>
 </section>
 
+<section *ngIf="verificacionHistorial">
+  <span>Noy hay historial</span>
+</section>
+
 <app-modal-historial [showModalHistory]="showModalHistory" [historyDetails]="historyDetails" (closeModalHistory)="closeModalHistory()"></app-modal-historial>

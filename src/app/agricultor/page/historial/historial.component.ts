@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class HistorialComponent {
   history: any[] = [];
   historyDetails: any = {};
+  verificacionHistorial:boolean = false;
 
   showModalHistory = false;
 
@@ -23,9 +24,15 @@ export class HistorialComponent {
   View() {
     this.service.getStats().subscribe(HT => {
       if (HT['state'] === 'Fail') {
-        this.router.navigate(['/']);
+        this.verificacionHistorial = true;
+        console.log("No hay información en historial", HT);
+        // this.router.navigate(['/']);
       }
-      this.history = HT.data;
+      if (HT['state'] === 'Ok') {
+        this.verificacionHistorial = false;
+        this.history = HT.data;
+        console.log("Este es el historial:",HT.data);
+      }
     });  
   }
 
