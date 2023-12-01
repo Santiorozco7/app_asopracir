@@ -28,14 +28,20 @@ export class OrdenesComponent {
     this.service.getOrders().subscribe(OD => {
       if (OD['state'] === 'Fail') {
         this.verificacionOrden = true;
-        console.log("No hay información de ordenes",OD)
+        console.log("No hay información de ordenes",OD);
       }
       if (OD['state'] === 'Ok') {
         this.verificacionOrden = false;
         this.orders = OD.data;
-        this.service.getTapes().subscribe(tape => {
-          this.tape = tape.data;
-        });
+      }
+    });
+    this.service.getTapes().subscribe(tape => {
+      if (tape['state'] === 'Fail') {
+        console.log("No hay información para generar ordenes",tape);
+      }
+      if (tape['state'] === 'Ok') {
+        this.tape = tape.data;
+        console.log("Las ordenes son: ",tape);
       }
     });
   }
