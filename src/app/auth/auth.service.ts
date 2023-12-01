@@ -7,8 +7,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 
-  //private API_ASOPRACIR = "http://192.168.1.61/uqplatanos/";
-  private API_ASOPRACIR = "http://192.168.217.37/uqplatanos/";
+  private API_ASOPRACIR = "http://localhost/uqplatanos/";
+  // private API_ASOPRACIR = "http://192.168.217.37/uqplatanos/";
 
   constructor(private http: HttpClient) { }
 

@@ -40,14 +40,19 @@ export class LotesComponent {
         this.firstTapeByBatch = [];
         // Después de cargar los datos de los lotes, realizamos la suscripción a los datos de las cintas
         this.service.getTapes().subscribe(tapes => {
-          this.tapes = tapes.data;
-          // Al cargar los datos de las cintas, encontraremos la primera cinta de cada lote
-          this.batches.forEach(bacthItem => {
-            const primeraCintaLote = this.tapes.find(cintaItem => cintaItem.batchID === bacthItem.batchID);
-            if (primeraCintaLote) {
-              this.firstTapeByBatch.push(primeraCintaLote); // Agregar la primera cinta completa al array
-            }
-          });  
+          if (tapes['state'] === 'Fail') {
+            console.log("No hay cintas creadas");
+          }
+          if (tapes['state'] === 'Ok') {
+            this.tapes = tapes.data;
+            // Al cargar los datos de las cintas, encontraremos la primera cinta de cada lote
+            this.batches.forEach(bacthItem => {
+              const primeraCintaLote = this.tapes.find(cintaItem => cintaItem.batchID === bacthItem.batchID);
+              if (primeraCintaLote) {
+                this.firstTapeByBatch.push(primeraCintaLote); // Agregar la primera cinta completa al array
+              }
+            }); 
+          } 
         });
       }
     });
