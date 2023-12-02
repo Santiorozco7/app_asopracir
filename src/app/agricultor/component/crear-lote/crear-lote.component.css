@@ -124,6 +124,10 @@ button {
   justify-content: center;
 }
 
+.button__icon {
+  width: 1rem;
+} 
+
 .button:disabled {
   background-color: #e9ecef; 
   color: #6c757d; 

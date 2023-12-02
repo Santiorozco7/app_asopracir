@@ -4,15 +4,19 @@
         <h2 class="order__title">{{ getFormattedDate(item.startDate) }}</h2>
         <ul class="order__info">
           <li class="order__item">
-            <i class="order__icon fa-solid fa-sun-plant-wilt" aria-hidden="true"></i>
+            <svg class="order__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M288 120c0-30.9 25.1-56 56-56s56 25.1 56 56v13c-29.3 10-48 34.5-48 70.1c0 27.9 25.3 74.8 66 111.6c3.8 3.5 8.9 5.3 14 5.3s10.2-1.8 14-5.3c40.7-36.8 66-83.7 66-111.6c0-35.6-18.7-60.2-48-70.1V120C464 53.7 410.3 0 344 0S224 53.7 224 120v21.8C207.3 133 188.2 128 168 128c-66.3 0-120 53.7-120 120v13c-29.3 10-48 34.5-48 70.1C0 359 25.3 405.9 66 442.7c3.8 3.5 8.9 5.3 14 5.3s10.2-1.8 14-5.3c40.7-36.8 66-83.7 66-111.6c0-35.6-18.7-60.2-48-70.1V248c0-30.9 25.1-56 56-56s56 25.1 56 56v32V480c0 17.7 14.3 32 32 32s32-14.3 32-32V280 248 120z"/>
+            </svg>
             <span class="order__text truncate-text">{{ item.batchName || '------------' }}</span>
           </li>
           <li class="order__item">
-            <i class="order__icon" aria-hidden="true"><img src="../../../../assets/fontawesome/platano.png" alt="Icono de racimos de plátano"></i>
+            <img class="order__icon" src="../../../../assets/platano.svg" alt="Icono de racimos de plátano">
             <span class="order__text truncate-text">{{ item.estBunches || '------------' }} Racimos</span>
           </li>
           <li class="order__item">
-            <i class="order__icon fa-solid fa-user" aria-hidden="true"></i>
+            <svg class="order__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
             <span class="order__text truncate-text">{{ item.signedBy || '------------' }}</span>
           </li>
         </ul>
@@ -24,30 +28,22 @@
   <span>No hay ordenes asignadas</span>
 </section>
 
-<div id="container-floating"> 
-  <a class="nd1 nds" href="javascript:void(0);" (click)="createOrder()">
-    <i class="fa-solid fa-handshake fa-xl reminder"></i>
-    <span class="text">Crear Orden</span>
-  </a>
-
-  <a id="floating-button">
-    <i class="plus fa-solid fa-plus fa-xl"></i>
-    <i class="edit fa-solid fa-pen fa-xl"></i>
-  </a>
-</div>
-
-<!-- <div class="button" [ngClass]="{'button--overlay': showMenu}" (click)="closeButton($event)">
+<div class="button" [ngClass]="{'button--overlay': showMenu}" (click)="closeButton($event)">
   <button class="button__cta" (click)="toggleMenu()" aria-label="Abrir menú de opciones, crear nueva orden" >
-    <i class="button__icon fa-solid fa-plus fa-xl"></i>
+    <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+    </svg>
     <div class="button__options" *ngIf="showMenu">
-      <button class="button__option" (click)="createBatch()" aria-label="crear nuevo lote">
+      <button class="button__option" (click)="createOrder()" aria-label="crear orden">
         <span class="button__text">Crear orden</span>
-        <i class="button__icon button__icon--small fa-solid fa-plant-wilt" aria-hidden="true"></i>
+        <svg class="button__icon--small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+          <path d="M323.4 85.2l-96.8 78.4c-16.1 13-19.2 36.4-7 53.1c12.9 17.8 38 21.3 55.3 7.8l99.3-77.2c7-5.4 17-4.2 22.5 2.8s4.2 17-2.8 22.5l-20.9 16.2L512 316.8V128h-.7l-3.9-2.5L434.8 79c-15.3-9.8-33.2-15-51.4-15c-21.8 0-43 7.5-60 21.2zm22.8 124.4l-51.7 40.2C263 274.4 217.3 268 193.7 235.6c-22.2-30.5-16.6-73.1 12.7-96.8l83.2-67.3c-11.6-4.9-24.1-7.4-36.8-7.4C234 64 215.7 69.6 200 80l-72 48V352h28.2l91.4 83.4c19.6 17.9 49.9 16.5 67.8-3.1c5.5-6.1 9.2-13.2 11.1-20.6l17 15.6c19.5 17.9 49.9 16.6 67.8-2.9c4.5-4.9 7.8-10.6 9.9-16.5c19.4 13 45.8 10.3 62.1-7.5c17.9-19.5 16.6-49.9-2.9-67.8l-134.2-123zM16 128c-8.8 0-16 7.2-16 16V352c0 17.7 14.3 32 32 32H64c17.7 0 32-14.3 32-32V128H16zM48 320a16 16 0 1 1 0 32 16 16 0 1 1 0-32zM544 128V352c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32V144c0-8.8-7.2-16-16-16H544zm32 208a16 16 0 1 1 32 0 16 16 0 1 1 -32 0z"/>
+        </svg>
       </button>
     </div>
   </button>
 </div>
- -->
+
 <app-modal-order [showModalOrder]="showModalOrder" [order]="order" [orderID]="orderID" (closeModalOrder)="closeModalOrder()"></app-modal-order>
 
 <app-create-order [showCreateOrder]="showCreateOrder" [tape]="tape" [orders]="orders" (orderCreated)="View()" (closeCreateOrder)="closeCreateOrder()"></app-create-order>

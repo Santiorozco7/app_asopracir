@@ -178,27 +178,45 @@ export class EditarEliminarLoteComponent implements OnChanges {
   getDeleteButtonMessage(): string {
     return this.deleteBatch.get('confirmationIsValid')?.value ? 'Eliminar lote permanentemente' : 'Bloqueado';
   }
-  
-  getDeleteButtonIconClass(): string {
-    return this.deleteBatch.get('confirmationIsValid')?.value ? 'fa-triangle-exclamation' : 'fa-lock';
+  getDeleteBatchIcon(): { path: string, viewBox: string } {
+    const path = this.deleteBatch.get('confirmationIsValid')?.value
+    ? "M144 144c0-44.2 35.8-80 80-80c31.9 0 59.4 18.6 72.3 45.7c7.6 16 26.7 22.8 42.6 15.2s22.8-26.7 15.2-42.6C331 33.7 281.5 0 224 0C144.5 0 80 64.5 80 144v48H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V256c0-35.3-28.7-64-64-64H144V144z" 
+    : "M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z";
+    
+    const viewBox = this.deleteBatch.get('confirmationIsValid')?.value
+    ? '0 0 448 512'
+    : '0 0 448 512';
+    return { path, viewBox };
   }
 
   getEditButtonMessage(): string {
     return this.isValidForm ? 'Editar este lote' : 'Bloqueado';
   }
-
-  getEditButtonIconClass(): string {
-    return this.isValidForm? 'fa-triangle-exclamation' : 'fa-lock';
+  getEditBatchIcon(): { path: string, viewBox: string } {
+    const path = this.isValidForm
+    ? "M144 144c0-44.2 35.8-80 80-80c31.9 0 59.4 18.6 72.3 45.7c7.6 16 26.7 22.8 42.6 15.2s22.8-26.7 15.2-42.6C331 33.7 281.5 0 224 0C144.5 0 80 64.5 80 144v48H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V256c0-35.3-28.7-64-64-64H144V144z" 
+    : "M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z";
+    
+    const viewBox = this.isValidForm
+    ? '0 0 448 512'
+    : '0 0 448 512';
+    return { path, viewBox };
   }
 
   getUpdateTapeButtonMessage(): string {
     return this.isValidForm ? 'Actualizar esta cinta' : 'Bloqueado';
   }
-
-  getUpdateTapeButtonIconClass(): string {
-    return this.isValidForm ? 'fa-triangle-exclamation' : 'fa-lock';
+  getUpdateBatchIcon(): { path: string, viewBox: string } {
+    const path = this.isValidForm
+    ? "M144 144c0-44.2 35.8-80 80-80c31.9 0 59.4 18.6 72.3 45.7c7.6 16 26.7 22.8 42.6 15.2s22.8-26.7 15.2-42.6C331 33.7 281.5 0 224 0C144.5 0 80 64.5 80 144v48H64c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V256c0-35.3-28.7-64-64-64H144V144z" 
+    : "M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z";
+    
+    const viewBox = this.isValidForm
+    ? '0 0 448 512'
+    : '0 0 448 512';
+    return { path, viewBox };
   }
-
+  
   getSelectedBatchName(): string {
     const selectedBatch = this.batches.find(item => item.batchID === this.batchID);
     return selectedBatch ? selectedBatch.batchName : '';

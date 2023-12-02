@@ -151,25 +151,19 @@ th:nth-child(2) {
   justify-content: end;
 }
 
+/*botonFlotante*/
+
 .button {
   position: fixed;
 }
 
 .button--overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); 
   width: 100vw;
   height: 100vh;
   z-index: 998;
   bottom: 0;
   right: 0;
-}
-
-.button__icon {
-  font-size: 1.5625rem;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .button__cta {
@@ -183,12 +177,19 @@ th:nth-child(2) {
   background-color: gray;
   cursor: revert;
   border: revert;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.button__icon {
+  width: 2rem;
+} 
 
 .button__options {
   position: fixed;
-  bottom: 10rem;
-  right: 1.1rem;
+  bottom: 10rem; 
+  right: 1.1rem; 
   min-width: 7.5rem;
   background-color: white;
   display: flex;
@@ -196,6 +197,7 @@ th:nth-child(2) {
   flex-direction: column;
   z-index: 1001;
   border-radius: 1rem;
+  overflow: hidden;
 }
 
 .button__option {
@@ -208,15 +210,21 @@ th:nth-child(2) {
   justify-content: flex-end;
 }
 
+.button_option:hover {
+  background-color: #333;
+}
+
 .button__text {
   margin-right: 0.625rem;
   font-size: 1rem;
 }
 
 .button__icon--small {
-  font-size: 1.25rem;
-  background-color: #333;
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.1rem;
+}
+
+.rotate {
+  transform: rotateY(180deg);
 }

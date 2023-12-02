@@ -1,4 +1,4 @@
-import { Component, Renderer2, ElementRef } from '@angular/core';
+import { Component, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
 
@@ -7,12 +7,14 @@ import { Router } from '@angular/router';
   templateUrl: './ordenes.component.html',
   styleUrls: ['./ordenes.component.css']
 })
+
 export class OrdenesComponent {
   orders: any[] = [];
   order: any = {};
   tape: any[] = [];
   verificacionOrden:boolean = false;
 
+  showMenu: boolean = false;
   showModalOrder = false;
   orderID?: any;
   showCreateOrder = false;
@@ -76,4 +78,31 @@ export class OrdenesComponent {
     this.showCreateOrder = false;
     this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open'); 
   }
+
+  toggleMenu(): void {
+    this.showMenu = !this.showMenu;
+    if (this.showMenu) {
+      this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
+    }
+  }
+
+  closeButton(event: Event): void {
+    // Verifica si el clic se realizó fuera del contenido del modal
+    if (event.target === event.currentTarget && this.showMenu) {
+      this.showMenu = false;
+      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
+    }
+  }
+
+  @HostListener('wheel', ['$event'])
+  @HostListener('touchmove', ['$event'])
+  onScroll(event: Event): void {
+    // Verifica si el modal está visible y se está haciendo scroll
+    if (this.showMenu) {
+      setTimeout(() => {
+        this.showMenu = false;
+        this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
+      }, 100);
+    }
+  } 
 }
