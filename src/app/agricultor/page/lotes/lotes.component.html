@@ -8,19 +8,25 @@
         <h2 class="batch__title">{{ item.batchName }}</h2>
         <ul class="batch__info">
           <li class="batch__item">
-            <i class="batch__icon fa-solid fa-user" aria-hidden="true"></i>
+            <svg class="batch__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
             <span class="batch__text">{{ tape.responsible || '------------' }}</span>
           </li>
           <li class="batch__item">
-            <i class="batch__icon fa-solid fa-caret-right" aria-hidden="true"></i>
+            <svg class="batch__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
+              <path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"/>
+            </svg>
             <span class="batch__text">{{ tape.variety || '------------' }}</span>
           </li>
           <li class="batch__item">
-            <i class="batch__icon" aria-hidden="true"><img src="../../../../assets/fontawesome/platano.png" alt="Icono de racimos de plátano"></i>
+            <img class="batch__icon" src="../../../../assets/platano.svg" alt="Icono de racimos de plátano">
             <span class="batch__text">{{ tape.numBunches || '------------' }}</span>
           </li>
           <li class="batch__item">
-            <i class="batch__icon fa-solid fa-calendar-days" aria-hidden="true"></i>
+            <svg class="batch__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z"/>
+            </svg>
             <span class="batch__text">{{ tape.endDate || '------------' }}</span>
           </li>
         </ul>
@@ -37,15 +43,21 @@
 
 <div class="button" [ngClass]="{'button--overlay': showMenu}" (click)="closeButton($event)">
   <button class="button__cta" (click)="toggleMenu()" aria-label="Abrir menú de opciones, crear nuevo lote y crear nueva cinta" >
-    <i class="button__icon fa-solid fa-plus fa-xl"></i>
+    <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+      <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+    </svg>
     <div class="button__options" *ngIf="showMenu">
       <button class="button__option" (click)="createBatch()" aria-label="crear nuevo lote">
         <span class="button__text">Nuevo lote</span>
-        <i class="button__icon button__icon--small fa-solid fa-plant-wilt" aria-hidden="true"></i>
+        <svg class="button__icon--small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M288 120c0-30.9 25.1-56 56-56s56 25.1 56 56v13c-29.3 10-48 34.5-48 70.1c0 27.9 25.3 74.8 66 111.6c3.8 3.5 8.9 5.3 14 5.3s10.2-1.8 14-5.3c40.7-36.8 66-83.7 66-111.6c0-35.6-18.7-60.2-48-70.1V120C464 53.7 410.3 0 344 0S224 53.7 224 120v21.8C207.3 133 188.2 128 168 128c-66.3 0-120 53.7-120 120v13c-29.3 10-48 34.5-48 70.1C0 359 25.3 405.9 66 442.7c3.8 3.5 8.9 5.3 14 5.3s10.2-1.8 14-5.3c40.7-36.8 66-83.7 66-111.6c0-35.6-18.7-60.2-48-70.1V248c0-30.9 25.1-56 56-56s56 25.1 56 56v32V480c0 17.7 14.3 32 32 32s32-14.3 32-32V280 248 120z"/>
+        </svg>
       </button>
       <button class="button__option" (click)="createTape()" aria-label="crear nuevo cinta">
         <span class="button__text">Nueva cinta</span>
-        <i class="button__icon button__icon--small fa-solid fa-tape fa-flip-horizontal" aria-hidden="true"></i>
+        <svg class="button__icon--small rotate" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+          <path d="M380.8 416c41.5-40.7 67.2-97.3 67.2-160C448 132.3 347.7 32 224 32S0 132.3 0 256S100.3 480 224 480H544c17.7 0 32-14.3 32-32s-14.3-32-32-32H380.8zM224 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm64 96a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"/>
+        </svg>
       </button>
     </div>
   </button>

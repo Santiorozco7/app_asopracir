@@ -3,7 +3,9 @@
     <div class="modal__header">
       <h1 class="modal__heading" id="modalTitle">Cintas - {{getSelectedBatchName()}}</h1>
       <a  class="modal__close" href="javascript:void(0);" role="button" (click)="closeModal.emit()" aria-label="Cerrar modal">
-        <i class="close__icon fa-solid fa-xmark" aria-hidden="true"></i>
+        <svg class="close__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+          <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+        </svg>
       </a>
     </div>
     <table class="tape__table">
@@ -28,7 +30,9 @@
           <tr class="tape__item item--notTapes">
             <td>Aún no tienes cintas agregadas a este lote.
               <button class="button--newTape" (click)="createTape()" aria-label="crear nuevo cinta">
-                <i class="fa-solid fa-tape fa-flip-horizontal" aria-hidden="true"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                  <path d="M380.8 416c41.5-40.7 67.2-97.3 67.2-160C448 132.3 347.7 32 224 32S0 132.3 0 256S100.3 480 224 480H544c17.7 0 32-14.3 32-32s-14.3-32-32-32H380.8zM224 160a96 96 0 1 1 0 192 96 96 0 1 1 0-192zm64 96a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"/>
+                </svg>
                 <span class="button__text">Crear nueva cinta</span>
               </button>
             </td>
@@ -38,15 +42,21 @@
     </table>
     <div class="button" [ngClass]="{'button--overlay': menuVisible}" (click)="closeButton($event)">
       <button class="button__cta" (click)="toggleMenu()" aria-label="Abrir menú de opciones, editar y eliminar lote">
-        <i class="button__icon fa-solid fa-pen fa-xl"></i>
+        <svg class="button__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/>
+        </svg>
         <div class="button__options" *ngIf="menuVisible">
           <button class="button__option" (click)="emitAction('updateBatch', batchID, $event)" aria-label="Editar este lote">
             <span class="button__text">Editar lote</span>
-            <i class="button__icon button__icon--small fa-solid fa-pen-to-square" aria-hidden="true"></i>
+            <svg class="button__icon--small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.7 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/>
+            </svg>
           </button>
           <button class="button__option" (click)="emitAction('deleteBatch', batchID, $event)" aria-label="Eliminar este lote">
             <span class="button__text">Eliminar lote</span>
-            <i class="button__icon button__icon--small fa-solid fa-trash" aria-hidden="true"></i>
+            <svg class="button__icon--small" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+            </svg>
           </button>
         </div>
       </button>

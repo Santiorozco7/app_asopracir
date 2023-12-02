@@ -29,6 +29,7 @@
 
 .nav__link {
   color: #6c757d;
+  fill: #6c757d;
   text-decoration: none;
   width: 100%;
   height: 100%;
@@ -53,4 +54,5 @@
 
 .nav__link--active {
   color: #252525;
+  fill: #252525;
 }

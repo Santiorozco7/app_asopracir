@@ -1,21 +1,3 @@
-<!-- <section>
-  <div class="historial">
-    <div class="tarjeta" *ngFor="let item of historial">
-      <a href="javascript:void(0);" (click)="showModal(item)">
-        <h2>{{ getMonthName(item.Month) }} {{ item.Year }}</h2>
-        <div class="imagenContainer">
-          <div class="imagen">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQinYs6MdyYKOVgilhkNrD6TFD1TnMhdNO7GA&usqp=CAU" alt="imagen de platano">
-          </div>
-          <div class="circuloNumBunches">
-            <span class="truncate-text">{{ item.numBunches || '00' }}</span>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
-</section> -->
-
 <section class="orders">
   <div class="order" *ngFor="let item of history">
     <button class="order__link" href="javascript:void(0);" (click)="modalHistory(item)" aria-label="Abrir detalles de la orden" >
@@ -31,7 +13,7 @@
     </button>
   </div>
 </section>
-
+ 
 <section *ngIf="verificacionHistorial">
   <span>Noy hay historial</span>
 </section>
