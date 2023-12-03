@@ -120,6 +120,10 @@ button {
   color: #6c757d; 
 }
 
+.button__icon--tape {
+  width: 1rem;
+}
+
 .tape__item > * {
   display: flex;
   align-items: center;
@@ -223,8 +227,4 @@ th:nth-child(2) {
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 0.1rem;
-}
-
-.rotate {
-  transform: rotateY(180deg);
 }

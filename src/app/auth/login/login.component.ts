@@ -14,7 +14,6 @@ export class LoginComponent {
   constructor(private FB: FormBuilder, private service: AuthService, private router: Router) {}
 
   formUser = this.FB.group({
-    // 'email': ['', [Validators.required, Validators.email]],
     'documento': ['', Validators.required],
     'password': ['', Validators.required]
   });
@@ -45,6 +44,5 @@ export class LoginComponent {
         this.err = true;
       }
     });
-    // console.log(this.formUser.value);
   }
 }
