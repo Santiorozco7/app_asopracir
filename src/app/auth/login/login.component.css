@@ -1,73 +1,73 @@
-/* Estilos para el formulario */
 .card {
-    max-width: 400px;
-    margin: 0 auto;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card__body {
+  color: #ffffff;
+  width: 80%;
+  background: blue;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10%;
+}
+
+.card__items {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.form__label {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.card__item {
+  height: 95px;
+}
+
+.form__input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.alert.alert-danger {
+  background-color: #ffe6e6;
+  border-color: #ff6666;
+  color: #ff3333;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.button {
+  box-shadow: none;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  padding: 0.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  border-radius: 0.5rem;
+}
   
-  .card-body {
-    padding: 20px;
-  }
+.button:disabled {
+  background-color: #e9ecef; 
+  color: #6c757d; 
+}
   
-  .form-label {
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .form-control {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .alert.alert-danger {
-    background-color: #ffe6e6;
-    border-color: #ff6666;
-    color: #ff3333;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .btn-primary {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-primary:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Estilos para dispositivos móviles */
-  @media screen and (max-width: 768px) {
-    .card {
-      max-width: 80%;
-    }
-  
-    .form-control {
-      font-size: 16px;
-    }
-  
-    .btn-primary {
-      font-size: 16px;
-    }
-  }
-  
+.button--success {
+  background-color: #2e7d32; 
+  color: #ffffff;
+}

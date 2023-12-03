@@ -1,36 +1,27 @@
 <div class="card">
-    <div class="card-body">
-      <form [formGroup]="formUser" (ngSubmit)="login()">
-        <div class="mb-2">
-          <label class="form-label">Numero de documento</label>
-          <input type="number" formControlName="documento" class="form-control" placeholder="Por favor ingrese su email"/>
-          <div class="alert alert-danger mt-2" [hidden]="formUser.get('documento')?.valid || formUser.get('documento')?.pristine">
-            <span *ngIf="formUser.get('documento')?.errors?.['required']">
-              El usuario es obligatorio
-            </span>
-            <!-- <span *ngIf="formUser.get('email')?.errors?.['email']">
-              El email debe ser válido
-            </span> -->
-          </div>
+  <form class="card__body" [formGroup]="formUser" (ngSubmit)="login()">
+    <h2 class="card__header">Iniciar sesión</h2>
+    <div class="card__items">
+      <div class="card__item">
+        <label class="form__label" for="email">Numero de documento</label>
+        <input class="form__input" type="number" id="email" formControlName="documento" placeholder="Ingrese el numero de documento"/>
+        <div class="alert alert-danger" [hidden]="formUser.get('documento')?.valid || formUser.get('documento')?.pristine">
+          <span *ngIf="formUser.get('documento')?.errors?.['required']">
+            El usuario es obligatorio
+          </span>
         </div>
-  
-        <div class="mb-2">
-          <label class="form-label">Contraseña</label>
-          <input type="password" formControlName="password" class="form-control" placeholder="Por favor ingrese su contraseña"/>
-          <div class="alert alert-danger mt-2" [hidden]="password.valid || password.pristine">
-            <span *ngIf="password.errors?.['required']">
-              La contraseña es obligatoria
-            </span>
-          </div>
+      </div>
+      <div class="card__item">
+        <label class="form__label" for="password">Contraseña</label>
+        <input class="form__input" type="password" id="password" formControlName="password" placeholder="Ingrese su contraseña"/>
+        <div class="alert alert-danger" [hidden]="password.valid || password.pristine">
+          <span *ngIf="password.errors?.['required']">
+            La contraseña es obligatoria
+          </span>
         </div>
-
-        <span *ngIf="err">Documeto o contraseña invalido</span>
-
-        <button class="btn btn-primary" [disabled]="formUser.invalid">Enviar</button>
-      </form>
+      </div>
     </div>
-  </div>
-  
-  {{ formUser.value | json }}
-  <!-- {{ formUser.get("email")?.value }} -->
-  
+    <span *ngIf="err">Documento o contraseña invalido</span>
+    <button class="button button--success" [disabled]="formUser.invalid">Iniciar sesión</button>
+  </form>
+</div>
