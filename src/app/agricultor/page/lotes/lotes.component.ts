@@ -1,6 +1,7 @@
 import { Component, Input, Renderer2, ElementRef, HostListener } from '@angular/core';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lotes',
@@ -28,31 +29,32 @@ export class LotesComponent {
 
   // Se cambio el View
   View() {
-    this.service.getBatches().subscribe(batches => {
-      if (batches['state'] === 'Fail') {
-        this.verificacionInfo = true;
-        console.log("No hay información en lotes", batches);
-        // this.router.navigate(['/']);
+    this.service.getBatches().pipe(
+      tap(batches => {
+        if (batches['state'] === 'Fail') {
+          this.verificacionInfo = true;
+          console.log("No hay información en lotes", batches);
+          // this.router.navigate(['/']);
+        }
+        if (batches['state'] === 'Ok') {
+          this.verificacionInfo = false;
+          this.batches = batches.data;
+        }
+      }),
+      switchMap(() => this.service.getTapes()) // Utilizando switchMap para cambiar a la llamada de getTapes
+    ).subscribe(tapes => {
+      if (tapes['state'] === 'Fail') {
+        console.log("No hay cintas creadas");
       }
-      if (batches['state'] === 'Ok') {
-        this.verificacionInfo = false;
-        this.batches = batches.data;
-        this.firstTapeByBatch = [];
-        // Después de cargar los datos de los lotes, realizamos la suscripción a los datos de las cintas
-        this.service.getTapes().subscribe(tapes => {
-          if (tapes['state'] === 'Fail') {
-            console.log("No hay cintas creadas");
+      if (tapes['state'] === 'Ok') {
+        this.tapes = tapes.data;
+
+        // Al cargar los datos de las cintas, encontraremos la primera cinta de cada lote
+        this.batches.forEach(bacthItem => {
+          const primeraCintaLote = this.tapes.find(cintaItem => cintaItem.batchID === bacthItem.batchID);
+          if (primeraCintaLote) {
+            this.firstTapeByBatch.push(primeraCintaLote);
           }
-          if (tapes['state'] === 'Ok') {
-            this.tapes = tapes.data;
-            // Al cargar los datos de las cintas, encontraremos la primera cinta de cada lote
-            this.batches.forEach(bacthItem => {
-              const primeraCintaLote = this.tapes.find(cintaItem => cintaItem.batchID === bacthItem.batchID);
-              if (primeraCintaLote) {
-                this.firstTapeByBatch.push(primeraCintaLote); // Agregar la primera cinta completa al array
-              }
-            }); 
-          } 
         });
       }
     });

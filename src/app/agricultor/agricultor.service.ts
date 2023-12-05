@@ -11,10 +11,20 @@ export class AgricultorService {
   private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
 
   constructor(private http: HttpClient) { }
-  
-  public getTapes(): Observable<any> {
-    return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=getTapes&token=${localStorage.getItem('token')}&filter=growing`);
+
+  private addTimestamp(url: string): string {
+    const timestamp = new Date().getTime();
+    return `${url}&timestamp=${timestamp}`;
   }
+
+  public getTapes(): Observable<any> {
+    const url = this.addTimestamp(`${this.API_ASOPRACIR}farmer.php?do=getTapes&token=${localStorage.getItem('token')}&filter=growing`);
+    return this.http.get(url);
+  }
+  
+  // public getTapes(): Observable<any> {
+  //   return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=getTapes&token=${localStorage.getItem('token')}&filter=growing`);
+  // }
   
   public createBatch(batchName:string, responsible:string, mainVariety:string): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=createBatch&token=${localStorage.getItem('token')}&batchName=${batchName}&responsible=${responsible}&mainVariety=${mainVariety}`);
@@ -25,8 +35,13 @@ export class AgricultorService {
   }
 
   public getBatches(): Observable<any> {
-    return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=getBatches&token=${localStorage.getItem('token')}`);
+    const url = this.addTimestamp(`${this.API_ASOPRACIR}farmer.php?do=getBatches&token=${localStorage.getItem('token')}`);
+    return this.http.get(url);
   }
+
+  // public getBatches(): Observable<any> {
+  //   return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=getBatches&token=${localStorage.getItem('token')}`);
+  // }
 
   public removeBatch(batchID:string): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=removeBatch&token=${localStorage.getItem('token')}&batchID=${batchID}`);
