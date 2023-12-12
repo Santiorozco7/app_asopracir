@@ -19,6 +19,7 @@ import { RoutesComponent } from './page/routes/routes.component';
 import { ModalRoutesComponent } from './component/modal-routes/modal-routes.component';
 import { AddRouteComponent } from './component/add-route/add-route.component';
 import { RoutesManagementComponent } from './component/routes-management/routes-management.component';
+import { ModalProductionComponent } from './component/modal-production/modal-production.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { RoutesManagementComponent } from './component/routes-management/routes-
     RoutesComponent,
     ModalRoutesComponent,
     AddRouteComponent,
-    RoutesManagementComponent
+    RoutesManagementComponent,
+    ModalProductionComponent
   ],
   providers: [
     DatePipe

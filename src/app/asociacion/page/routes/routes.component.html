@@ -26,10 +26,10 @@
             <td><p *ngIf="route.orders[0]">{{ route.orders[0].farmName }}</p></td>
             <td>{{ route.totalBunches }}</td>
             <td>
-                <a href="javascript:void(0);" (click)="abrirmodalRutas(route.routeID, true)">
+                <a href="javascript:void(0);" (click)="abrirmodalRutas(route.routeID, true)" *ngIf="route.routeState == 0 || route.routeState == 1">
                     Agendar ruta
                 </a>
-                <a href="javascript:void(0);" (click)="cancelRoute(route.routeID)">
+                <a href="javascript:void(0);" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState == 0 || route.routeState == 1">
                     Borrar
                 </a>
             </td>

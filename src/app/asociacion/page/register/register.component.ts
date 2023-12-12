@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  selectRegister = true;
+  selectRegister:boolean = true;
+  searchFlag:boolean = false;
+  searchValidator:boolean = false;
+
 
   docTypeselect: any[] = [
     { id: 0, name: 'CC' },
@@ -41,13 +44,25 @@ export class RegisterComponent {
   ];
 
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+    this.loteForm.valueChanges.subscribe(() => {
+      if (this.infoUser.value.docNumber !== this.loteForm.value.docNumber ||
+        this.infoUser.value.docType !== this.loteForm.value.docType) {
+        this.searchFlag = false;
+        console.log("Hubo cambios en el formulario");
+      }
+    });
     
   }
+
+  infoUser = this.formBuilder.group({
+    docType: [''],
+    docNumber: ['']
+  });
 
   loteForm = this.formBuilder.group({
     name: ['', [Validators.required]],
     firstLastname: ['', [Validators.required]],
-    docType: [, [Validators.required]],
+    docType: ['', [Validators.required]],
     docNumber: ['', [Validators.required]],
     secondLastname: [''],  // este sea opcional
     docIssueDate: [''],
@@ -220,5 +235,31 @@ export class RegisterComponent {
     const selectedValue = event.target.value; // Obtiene el valor seleccionado
     console.log('Valor seleccionado:', selectedValue);
     this.selectRegister = !this.selectRegister;
+  }
+
+  onSubmitUser(): void {
+    if (this.infoUser.valid) {
+      const formDataUser = this.infoUser.value;
+      const docTypeaux: string = formDataUser.docType ?? "";
+      const docNumberaux: string = formDataUser.docNumber ?? "";
+
+      // console.log(formDataUser);
+
+      this.service.getFarmer(docTypeaux, docNumberaux).subscribe(userData => {
+        if (userData['state'] === 'Ok') {
+          this.searchFlag = false;
+          this.searchValidator = true;
+          console.log(userData.data);
+        }else if(userData['state'] === 'Fail') {
+          this.searchFlag = true;
+          this.searchValidator = false;
+          this.loteForm.patchValue({
+            docType: docTypeaux,
+            docNumber: docNumberaux
+          });
+          console.log('Algo salio mal',userData.data);
+        }
+      });      
+    }
   }
 }

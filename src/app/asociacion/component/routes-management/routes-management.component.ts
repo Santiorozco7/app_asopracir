@@ -216,6 +216,7 @@ export class RoutesManagementComponent {
         console.log("No se logro asignar la orden a la ruta ",order);
       } else {
         console.log("Se agrego a la ruta ", order.data);
+        this.cerrarTodo();
       }
     });
   }

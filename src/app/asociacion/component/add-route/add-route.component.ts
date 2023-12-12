@@ -15,7 +15,11 @@ interface OrderInformation {
     GPSposition: string;
     farmID: number;
     farmName: string;
+    name: string; // Nombre completo del cliente
+    numBunches: number;
     orderID: number;
+    phoneNumber: string; // Número de teléfono del cliente
+    startDate: string; // Fecha de inicio
     zoneName: string;
   }>;
   pickupDate: string;
@@ -47,6 +51,7 @@ export class AddRouteComponent {
   @Input() orderID:number = 0;
 
   routes: OrderInformation[] = [];
+  filteredRoutes: OrderInformation[] = [];
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
@@ -76,6 +81,8 @@ export class AddRouteComponent {
       if (routes['state'] === 'Ok') {
         this.routes = routes.data;
         console.log("Se encontraron las rutas", this.routes);
+        this.filteredRoutes = this.routes.filter(route => route.routeState.toString().trim() === '0' || route.routeState.toString().trim() === '1');
+        console.log("Rutas con estado 0:", this.filteredRoutes);
       } else {
         this.routes = routes.data;
         console.log("No se encontraron las rutas", this.routes);

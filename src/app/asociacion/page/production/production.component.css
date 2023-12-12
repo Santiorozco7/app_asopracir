@@ -1,0 +1,87 @@
+button {
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    color: inherit;
+    font: inherit;
+  }
+  
+  .orders {
+    background-color: rgb(246, 246, 246);
+    margin: 2.5rem 5%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 90%;
+  }
+  
+  .order {
+    background-color: rgb(242, 242, 242);
+    width: 47.5%;
+    min-height: 10.625rem;
+    border-radius: 1rem;
+    margin-bottom: 1.2rem;
+    overflow: hidden;
+    box-shadow: rgba(149, 157, 165, 0.35) 0px 10px 15px;
+  }
+  
+  .order__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: black;
+    text-decoration: none;
+  }
+  
+  .order__title {
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.125rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  
+  .truncate-text {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; /* Agrega puntos suspensivos (...) si el texto se trunca */
+  }
+  
+  .imagenContainer {
+    position: relative;
+  }
+  
+  .imagen {
+    text-align: center;
+  }
+  
+  .imagen img {
+    height: 85px;
+    width: 85px;
+    border-radius: 50%;
+    mix-blend-mode: darken;
+    border: 1px solid #000; 
+  }
+  
+  .circuloNumBunches {
+    position: absolute;
+    bottom: 5px;
+    right: 25px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid #000; /* Borde sólido de 1 px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .circuloNumBunches span {
+    font-size: 12px;
+  }
