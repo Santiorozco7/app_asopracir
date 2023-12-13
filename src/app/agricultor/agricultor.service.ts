@@ -64,11 +64,13 @@ export class AgricultorService {
   } */
 
   public getOrders(): Observable<any> {
-    return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=getOrders&token=${localStorage.getItem('token')}`);
+    const url = `${this.API_ASOPRACIR}farmer.php?do=getOrders&token=${localStorage.getItem('token')}`;
+    return this.http.get(this.addTimestamp(url));
   }
-
-  public getOrder(orderID:string): Observable<any> {
-    return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=getOrder&token=${localStorage.getItem('token')}&orderID=${orderID}`);
+  
+  public getOrder(orderID: string): Observable<any> {
+    const url = `${this.API_ASOPRACIR}farmer.php?do=getOrder&token=${localStorage.getItem('token')}&orderID=${orderID}`;
+    return this.http.get(this.addTimestamp(url));
   }
 
   public createOrder(tapeID:string): Observable<any> {
@@ -87,7 +89,19 @@ export class AgricultorService {
     return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=removeOrder&token=${localStorage.getItem('token')}&batchID=${batchID}&numBunches=${numBunches}&variety=${variety}&color=%23${color}`);
   } */
 
-  public getStats(): Observable<any> {
-    return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=getStats&token=${localStorage.getItem('token')}`);
+  public getStats(filter?:string): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    let url = `${this.API_ASOPRACIR}farmer.php?do=getStats`;
+
+    if (filter) {
+      url += `&filter=${filter}`;
+    }
+
+    url += `&token=${token}`;
+
+    url = this.addTimestamp(url);
+
+    return this.http.get(url);
   }
 }

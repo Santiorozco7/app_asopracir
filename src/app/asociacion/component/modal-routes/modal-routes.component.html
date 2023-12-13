@@ -53,11 +53,11 @@
             </thead>
             <tbody>
                 <tr *ngFor="let route of routesData?.orders">
-                    <td>{{ routesData?.pickupDate }} Verificar fecha</td>
+                    <td>{{ route.startDate }}</td>
                     <td>{{ route.farmName }}</td>
                     <td>{{ route.zoneName }}</td>
-                    <td>Verificar nombre</td>
-                    <td>Verificar teléfono</td>
+                    <td>{{ route.name }}</td>
+                    <td>{{ route.phoneNumber }}</td>
                     <td>{{ route.numBunches }}</td>
                     <td>
                         <a href="javascript:void(0);" (click)="removeOrderFromRoute(route.orderID)">

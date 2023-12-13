@@ -113,6 +113,13 @@
                   <label for="fileOwnerCertificate">Certificado de Propiedad (Opcional)</label>
                   <input type="text" id="fileOwnerCertificate" formControlName="fileOwnerCertificate" class="form-control">
                 </div>
+                <div class="form-group">
+                  <label for="state">Estado de la Asociación</label>
+                  <select name="state" id="state" formControlName="state" required>
+                    <option value="0">Inactivo</option>
+                    <option value="1">Activo</option>
+                  </select>
+                </div>
                 <!-- Agrega más campos adicionales aquí si es necesario -->
               </div>
               <button type="submit" [disabled]="infoUser.invalid" class="btn btn-primary" *ngIf="formChanges">Actualizar información</button>

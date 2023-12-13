@@ -17,8 +17,11 @@ interface OrderInformation {
     GPSposition: string;
     farmID: number;
     farmName: string;
+    name: string; // Nombre completo del cliente
     numBunches: number;
     orderID: number;
+    phoneNumber: string; // Número de teléfono del cliente
+    startDate: string; // Fecha de inicio
     zoneName: string;
   }>;
   pickupDate: string;
@@ -171,6 +174,7 @@ export class ModalRoutesComponent {
         console.log("No se legro eliminar la orden de la ruta ", result);
       } else {
         console.log("Orden eliminada correctamente");
+        this.ngOnChanges();
       }
     });
   }
@@ -186,6 +190,7 @@ export class ModalRoutesComponent {
 
   closeRoutesManagement() {
     this.routesManagementVisible = false;
+    this.ngOnChanges();
   }
 
   obtenerTransportador(transporter:transporterInformation){

@@ -1,7 +1,42 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
-import { Router } from '@angular/router';
+
+interface FarmInformation {
+  farm: {
+    GPSposition: string;
+    area: string;
+    city: string;
+    farmID: string;
+    farmName: string;
+    fileOwnerCertificate: string;
+    zoneName: string;
+  };
+  farmerID: string;
+  farmerStatus: number;
+  user: {
+    address: string;
+    altPhoneNumber: string;
+    bankAccountBName: string;
+    bankAccountNumber: string;
+    bankAccountType: string;
+    birthday: string;
+    city: string;
+    docIssueDate: string;
+    docIssuePlace: string;
+    docNumber: string;
+    docType: string;
+    email: string;
+    fileDocument: string;
+    filePicture: string;
+    fileRUT: string;
+    firstLastname: string;
+    names: string;
+    phoneNumber: string;
+    secondLastname: string;
+    userID: string;
+  };
+}
 
 @Component({
   selector: 'app-modal-farm',
@@ -12,10 +47,11 @@ export class ModalFarmComponent {
   @Output() cerrarModal = new EventEmitter<void>();
   @Output() cerrarActualizar = new EventEmitter<void>();
   @Input() modalVisible: boolean = false;
-  @Input() modalData: { numeroDocumento?: number, tipoDocumento?: number } = {};
+  @Input() modalData: { numeroDocumento?: string, tipoDocumento?: string } = {};
   editareliminar: boolean = false;
   formChanges = false;
   originalData: any;
+  verificaActualizar:number = 0;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
@@ -39,7 +75,7 @@ export class ModalFarmComponent {
     firstLastname: ['', [Validators.required]],
     docType: [, [Validators.required]],
     docNumber: ['', [Validators.required]],
-    secondLastname: [''],  // este sea opcional
+    secondLastname: [''],
     docIssueDate: [''],
     docIssuePlace: [''],
     birthday: [''],
@@ -58,18 +94,18 @@ export class ModalFarmComponent {
     farmID: [''],
     farmName: [''],
     fileOwnerCertificate: [''],
-    zoneName: ['']
+    zoneName: [''],
+    state: []
   });
 
-  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService) {
     // Suscribirse a los cambios de valor en el formulario
     this.infoUser.valueChanges.subscribe(() => {
       // Obtener los valores actuales del formulario
       const currentFormValues = this.infoUser.value;
       const originalUserData = this.originalData.user;
       const originalFarmData = this.originalData.farm;
-      // console.log(currentFormValues.name);
-      // console.log(this.originalData.user.names);
+      const originalfarmerStatus = this.originalData.farmerStatus;
       // Realizar comparación con los datos originales
       if (currentFormValues.name !== originalUserData.names ||
         currentFormValues.firstLastname !== originalUserData.firstLastname ||
@@ -94,9 +130,18 @@ export class ModalFarmComponent {
         currentFormValues.fileOwnerCertificate !== originalFarmData.fileOwnerCertificate ||
         currentFormValues.zoneName !== originalFarmData.zoneName) {
         this.formChanges = true;
+        this.verificaActualizar = 1;
+        console.log("Hubo cambios en el formulario");
+      }
+
+      // Actualizar estado con la asosiacion.
+      else if (currentFormValues.state !== originalfarmerStatus) {
+        this.formChanges = true;
+        this.verificaActualizar = 2;
         console.log("Hubo cambios en el formulario");
       } else {
         this.formChanges = false;
+        this.verificaActualizar = 0;
         console.log("No hubo cambios en el formulario");
       }
     });
@@ -109,17 +154,16 @@ export class ModalFarmComponent {
   ngOnChanges(): void {
     console.log(this.modalData);
     if (this.modalData.tipoDocumento !== undefined && this.modalData.numeroDocumento) {
-      // console.log("tipo de documento",this.modalData.numeroDocumento);
-      // console.log("numero de documento",this.modalData.tipoDocumento);
       this.service.getFarmer(this.modalData.tipoDocumento, this.modalData.numeroDocumento).subscribe(infoFarmer=>{
         if (infoFarmer['state'] === 'Ok') {
           this.originalData = { ...infoFarmer.data };
-          console.log("datos originales: ", this.originalData.farm.farmID);
-          // console.log("El estado es 'Ok'");
-          // console.log(infoFarmer.data);
+          console.log("datos originales: ", this.originalData);
+
           // Asignar los valores recibidos del servicio al formulario
           const userData = infoFarmer.data.user; 
           const farmData = infoFarmer.data.farm;
+          const farmerStatus = infoFarmer.data.farmerStatus;
+          console.log(farmerStatus);
           this.infoUser.patchValue({
             name: userData.names,
             firstLastname: userData.firstLastname,
@@ -144,7 +188,10 @@ export class ModalFarmComponent {
             farmName: farmData.farmName,
             fileOwnerCertificate: farmData.fileOwnerCertificate,
             zoneName: farmData.zoneName,
+            
+            state: farmerStatus
           });
+          console.log("este es el estado del ususrio: ",this.infoUser.value);
       } else {
           console.log("El estado no es 'Ok'");
           console.log(infoFarmer);
@@ -156,9 +203,6 @@ export class ModalFarmComponent {
   onSubmit(): void {
     if (this.infoUser.valid) {
       const formData = this.infoUser.value;
-      // const batchName: string = formData.batchName ?? "";
-      // const responsible: string = formData.responsible ?? "";
-      // const mainVariety: string = formData.mainVariety ?? "";
       const name: string = formData.name ?? "";
       const firstLastname: string = formData.firstLastname ?? "";
       const docType: string = formData.docType ?? "";
@@ -183,46 +227,61 @@ export class ModalFarmComponent {
       const fileOwnerCertificate: string = formData.fileOwnerCertificate ?? "";
       const zoneName: string = formData.zoneName ?? "";
 
-      this.service.updateUser(
-        this.originalData.user.userID,
-        name,
-        firstLastname,
-        docType,
-        docNumber,
-        secondLastname,
-        docIssueDate,
-        docIssuePlace,
-        birthday,
-        address,
-        city,
-        phoneNumber,
-        altPhoneNumber,
-        email,
-        bankAccountBName,
-        bankAccountType,
-        bankAccountNumber
-      ).subscribe(result => {
-        if (result['state'] === 'Ok') {
-          console.log('Usuario Actualizado');
-          this.service.updateFarm(
-            this.originalData.farm.farmID,
-            farmName,
-            zoneName,
-            cityFarm,
-            area,
-            GPSposition
-          ).subscribe(resultFarm => {
-            if (resultFarm['state'] === 'Ok') {
-              console.log('Finca Actualizada');
-              this.cerrarActualizar.emit();
-            }if(resultFarm['state'] === 'Fail') {
-              console.log('Finca no Actualizada');
-            }
-          });
-        }if(result['state'] === 'Fail') {
-          console.log('Usuario no fue Actualizado');
-        }
-      });
+      const farmerStatus:string = formData.state ?? "";
+
+      if (this.verificaActualizar === 1) {
+        this.service.updateUser(
+          this.originalData.user.userID,
+          name,
+          firstLastname,
+          docType,
+          docNumber,
+          secondLastname,
+          docIssueDate,
+          docIssuePlace,
+          birthday,
+          address,
+          city,
+          phoneNumber,
+          altPhoneNumber,
+          email,
+          bankAccountBName,
+          bankAccountType,
+          bankAccountNumber
+        ).subscribe(result => {
+          if (result['state'] === 'Ok') {
+            console.log('Usuario Actualizado');
+            this.service.updateFarm(
+              this.originalData.farm.farmID,
+              farmName,
+              zoneName,
+              cityFarm,
+              area,
+              GPSposition
+            ).subscribe(resultFarm => {
+              if (resultFarm['state'] === 'Ok') {
+                console.log('Finca Actualizada');
+                this.cerrarActualizar.emit();
+              }if(resultFarm['state'] === 'Fail') {
+                console.log('Finca no Actualizada');
+              }
+            });
+          }if(result['state'] === 'Fail') {
+            console.log('Usuario no fue Actualizado');
+          }
+        });
+      }
+
+      if (this.verificaActualizar === 2) {
+        this.service.setFarmerStatus(this.originalData.farmerID, farmerStatus).subscribe(result => {
+          if (result['state'] === 'Ok') {
+            console.log('Finca Actualizada');
+            this.cerrarActualizar.emit();
+          }if(result['state'] === 'Fail') {
+            console.log('Finca no Actualizada');
+          }
+        });
+      }
       this.cerrarModal.emit();
     }
   }

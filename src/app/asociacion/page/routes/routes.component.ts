@@ -112,5 +112,6 @@ export class RoutesComponent {
 
   cerrarmodalRutas() {
     this.rutasVisible = false;
+    this.View();
   }
 }

@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let route of routes">
+            <tr *ngFor="let route of filteredRoutes">
                 <td>{{ routeState[route.routeState] }}</td>
                 <td>{{ route.pickupDate }}</td>
                 <td>{{ route.plate }}</td>

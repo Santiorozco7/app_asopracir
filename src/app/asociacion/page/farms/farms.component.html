@@ -1,4 +1,25 @@
 <h1>Fincas</h1>
+
+<div class="filter">
+    <div [formGroup]="infoUser">
+        <label for="state">Estado de la Asociación</label>
+        <select name="state" id="state" formControlName="state" required>
+          <option value="active">Activo</option>
+          <option value="inactive">Inactivo</option>
+          <option value="all">Todos</option>
+        </select>
+    </div>
+
+    <div>
+        <input type="number" placeholder="Ingrese documento" [(ngModel)]="docNumberInput">
+        <button (click)="docSearch()">Buscar</button>
+    </div>
+</div>
+
+<button (click)="View()" *ngIf="buttonFlag">Actualizar</button>
+
+<span *ngIf="stateFlag"><p style="color: red;">No hay usuarios para mostrar</p></span>
+
 <table class="farm-table">
     <thead>
         <tr>
@@ -28,5 +49,7 @@
         </tr>
     </tbody>
 </table>
+
+<span *ngIf="searchFlag"><p>No hay usuario relacionado con ese documento, verificar el estado.</p></span>
 
 <app-modal-farm [modalVisible]="modalVisible" (cerrarModal)="cerrarModal()" (cerrarActualizar)="View()" [modalData]="modalData"></app-modal-farm>
