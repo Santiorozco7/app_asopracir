@@ -102,25 +102,26 @@
         <select name="select" id="userType" (change)="onSelectUserType($event)">
           <option value="0">Agricultor</option>
           <option value="1">Transportador</option>
+          <option value="2">Colaborador</option>
         </select>
   
         <!-- Crear Agricultor -->
-        <div class="infoFarm" *ngIf="selectRegister">
+        <div class="infoFarm" *ngIf="farmerRegister">
           <h2>Información de la finca</h2>
           <div class="form-group">
-            <label for="farmName">Nombre de la Granja</label>
+            <label for="farmName">Nombre del Predio</label>
             <input type="text" id="farmName" formControlName="farmName" class="form-control">
           </div>
           <div class="form-group">
-            <label for="zoneName">Nombre de la Zona</label>
+            <label for="zoneName">Nombre de la Vereda</label>
             <input type="text" id="zoneName" formControlName="zoneName" class="form-control">
           </div>
           <div class="form-group">
-            <label for="cityFarm">Ciudad de la Granja</label>
+            <label for="cityFarm">Ciudad del Predio</label>
             <input type="text" id="cityFarm" formControlName="cityFarm" class="form-control">
           </div>
           <div class="form-group">
-            <label for="area">Área de la Granja</label>
+            <label for="area">Hectáreas del Predio (ha)</label>
             <input type="text" id="area" formControlName="area" class="form-control">
           </div>
           <div class="form-group">
@@ -134,10 +135,10 @@
         </div>
   
         <!-- Crear Transportador -->
-        <div class="infoTransport" *ngIf="!selectRegister">
+        <div class="infoTransport" *ngIf="transporterRegister">
           <h2>Información del transportador</h2>
           <div class="form-group">
-            <label for="licenseExpiration">Fecha de expedición de la Licencia</label>
+            <label for="licenseExpiration">Fecha de expiración de la Licencia</label>
             <input type="date" id="licenseExpiration" formControlName="licenseExpiration" class="form-control">
           </div>
           <div class="form-group">
@@ -178,10 +179,17 @@
             <input type="text" id="comments" formControlName="comments" class="form-control">
           </div>
         </div>
+
+        <!-- Crear Colaborador -->
+        <div class="infoCollab" *ngIf="collaboratorRegister">
+          <h2>Información del colaborador</h2>
+          <p>Aqui va la información del colaborador</p>       
+        </div>
         
         <button type="submit" [disabled]="loteForm.invalid" class="btn btn-primary">
-          <div *ngIf="selectRegister">Crear Agricultor</div>
-          <div *ngIf="!selectRegister">Crear Transportador</div>
+          <div *ngIf="farmerRegister">Crear Agricultor</div>
+          <div *ngIf="transporterRegister">Crear Transportador</div>
+          <div *ngIf="collaboratorRegister">Crear Colaborador</div>
         </button>
       </form>
     </div>

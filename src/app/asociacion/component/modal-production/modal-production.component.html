@@ -15,11 +15,15 @@
         </div>
         <div class="form__item">
           <label class="form__label" for="weight">Peso total de la cosecha del mes</label>
-          <input class="form__input input--truncated" id="weight" [value]="historyDetails.weight" disabled>
+          <input class="form__input input--truncated" id="weight" [value]="historyDetails.weight+'kg'" disabled>
         </div>
         <div class="form__item">
           <label class="form__label" for="payAmount">Pago de la cosecha del mes</label>
-          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount" disabled>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount | currency:'COP ':'symbol':'1.2-2'" disabled>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="payAmount">Precio por Kilo</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
         </div>
       </div> 
     </div>

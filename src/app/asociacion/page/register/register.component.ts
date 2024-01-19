@@ -9,7 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  selectRegister:boolean = true;
+  farmerRegister:boolean = true;
+  transporterRegister:boolean = false;
+  collaboratorRegister:boolean = false;
   searchFlag:boolean = false;
   searchValidator:boolean = false;
 
@@ -96,15 +98,17 @@ export class RegisterComponent {
     type: [''],
     state: [''],
     capacity: [''],
+
+    //Colaborador
   });
 
   View() {
     console.log("Recargando..........");
-    if (this.selectRegister) {
+    if (this.farmerRegister) {
       console.log("Recargando fincas");
       this.router.navigate(['/asociacion/fincas']);
     }
-    if (!this.selectRegister) {
+    if (this.transporterRegister) {
       console.log("Recargando transportadores");
       this.router.navigate(['/asociacion/transporte']);
     }
@@ -118,7 +122,7 @@ export class RegisterComponent {
       // Recopila los datos del formulario
       const names: string = formData.name || "";
       const firstLastname: string = formData.firstLastname || "";
-      const docType: any = formData.docType;
+      const docType: string = formData.docType || "";
       const docNumber: string = formData.docNumber || "";
   
       // Recopila los campos opcionales
@@ -132,7 +136,7 @@ export class RegisterComponent {
       const altPhoneNumber: string = formData.altPhoneNumber || "";
       const email: string = formData.email || "";
       const bankAccountBName: string = formData.bankAccountBName || "";
-      const bankAccountType: any = formData.bankAccountType;
+      const bankAccountType: string = formData.bankAccountType || "";
       const bankAccountNumber: string = formData.bankAccountNumber || "";
 
       //Datos de la fica
@@ -174,7 +178,8 @@ export class RegisterComponent {
       ).subscribe(resultUser => {
         if (resultUser['state'] === 'Ok') {
           console.log('Usuario creado con id:', resultUser.data.userID);
-          if (this.selectRegister) {  //Crear Agricultor
+
+          if (this.farmerRegister) {  //Crear Agricultor
             console.log("Creando agricultor.....................");
             console.log(farmName,' ',zoneName,' ',cityFarm,' ',area,' ',GPSposition);
             this.service.createFarm(
@@ -199,7 +204,7 @@ export class RegisterComponent {
               }
             })
           }
-          if (!this.selectRegister) {  //Crear Transportador
+          if (this.transporterRegister) {  //Crear Transportador
             console.log("Creando trasnportador...................");
             this.service.createVehicle(
               plate,
@@ -224,6 +229,9 @@ export class RegisterComponent {
               }
             })
           }
+          if (this.collaboratorRegister) {  //Crear Colaborador
+            console.log("Creando colaborador...................");
+          }
         }if(resultUser['state'] === 'Fail') {
           console.log('Usuario no fue creado');
         }
@@ -234,7 +242,35 @@ export class RegisterComponent {
   onSelectUserType(event: any) {
     const selectedValue = event.target.value; // Obtiene el valor seleccionado
     console.log('Valor seleccionado:', selectedValue);
-    this.selectRegister = !this.selectRegister;
+    switch (selectedValue) {
+      case '0':
+        this.farmerRegister = true;
+        this.transporterRegister = false;
+        this.collaboratorRegister = false;
+        console.log('Registrar un agriculto');
+        break;
+      
+      case '1':
+        this.farmerRegister = false;
+        this.transporterRegister = true;
+        this.collaboratorRegister = false;
+        console.log('Registrar un transportador');
+        break;
+
+      case '2':
+        this.farmerRegister = false;
+        this.transporterRegister = false;
+        this.collaboratorRegister = true;
+        console.log('Registrar un colaborador');
+        break;
+
+      default:
+        this.farmerRegister = true;
+        this.transporterRegister = false;
+        this.collaboratorRegister = false;
+        console.log('Aun no hay seleccion');
+        break;
+    }
   }
 
   onSubmitUser(): void {
@@ -257,7 +293,7 @@ export class RegisterComponent {
             docType: docTypeaux,
             docNumber: docNumberaux
           });
-          console.log('Algo salio mal',userData.data);
+          console.log('No hay Usuario registrado con esa CC',userData.data);
         }
       });      
     }
