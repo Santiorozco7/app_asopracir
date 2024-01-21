@@ -35,3 +35,19 @@ a {
 .farm-table tbody tr:hover {
     background-color: #ddd;
 }
+
+.filter{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.valid-green {
+    background-color: green; /* Puedes ajustar el estilo según tus preferencias */
+    color: white; /* Color del texto en la casilla verde */
+}
+
+.valid-red {
+    background-color: red; /* Puedes ajustar el estilo según tus preferencias */
+    color: white; /* Color del texto en la casilla roja */
+}

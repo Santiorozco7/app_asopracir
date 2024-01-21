@@ -2,6 +2,23 @@
     <h1>Transportador</h1>
     <a href="javascript:void(0);" (click)="mostrarcreateVehicle()">Crear Vehículo</a>
 </div>
+<div class="filter">
+    <div [formGroup]="infoUser">
+        <label for="state">Estado del Transportador </label>
+        <select name="state" id="state" formControlName="state" required>
+          <option value="active">Activo</option>
+          <option value="inactive">Inactivo</option>
+          <option value="all">Todos</option>
+        </select>
+    </div>
+    <div>
+        <input type="number" placeholder="Ingrese documento" [(ngModel)]="docNumberInput">
+        <button (click)="docSearch()">Buscar</button>
+    </div>
+</div>
+<button (click)="View()" *ngIf="buttonFlag">Actualizar</button>
+
+<span *ngIf="stateFlag"><p style="color: red;">No hay usuarios para mostrar</p></span>
 <table class="farm-table">
     <thead>
         <tr>
@@ -17,7 +34,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let Transporter of Transporters">
-            <td>{{ Transporter.valid }}</td>
+            <td [ngClass]="{'valid-green': Transporter.valid, 'valid-red': !Transporter.valid}"></td>
             <td>{{ Transporter.plate }}</td>
             <td>{{ Transporter.names }} {{Transporter.firstLastname }}</td>
             <td>{{ Transporter.docNumber }}</td>
@@ -33,6 +50,8 @@
         </tr>
     </tbody>
 </table>
+
+<span *ngIf="searchFlag"><p>No hay usuario relacionado con ese documento, verificar el estado.</p></span>
 
 <app-modal-transport [modalVisible]="modalVisible" (cerrarModal)="cerrarModal()" (cerrarActualizar)="View()" [modalData]="modalData"></app-modal-transport>
 <app-create-vehicle [createVehicleVisible]="createVehicleVisible" (cerrarcreateVehicle)="cerrarcreateVehicleVisible()" (cerrarActualizar)="View()"></app-create-vehicle>

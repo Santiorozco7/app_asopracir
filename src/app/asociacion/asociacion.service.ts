@@ -6,8 +6,9 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AsociacionService {
-  // private API_ASOPRACIR = "http://localhost/uqplatanos/";
-  private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
+  private API_ASOPRACIR = "http://localhost/uqplatanos/";
+  // private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
+  // private API_ASOPRACIR = "http://192.168.102.191/uqplatanos/";
 
   constructor(private http: HttpClient) { }
 
@@ -133,7 +134,7 @@ public getOrder(orderID: number): Observable<any> {
   public createUser(
     names: string,
     firstLastname: string,
-    docType: number,
+    docType: string,
     docNumber: string,
     secondLastname?: string,
     docIssueDate?: string,
@@ -145,7 +146,7 @@ public getOrder(orderID: number): Observable<any> {
     altPhoneNumber?: string,
     email?: string,
     bankAccountBName?: string,
-    bankAccountType?: number,
+    bankAccountType?: string,
     bankAccountNumber?: string
   ): Observable<any> {
     const token = localStorage.getItem('token');
