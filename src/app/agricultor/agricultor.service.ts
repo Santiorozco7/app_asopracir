@@ -7,8 +7,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AgricultorService {
 
-  // private API_ASOPRACIR = "http://localhost/uqplatanos/";
-  private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
+  private API_ASOPRACIR = "http://localhost/uqplatanos/";
+  // private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
 
   constructor(private http: HttpClient) { }
 
@@ -47,7 +47,7 @@ export class AgricultorService {
     return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=removeBatch&token=${localStorage.getItem('token')}&batchID=${batchID}`);
   }
 
-  public createTape(batchID:number, numBunches:number, variety:string, color:any): Observable<any> {
+  public createTape(batchID:string, numBunches:string, variety:string, color:string): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}farmer.php?do=createTape&token=${localStorage.getItem('token')}&batchID=${batchID}&numBunches=${numBunches}&variety=${variety}&color=%23${color}`);
   }
 

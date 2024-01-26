@@ -72,6 +72,20 @@ export class CrearLoteComponent {
     if (event.target === event.currentTarget) {
       this.closeCreateBatch.emit();
       this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
+      this.resetForm();
     }
+  }
+
+  allClose() {
+    this.closeCreateBatch.emit();
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.loteForm.reset({
+      batchName: '',
+      responsible: '',
+      mainVariety: ''
+    });
   }
 }

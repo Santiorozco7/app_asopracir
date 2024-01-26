@@ -3,13 +3,20 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AgricultorService } from '../../agricultor.service';
 import { Router } from '@angular/router';
 
+interface Lote {
+  batchID: string;
+  batchName: string;
+  responsible: string;
+  mainVariety: string;
+}
+
 @Component({
   selector: 'app-crear-cinta',
   templateUrl: './crear-cinta.component.html',
   styleUrls: ['./crear-cinta.component.css']
 })
 export class CrearCintaComponent {
-  @Input() lote: any[] = [];
+  @Input() lote: Lote[] = [];
   @Input() showCreateTape: boolean = false;
   @Output() tapeCreated = new EventEmitter<void>();
   @Output() closeCreateTape = new EventEmitter<void>();
@@ -23,14 +30,14 @@ export class CrearCintaComponent {
     batchID: ['', [Validators.required]],
     numBunches: ['', [Validators.required]],
     variety: ['', [Validators.required]],
-    color: ['', [Validators.required]]
+    color: ['#000000', [Validators.required]]
   });
 
   onSubmit(): void {
     if (this.loteForm.valid) {
       const formData = this.loteForm.value;
-      const batchID: any = formData.batchID ?? "";
-      const numBunches: any = formData.numBunches ?? "";
+      const batchID: string = formData.batchID ?? "";
+      const numBunches: string = formData.numBunches ?? "";
       const variety: string = formData.variety ?? "";
       // Obtén el valor del campo "color" y quita el símbolo '#' si está presente
       const colorValue: any = formData.color ?? "";
@@ -77,6 +84,23 @@ export class CrearCintaComponent {
     if (event.target === event.currentTarget) {
       this.closeCreateTape.emit();
       this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
+      this.resetForm();
+      // reiniar variables
     }
+  }
+
+  allClose(){
+    this.closeCreateTape.emit();
+    this.resetForm();
+    // reiniar variables
+  }
+
+  resetForm() {
+    this.loteForm.reset({
+      batchID: '',
+      numBunches: '',
+      variety: '',
+      color: '#000000'
+    });
   }
 }
