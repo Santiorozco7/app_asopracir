@@ -157,7 +157,7 @@ export class ModalTransportComponent {
     if (this.modalData.tipoDocumento !== undefined && this.modalData.numeroDocumento) {
       // console.log("tipo de documento",this.modalData.numeroDocumento);
       // console.log("numero de documento",this.modalData.tipoDocumento);
-      this.service.getTransporter(this.modalData.tipoDocumento, this.modalData.numeroDocumento).subscribe(infoTransporter=>{
+      this.service.getTransporter(this.modalData.tipoDocumento.toString(), this.modalData.numeroDocumento.toString()).subscribe(infoTransporter=>{
         if (infoTransporter['state'] === 'Ok') {
           this.originalData = { ...infoTransporter.data };
           // aqui estaba lo de la placa
