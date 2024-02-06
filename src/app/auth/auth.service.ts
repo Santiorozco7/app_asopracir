@@ -7,7 +7,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 
-  private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
+  private API_ASOPRACIR = "http://localhost/uqplatanos/";
+  // private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
 
   constructor(private http: HttpClient) { }
 
@@ -16,8 +17,13 @@ export class AuthService {
     return `${url}&timestamp=${timestamp}`;
   }
 
-  public login(docNumber: number, Password: any): Observable<any> {
-    const loginUrl = `${this.API_ASOPRACIR}login.php?docNumber=${docNumber}&Password=${Password}`;
+  public login(docType: string, docNumber: string, Password: string, role?: string): Observable<any> {
+    let loginUrl = `${this.API_ASOPRACIR}login.php?docNumber=${docNumber}&docType=${docType}&Password=${Password}`;
+
+    if (role) {
+      loginUrl += `&role=${role}`;
+    }
+
     const urlWithTimestamp = this.addTimestamp(loginUrl);
 
     return this.http.get(urlWithTimestamp)
