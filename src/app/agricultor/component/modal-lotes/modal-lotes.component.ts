@@ -1,5 +1,12 @@
 import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostListener} from '@angular/core';
 
+interface Lote {
+  batchID: string;
+  batchName: string;
+  responsible: string;
+  mainVariety: string;
+}
+
 @Component({
   selector: 'app-modal-lotes',
   templateUrl: './modal-lotes.component.html',
@@ -8,7 +15,7 @@ import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostList
 export class ModalLotesComponent {
   @Input() showModal: boolean = false;
   @Input() tapes: any[] = [];
-  @Input() batches: any[] = [];
+  @Input() batches: Lote[] = [];
   @Input() batchID: string = "";
 
   @Output() closeModal = new EventEmitter<void>();
@@ -50,6 +57,16 @@ export class ModalLotesComponent {
   
   // Crear Cinta -------------------------------------------------------  
   createTape(){
+    if (this.batches && this.batches.length > 0) {
+      const lotefiltrado = this.batches.find(batche => batche.batchID === this.batchID);
+  
+      // Verificar si se encontró el lote antes de asignar a this.lote
+      if (lotefiltrado) {
+        this.batches = [lotefiltrado]; // Asignar el lote encontrado en un array
+      } else {
+        this.batches = []; // O asignar un array vacío, dependiendo de tus necesidades
+      }
+    }
     this.showCreateTape = true;
     this.renderer.addClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
   }
