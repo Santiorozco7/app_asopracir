@@ -26,7 +26,7 @@
         <h1 class="heading">Nuevo Usuario</h1>
       </div>
       
-      <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
         <div class="infoUser">
           <div class="form-group">
             <label for="name">Nombre</label>
@@ -101,8 +101,9 @@
         <h2>Registrar</h2>
         <select name="select" id="userType" (change)="onSelectUserType($event)">
           <option value="0">Agricultor</option>
-          <option value="1">Transportador</option>
+          <option value="1">Asociado</option>
           <option value="2">Colaborador</option>
+          <option value="3">Transportador</option>
         </select>
   
         <!-- Crear Agricultor -->
@@ -183,17 +184,152 @@
         <!-- Crear Colaborador -->
         <div class="infoCollab" *ngIf="collaboratorRegister">
           <h2>Información del colaborador</h2>
-          <p>Aqui va la información del colaborador</p>       
+          <p>Escribir "Tesorero" para registrarlo como colaborador</p>
+          <div class="form-group">
+            <label for="roleNameCollab">Nombre</label>
+            <input type="text" id="roleNameCollab" formControlName="roleNameCollab" class="form-control">
+          </div>      
+        </div>
+
+        <!-- Crear Asociado -->
+        <div class="infoCollab" *ngIf="assocRegister">
+          <h2>Información del Asociado</h2>
+          <p>Escribir "Admin" para registrarlo como asociado</p>
+          <div class="form-group">
+            <label for="roleNameAssoc">Nombre</label>
+            <input type="text" id="roleNameAssoc" formControlName="roleNameAssoc" class="form-control">
+          </div>       
         </div>
         
-        <button type="submit" [disabled]="loteForm.invalid" class="btn btn-primary">
+        <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary">
           <div *ngIf="farmerRegister">Crear Agricultor</div>
           <div *ngIf="transporterRegister">Crear Transportador</div>
           <div *ngIf="collaboratorRegister">Crear Colaborador</div>
+          <div *ngIf="assocRegister">Crear Asociado</div>
         </button>
       </form>
     </div>
+    <div *ngIf="searchValidator">
+      <h3>Los Roles con los que cuenta son:</h3>
+      <h4>
+        <p *ngIf="userFarmer">Agricultor</p>
+        <p *ngIf="userAssoc">Asociado</p>
+        <p *ngIf="userCollaborator">Colaborador</p>
+        <p *ngIf="userTransporter">Transportador</p>        
+      </h4>
+      <br>
+      <h3>Que otro rol quiere agregar</h3>
+      <br>
+      <div class="rolesSelect">
+        <button class="rolesButton btn btn-primary" *ngIf="!userFarmer" (click)="rolesAdd('0')">Agricultor</button>
+        <button class="rolesButton btn btn-primary" *ngIf="!userAssoc" (click)="rolesAdd('1')">Asociado</button>
+        <button class="rolesButton btn btn-primary" *ngIf="!userCollaborator" (click)="rolesAdd('2')">Colaborador</button>
+        <button class="rolesButton btn btn-primary" *ngIf="!userTransporter" (click)="rolesAdd('3')">Transportador</button>        
+      </div>
+      <!-- Agregar nuevos roles a usuarios existentes -->
+      <form [formGroup]="roleAddForm" (ngSubmit)="submitRole()">  
+        <!-- Crear Agricultor -->
+        <div class="infoFarm" *ngIf="farmerRegister">
+          <h2>Información de la finca</h2>
+          <div class="form-group">
+            <label for="farmName">Nombre del Predio</label>
+            <input type="text" id="farmName" formControlName="farmName" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="zoneName">Nombre de la Vereda</label>
+            <input type="text" id="zoneName" formControlName="zoneName" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="cityFarm">Ciudad del Predio</label>
+            <input type="text" id="cityFarm" formControlName="cityFarm" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="area">Hectáreas del Predio (ha)</label>
+            <input type="text" id="area" formControlName="area" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="GPSposition">Posición GPS</label>
+            <input type="text" id="GPSposition" formControlName="GPSposition" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="fileOwnerCertificate">Certificado de Propiedad (Opcional)</label>
+            <input type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate" class="form-control">
+          </div>        
+        </div>
+  
+        <!-- Crear Transportador -->
+        <div class="infoTransport" *ngIf="transporterRegister">
+          <h2>Información del transportador</h2>
+          <div class="form-group">
+            <label for="licenseExpiration">Fecha de expiración de la Licencia</label>
+            <input type="date" id="licenseExpiration" formControlName="licenseExpiration" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="licenseType">Tipo de Licencia</label>
+            <input type="text" id="licenseType" formControlName="licenseType" class="form-control">
+          </div>    
+        
+          <div class="form-group">
+            <label for="plate">Placa</label>
+            <input type="text" id="plate" formControlName="plate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="soatExpiration">Vencimiento de SOAT</label>
+            <input type="date" id="soatExpiration" formControlName="soatExpiration" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="techExpiration">Vencimiento de Revisión Técnico-Mecánica</label>
+            <input type="date" id="techExpiration" formControlName="techExpiration" class="form-control">
+          </div>
+          <div class="form-group">
+              <label for="type">Tipo</label>
+              <select name="docType" id="type" formControlName="type">
+                <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label for="state">Estado</label>
+              <select name="docType" id="state" formControlName="state">
+                <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
+              </select>
+          </div>
+          <div class="form-group">
+            <label for="capacity">Capacidad (T)</label>
+            <input type="number" id="capacity" formControlName="capacity" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="comments">Comentarios</label>
+            <input type="text" id="comments" formControlName="comments" class="form-control">
+          </div>
+        </div>
 
-    {{ loteForm.value | json }}
+        <!-- Crear Colaborador -->
+        <div class="infoCollab" *ngIf="collaboratorRegister">
+          <h2>Información del colaborador</h2>
+          <p>Escribir "Tesorero" para registrarlo como colaborador</p>
+          <div class="form-group">
+            <label for="roleNameCollab">Nombre</label>
+            <input type="text" id="roleNameCollab" formControlName="roleNameCollab" class="form-control">
+          </div>      
+        </div>
+
+        <!-- Crear Asociado -->
+        <div class="infoCollab" *ngIf="assocRegister">
+          <h2>Información del Asociado</h2>
+          <p>Escribir "Admin" para registrarlo como asociado</p>
+          <div class="form-group">
+            <label for="roleNameAssoc">Nombre</label>
+            <input type="text" id="roleNameAssoc" formControlName="roleNameAssoc" class="form-control">
+          </div>       
+        </div>
+        
+        <button type="submit" [disabled]="roleAddForm.invalid" class="btn btn-primary" *ngIf="farmerRegister || collaboratorRegister || transporterRegister || assocRegister">
+          <div *ngIf="farmerRegister">Crear Agricultor</div>
+          <div *ngIf="transporterRegister">Crear Transportador</div>
+          <div *ngIf="collaboratorRegister">Crear Colaborador</div>
+          <div *ngIf="assocRegister">Crear Asociado</div>
+        </button>
+      </form>
+    </div>
   </div>
 </div>

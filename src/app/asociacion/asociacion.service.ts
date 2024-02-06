@@ -46,32 +46,32 @@ export class AsociacionService {
   public getTransporters(filter: string): Observable<any> {
   const url = `${this.API_ASOPRACIR}assoc.php?do=getTransporters&token=${localStorage.getItem('token')}&filter=${filter}`;
   return this.http.get(this.addTimestamp(url));
-}
+  }
 
-public getCollaborators(): Observable<any> {
-  const url = `${this.API_ASOPRACIR}assoc.php?do=getCollaborators&token=${localStorage.getItem('token')}`;
-  return this.http.get(this.addTimestamp(url));
-}
+  public getCollaborators(): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=getCollaborators&token=${localStorage.getItem('token')}`;
+    return this.http.get(this.addTimestamp(url));
+  }
 
-public getPendingOrders(): Observable<any> {
-  const url = `${this.API_ASOPRACIR}assoc.php?do=getPendingOrders&token=${localStorage.getItem('token')}`;
-  return this.http.get(this.addTimestamp(url));
-}
+  public getPendingOrders(): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=getPendingOrders&token=${localStorage.getItem('token')}`;
+    return this.http.get(this.addTimestamp(url));
+  }
 
-public getPendingTapes(months: number): Observable<any> {
-  const url = `${this.API_ASOPRACIR}assoc.php?do=getPendingTapes&token=${localStorage.getItem('token')}&months=${months}`;
-  return this.http.get(this.addTimestamp(url));
-}
+  public getPendingTapes(months: number): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=getPendingTapes&token=${localStorage.getItem('token')}&months=${months}`;
+    return this.http.get(this.addTimestamp(url));
+  }
 
-public getOrders(filter: number): Observable<any> {
-  const url = `${this.API_ASOPRACIR}assoc.php?do=getOrders&token=${localStorage.getItem('token')}&filter=${filter}`;
-  return this.http.get(this.addTimestamp(url));
-}
+  public getOrders(filter: number): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=getOrders&token=${localStorage.getItem('token')}&filter=${filter}`;
+    return this.http.get(this.addTimestamp(url));
+  }
 
-public getOrder(orderID: number): Observable<any> {
-  const url = `${this.API_ASOPRACIR}assoc.php?do=getOrder&token=${localStorage.getItem('token')}&orderID=${orderID}`;
-  return this.http.get(this.addTimestamp(url));
-}
+  public getOrder(orderID: number): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=getOrder&token=${localStorage.getItem('token')}&orderID=${orderID}`;
+    return this.http.get(this.addTimestamp(url));
+  }
 
   public getRoutes(filter?:number, limit?:string, offset?:string): Observable<any> {
     const token = localStorage.getItem('token');
@@ -109,13 +109,18 @@ public getOrder(orderID: number): Observable<any> {
     const url = `${this.API_ASOPRACIR}assoc.php?do=getUser&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
     return this.http.get(this.addTimestamp(url));
   }
+
+  public getRoles(docType: string, docNumber: string): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=getRoles&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
+    return this.http.get(this.addTimestamp(url));
+  }
   
-  public getTransporter(docType: number, docNumber: number): Observable<any> {
+  public getTransporter(docType: string, docNumber: string): Observable<any> {
     const url = `${this.API_ASOPRACIR}assoc.php?do=getTransporter&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
     return this.http.get(this.addTimestamp(url));
   }
 
-  public createFarmer(userID:number, farmID:number): Observable<any> {
+  public createFarmer(userID: string, farmID: string): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createFarmer&token=${localStorage.getItem('token')}&userID=${userID}&farmID=${farmID}`);
   }
 
@@ -129,6 +134,10 @@ public getOrder(orderID: number): Observable<any> {
 
   public createTransporter(userID:string, vehID:string, licenseType:string, licenseExpiration:string): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createTransporter&token=${localStorage.getItem('token')}&userID=${userID}&vehID=${vehID}&licenseType=${licenseType}&licenseExpiration=${licenseExpiration}`);
+  }
+
+  public createCollab(userID:string, roleName:string): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createCollab&token=${localStorage.getItem('token')}&userID=${userID}&roleName=${roleName}`);
   }
 
   public createUser(
