@@ -15,11 +15,7 @@ export class ModalProductionComponent {
 
   ngOnChanges() {}
 
-  closeDialog(event: Event): void {
-    // Verifica si el clic se realizó fuera del contenido del modal
-    if (event.target === event.currentTarget) {
-      this.closeModalHistory.emit();
-      this.renderer.removeClass(this.el.nativeElement.ownerDocument.body, 'modal--open');
-    }
+  cerrarTodo() {
+    this.closeModalHistory.emit();
   }
 }

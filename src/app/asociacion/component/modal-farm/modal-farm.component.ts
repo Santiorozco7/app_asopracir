@@ -48,14 +48,16 @@ export class ModalFarmComponent {
   @Output() cerrarActualizar = new EventEmitter<void>();
   @Input() modalVisible: boolean = false;
   @Input() modalData: { numeroDocumento?: string, tipoDocumento?: string } = {};
-  editareliminar: boolean = false;
   formChanges = false;
   originalData: any;
   verificaActualizar:number = 0;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
-  mensaje = '';
+  
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
   confirmCallback: (() => void) | null = null;
 
   docTypeselect: any[] = [
@@ -145,6 +147,10 @@ export class ModalFarmComponent {
         console.log("No hubo cambios en el formulario");
       }
     });
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
   }
 
   cerrarTodo() {
@@ -261,13 +267,22 @@ export class ModalFarmComponent {
             ).subscribe(resultFarm => {
               if (resultFarm['state'] === 'Ok') {
                 console.log('Finca Actualizada');
+                this.showDialog = true;
+                this.positiveNotification = true;
+                this.message = `Se han actualizado los datos `;
                 this.cerrarActualizar.emit();
               }if(resultFarm['state'] === 'Fail') {
                 console.log('Finca no Actualizada');
+                this.showDialog = true;
+                this.positiveNotification = false;
+                this.message = `No se ha podido actualizar`;
               }
             });
           }if(result['state'] === 'Fail') {
             console.log('Usuario no fue Actualizado');
+            this.showDialog = true;
+            this.positiveNotification = false;
+            this.message = `No se ha podido actualizar`;
           }
         });
       }
@@ -285,9 +300,4 @@ export class ModalFarmComponent {
       this.cerrarModal.emit();
     }
   }
-
-  editarEliminar() {
-    this.editareliminar = !this.editareliminar;
-  }
-
 }

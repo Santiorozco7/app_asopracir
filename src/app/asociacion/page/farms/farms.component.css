@@ -1,29 +1,126 @@
-.farm-table {
-    width: 100%;
-    border-collapse: collapse;
+button {
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  color: inherit;
+  font: inherit;
 }
 
-.farm-table th, .farm-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+.filter {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+
+.header__icon {
+  width: 1rem;
+}
+
+.icon--marginr {
+  margin-right: 0.5rem;
+}
+
+.title {
+  text-transform: uppercase;
+}
+
+.section__item {
+  display: flex;
+  align-items: center;
+}
+
+label {
+  margin-right: 10px;
+}
+
+.form__input {
+  height: 2rem;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.error {
+  text-align: center;
+  color: red;
+}
+
+.farm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.farm-table th,
+.farm-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
 }
 
 .farm-table th {
-    background-color: #333;
-    color: white;
+  background-color: #333;
+  color: white;
 }
 
 .farm-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 .farm-table tbody tr:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
-.filter{
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
+tbody {
+  cursor: pointer;
+}
+
+.col__icon {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.button {
+  width: 100%;
+  display: flex;
+  padding: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  align-items: center;
+  line-height: 1.25rem;
+  border-radius: 0.5rem;
+  justify-content: center;
+}
+
+.button--search {
+  background-color: #e9ecef;
+  color: #333;
 }

@@ -20,7 +20,8 @@ import { ModalRoutesComponent } from './component/modal-routes/modal-routes.comp
 import { AddRouteComponent } from './component/add-route/add-route.component';
 import { RoutesManagementComponent } from './component/routes-management/routes-management.component';
 import { ModalProductionComponent } from './component/modal-production/modal-production.component';
-
+import { ConfirmationModalComponent } from './component/confirmation-modal/confirmation-modal.component';
+import { NotificationModule } from '../notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ModalProductionComponent } from './component/modal-production/modal-pro
     ModalRoutesComponent,
     AddRouteComponent,
     RoutesManagementComponent,
-    ModalProductionComponent
+    ModalProductionComponent,
+    ConfirmationModalComponent
   ],
   providers: [
     DatePipe
@@ -48,7 +50,8 @@ import { ModalProductionComponent } from './component/modal-production/modal-pro
     CommonModule,
     AsociacionRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NotificationModule
   ]
 })
 export class AsociacionModule { }

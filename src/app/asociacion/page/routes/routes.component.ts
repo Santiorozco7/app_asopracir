@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
 
@@ -44,6 +45,16 @@ export class RoutesComponent {
   routes: OrderInformation[] = [];
   tapesAlert:boolean = false;
   ordersAlert:boolean = false;
+  filterValue:number = 0;
+  showConfirmationModal: boolean = false;
+
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
+
+  filterUser = this.formBuilder.group({
+    state: [0] 
+  });
 
   typeFilter: { [key: number]: string } = {
     0: 'Preparación',
@@ -63,7 +74,19 @@ export class RoutesComponent {
     4: 'Vendida'
   };
 
-  constructor(private service: AsociacionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+    this.filterUser.valueChanges.subscribe(() => {
+      this.filterValue = this.filterUser.value.state ?? 0;
+      console.log(this.filterValue);
+      this.View();
+    });
+    // Llama a la funciones con los valores iniciales
+    // this.month({ target: { value: this.months } });
+    // this.onSelectFilter({ target: { value: this.selectedValueAux } });
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
   }
 
   ngOnInit(): void{
@@ -71,7 +94,7 @@ export class RoutesComponent {
   }
 
   View() {
-    this.service.getRoutes().subscribe(routes => {
+    this.service.getRoutes(this.filterValue, undefined, undefined).subscribe(routes => {
       if (routes['state'] === 'Ok') {
         this.routes = routes.data;
         console.log("Se encontraron las rutas", this.routes);
@@ -82,15 +105,28 @@ export class RoutesComponent {
     })
   }
 
-  cancelRoute(routeID:number){
-    console.log("El identificador es: ",routeID);
+  cancelRoute(routeID:number, event: Event){
+    event.stopPropagation();
+    this.showConfirmationModal = true;
+    this.routesAUX = routeID;
+  }
+  
+  cancelRouteConfirmed(routeID: number) {
     this.service.cancelRoute(routeID).subscribe(result => {
       if (result['state'] === 'Ok') {
         console.log("Se elimino la ruta correctamente");
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha eliminado la órden`;
       } else {
         console.log("No se logro eliminar la ruta correctamente");
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = `No se ha podido eliminar la órden`;
       }
+      this.View();
     });
+    this.showConfirmationModal = false;
   }
 
   // Modal de rutas -----------------------------------------------------

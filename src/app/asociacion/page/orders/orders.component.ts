@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
 
@@ -13,10 +14,15 @@ export class OrdersComponent {
   ordersFilter: any[] = [];
   tapesAlert:boolean = false;
   ordersAlert:boolean = false;
+  filterValue:string = "pendientes";
 
   months:number = 1;
   filter:number = 0;
   selectedValueAux:number = 0;
+
+  filterUser = this.formBuilder.group({
+    state: ['pendientes'] 
+  });
 
   typeFilter: { [key: number]: string } = {
     0: 'Preparación',
@@ -28,7 +34,15 @@ export class OrdersComponent {
     6: 'Pagada',
   };
 
-  constructor(private service: AsociacionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+    this.filterUser.valueChanges.subscribe(() => {
+      this.filterValue = this.filterUser.value.state ?? 'pendientes';
+      console.log(this.filterValue);
+      this.View();
+    });
+    // Llama a la funciones con los valores iniciales
+    this.month({ target: { value: this.months } });
+    this.onSelectFilter({ target: { value: this.selectedValueAux } });
   }
 
   ngOnInit(): void{
@@ -38,7 +52,7 @@ export class OrdersComponent {
   View() {
     this.service.getPendingOrders().subscribe(orders => {
       if (orders['state'] === 'Fail') {
-        this.router.navigate(['/']);
+        // this.router.navigate(['/']);
         console.log(orders);
       } else {
         this.orders = orders.data;
@@ -59,9 +73,9 @@ export class OrdersComponent {
     });
   }
 
-  onEnterPressed() {
-    console.log('Enter presionado. Nuevo número ingresado:', this.months);
-    // Aquí puedes realizar cualquier acción adicional con el nuevo número.
+  month(event: any) {
+    const selectedMonth = event.target.value; // Obtiene el valor seleccionado
+    this.months = selectedMonth;
     this.service.getPendingTapes(this.months).subscribe(tapes => {
       if (tapes['state'] === 'Ok') {
         this.tapes = tapes.data;

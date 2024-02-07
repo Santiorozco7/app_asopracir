@@ -17,9 +17,14 @@ export class CreateOrderComponent {
 
   ordenFiltrada: any[] = [];
   showDialog = false;
+  positiveNotification = true;
   message = '';
 
   constructor(private service: AgricultorService, private renderer: Renderer2, private el: ElementRef) {}
+
+  closeNotification(): void {
+    this.showDialog = false;
+  }
 
   ngOnChanges() {
     // Llamar a filterCintaByDate cuando cinta cambie
@@ -49,21 +54,17 @@ export class CreateOrderComponent {
     this.service.createOrder(tapeID).subscribe(orderCreated => {
       if (orderCreated['state'] === 'Ok') {
         this.orderCreated.emit();
-        this.showNotification(`Se ha creado una nueva orden`);
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha creado una nueva orden`;
       } else {
         this.orderCreated.emit();
-        this.showNotification(`¡Ha occurido un error!"`);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = '¡Ha ocurrido un error!';
       }
     })
     this.closeCreateOrder.emit();
-  }
-
-  showNotification(message: string) {
-    this.showDialog = true;
-    this.message = message;
-    setTimeout(() => {
-      this.showDialog = false;
-    }, 3000);
   }
 
   closeDialog(event: Event): void {

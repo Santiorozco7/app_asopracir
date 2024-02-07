@@ -23,10 +23,9 @@ export class CreateVehicleComponent {
   confirmCallback: (() => void) | null = null;
 
   docTypeselect: any[] = [
-    { id: 0, name: 'CC' },
-    { id: 1, name: 'TI' },
-    { id: 2, name: 'CE' },
-    { id: 3, name: 'NIT' },
+    { id: 0, name: 'Cédula de ciudadanía' },
+    { id: 1, name: 'Cédula de extranjería' },
+    { id: 2, name: 'NIT' },
   ];
 
   typeSelect: any[] = [
@@ -58,7 +57,12 @@ export class CreateVehicleComponent {
   });
 
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
-    
+    this.infoUser.valueChanges.subscribe(() => {
+      if (this.infoUser.value.docNumber !== this.infoUser.value.docNumber ||
+        this.infoUser.value.docType !== this.infoUser.value.docType) {
+        this.activVehicle = false;
+      }
+    });
   }
 
   cerrarTodo() {

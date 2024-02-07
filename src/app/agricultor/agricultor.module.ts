@@ -17,7 +17,7 @@ import { OrdenesComponent } from './page/ordenes/ordenes.component';
 import { ModalOrderComponent } from './component/modal-order/modal-order.component';
 import { CreateOrderComponent } from './component/create-order/create-order.component';
 import { ModalHistorialComponent } from './component/modal-historial/modal-historial.component';
-
+import { NotificationModule } from '../notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -39,7 +39,8 @@ import { ModalHistorialComponent } from './component/modal-historial/modal-histo
   imports: [
     CommonModule,
     AgricultorRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NotificationModule
   ]
 })
 export class AgricultorModule { }

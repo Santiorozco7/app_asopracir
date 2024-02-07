@@ -15,12 +15,16 @@ export class RegisterComponent {
   searchFlag:boolean = false;
   searchValidator:boolean = false;
 
+  selectedValue: string = '0';
+
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
 
   docTypeselect: any[] = [
-    { id: 0, name: 'CC' },
-    { id: 1, name: 'TI' },
-    { id: 2, name: 'CE' },
-    { id: 3, name: 'NIT' },
+    { id: 0, name: 'Cédula de ciudadanía' },
+    { id: 1, name: 'Cédula de extranjería' },
+    { id: 2, name: 'NIT' },
   ];
 
   bankAccountTypeselect: any[] = [
@@ -101,6 +105,10 @@ export class RegisterComponent {
 
     //Colaborador
   });
+
+  closeNotification(): void {
+    this.showDialog = false;
+  }
 
   View() {
     console.log("Recargando..........");
@@ -194,13 +202,24 @@ export class RegisterComponent {
                 this.service.createFarmer(resultUser.data.userID, resultFarm.data.farmID).subscribe(resultFarmer => {
                   if (resultFarmer['state'] === 'Ok') {
                     console.log('Agricultor fue creado');
-                    this.View(); 
+                    this.showDialog = true;
+                    this.positiveNotification = true;
+                    this.message = `Se ha registrado un nuevo usuario con éxito`;
+                    setTimeout(() => {
+                      this.View();
+                    }, 3200);
                   } if(resultFarmer['state'] === 'Fail') {
                     console.log('Agricultor no fue creado',resultFarm);
-                  }
+                    this.showDialog = true;
+                    this.positiveNotification = false;
+                    this.message = '¡Ha ocurrido un error!';
+                  }                  
                 })
               } if(resultFarm['state'] === 'Fail') {
                 console.log('Finca no fue creado');
+                this.showDialog = true;
+                this.positiveNotification = false;
+                this.message = '¡Ha ocurrido un error!';
               }
             })
           }
@@ -219,13 +238,24 @@ export class RegisterComponent {
                 this.service.createTransporter(resultUser.data.userID, resultVehicle.data.vehID, licenseType, licenseExpiration).subscribe(resultTransport => {
                   if (resultTransport['state'] === 'Ok') {
                     console.log("Transportador Creado");
-                    this.View();
+                    this.showDialog = true;
+                    this.positiveNotification = true;
+                    this.message = `Se ha registrado un nuevo usuario con éxito`;
+                    setTimeout(() => {
+                      this.View();
+                    }, 3200);
                   }if (resultVehicle['state'] === 'Fail') {
                     console.log("Trasnportador no creado");
+                    this.showDialog = true;
+                    this.positiveNotification = false;
+                    this.message = '¡Ha ocurrido un error!';
                   }
                 })
               }if (resultVehicle['state'] === 'Fail') {
                 console.log("Vehiculo no creado");
+                this.showDialog = true;
+                this.positiveNotification = false;
+                this.message = '¡Ha ocurrido un error!';
               }
             })
           }
@@ -234,20 +264,23 @@ export class RegisterComponent {
           }
         }if(resultUser['state'] === 'Fail') {
           console.log('Usuario no fue creado');
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = '¡Ha ocurrido un error!';
         }
       });
     }
   }
 
   onSelectUserType(event: any) {
-    const selectedValue = event.target.value; // Obtiene el valor seleccionado
-    console.log('Valor seleccionado:', selectedValue);
-    switch (selectedValue) {
+    this.selectedValue = event.target.value; // Obtiene el valor seleccionado
+    console.log('Valor seleccionado:', this.selectedValue);
+    switch (this.selectedValue) {
       case '0':
         this.farmerRegister = true;
         this.transporterRegister = false;
         this.collaboratorRegister = false;
-        console.log('Registrar un agriculto');
+        console.log('Registrar un agricultor');
         break;
       
       case '1':
@@ -273,6 +306,39 @@ export class RegisterComponent {
     }
   }
 
+  getHeaderIcon(): { path: string, viewBox: string } {
+    const path = this.selectedValue === '0'
+      ? "M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"
+      : (this.selectedValue === '1'
+        ? "M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"
+        : "M48 0C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H64c0 53 43 96 96 96s96-43 96-96H384c0 53 43 96 96 96s96-43 96-96h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V288 256 237.3c0-17-6.7-33.3-18.7-45.3L512 114.7c-12-12-28.3-18.7-45.3-18.7H416V48c0-26.5-21.5-48-48-48H48zM416 160h50.7L544 237.3V256H416V160zM112 416a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm368-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z");
+  
+    const viewBox = this.selectedValue === '0' 
+      ? '0 0 576 512' 
+      : (this.selectedValue === '0'
+        ? '0 0 640 512'
+        : '0 0 640 512');
+    return { path, viewBox };
+  }
+  
+  getHeader(): string {
+    return this.selectedValue === '0' ? 'Información de la finca' : (this.selectedValue === '1' ? 'Información del transportador' : 'Información del colaborador');
+  }
+
+  cerrarTodo() {
+    this.searchFlag = false;
+  }
+
+  areAgricultorFieldsValid(): boolean {
+    const agricultorFields = ['farmName', 'zoneName', 'cityFarm', 'area'];
+    return agricultorFields.every(field => this.loteForm.get(field)?.value !== null && this.loteForm.get(field)?.value !== '');
+  }
+  
+  areTransporterFieldsValid(): boolean {
+    const transporterFields = ['licenseType', 'licenseExpiration', 'plate', 'soatExpiration', 'techExpiration', 'type', 'state', 'capacity'];
+    return transporterFields.every(field => this.loteForm.get(field)?.value !== null && this.loteForm.get(field)?.value !== '');
+  }
+  
   onSubmitUser(): void {
     if (this.infoUser.valid) {
       const formDataUser = this.infoUser.value;

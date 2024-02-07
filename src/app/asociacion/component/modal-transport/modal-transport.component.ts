@@ -28,23 +28,24 @@ export class ModalTransportComponent {
   @Output() cerrarActualizar = new EventEmitter<void>();
   @Input() modalVisible: boolean = false;
   @Input() modalData: { numeroDocumento?: number, tipoDocumento?: number, placa?: string } = {};
-  editareliminar: boolean = false;
   formChanges = false;
   originalData: any;
   originalVehicle: number = 0;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
-  mensaje = '';
+
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
   confirmCallback: (() => void) | null = null;
 
   
 
   docTypeselect: any[] = [
-    { id: 0, name: 'CC' },
-    { id: 1, name: 'TI' },
-    { id: 2, name: 'CE' },
-    { id: 3, name: 'NIT' },
+    { id: 0, name: 'Cédula de ciudadanía' },
+    { id: 1, name: 'Cédula de extranjería' },
+    { id: 2, name: 'NIT' },
   ];
 
   bankAccountTypeselect: any[] = [
@@ -146,6 +147,10 @@ export class ModalTransportComponent {
         console.log("No hubo cambios en el formulario");
       }
     });
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
   }
 
   cerrarTodo() {
@@ -290,25 +295,32 @@ export class ModalTransportComponent {
               ).subscribe(resultTrans => {
                 if (resultTrans["state"] === 'Ok') {
                   console.log('Transportador Actualizado');
+                  this.showDialog = true;
+                  this.positiveNotification = true;
+                  this.message = `Se han actualizado los datos`;
                   this.cerrarActualizar.emit();
                 }if(resultVeh['state'] === 'Fail') {
                   console.log('Transportador no fue Actualizado');
+                  this.showDialog = true;
+                  this.positiveNotification = false;
+                  this.message = `No se ha podido actualizar`;
                 }
               });
             }if(resultVeh['state'] === 'Fail') {
               console.log('Vehículo no fue Actualizado');
+              this.showDialog = true;
+              this.positiveNotification = false;
+              this.message = `No se ha podido actualizar`;
             }
           });
         }if(result['state'] === 'Fail') {
           console.log('Usuario no fue Actualizado');
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = `No se ha podido actualizar`;
         }
       });
       this.cerrarModal.emit();
     }
   }
-
-  editarEliminar() {
-    this.editareliminar = !this.editareliminar;
-  }
-
 }

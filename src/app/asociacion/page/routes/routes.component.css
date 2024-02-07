@@ -1,37 +1,64 @@
 .header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
   }
-
-a {
-    text-decoration: none;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #ffffff;
-    border-radius: 5px;
+  
+  .mb {
+    margin-bottom: 50px;
   }
-
-.farm-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.farm-table th, .farm-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.farm-table th {
-    background-color: #333;
-    color: white;
-}
-
-.farm-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.farm-table tbody tr:hover {
-    background-color: #ddd;
-}
+  
+  .header__icon {
+    width: 1rem;
+  }
+  
+  .icon--marginr {
+    margin-right: 0.5rem;
+  }
+  
+  .title {
+    text-transform: uppercase;
+  }
+  
+  .inline {
+    display: inline;
+  }
+  
+  .subtitle {
+    text-transform: capitalize;
+  }
+  
+  .section__item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .form__item {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+    margin: 30px 0;
+  }
+  
+  label {
+    margin-right: 10px;
+  }
+  
+  .form__input {
+    height: 2rem;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
+  
+  .select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  .error {
+    text-align: center;
+    color: red;
+  }
+  
