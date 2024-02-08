@@ -9,6 +9,16 @@
     <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
   </div>
   <form [formGroup]="infoUser" (ngSubmit)="onSubmit()">
+    <div class="section__header mb">
+      <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+      </svg>  
+      <span class="mr"><h2 class="subtitle inline">Estado en la asociación</h2></span>
+      <select class="form__input select" name="state" id="state" formControlName="state" required>
+        <option value="0">Inactivo</option>
+        <option value="1">Activo</option>
+      </select>
+    </div>
     <div class="section__header">
       <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>

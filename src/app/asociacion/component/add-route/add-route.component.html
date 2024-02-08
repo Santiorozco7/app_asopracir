@@ -35,3 +35,9 @@
       </tbody>
     </table>
 </div>
+
+<app-notification *ngIf="showDialog" 
+  [message]="message" 
+  [positiveNotification]="positiveNotification" 
+  (closeNotification)="closeNotification()">
+</app-notification>

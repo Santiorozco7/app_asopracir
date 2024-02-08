@@ -45,14 +45,14 @@ export class CreateVehicleComponent {
   });
 
   infoVehicle = this.formBuilder.group({
-    licenseExpiration: [''],
-    licenseType: [''],
+    licenseExpiration: ['', [Validators.required]],
+    licenseType: ['', [Validators.required]],
 
-    plate: [''],
-    soatExpiration: [''],
-    techExpiration: [''],
-    type: [''],
-    capacity: [''],
+    plate: ['', [Validators.required]],
+    soatExpiration: ['', [Validators.required]],
+    techExpiration: ['', [Validators.required]],
+    type: ['', [Validators.required]],
+    capacity: ['', [Validators.required]],
     comments: ['']
   });
 

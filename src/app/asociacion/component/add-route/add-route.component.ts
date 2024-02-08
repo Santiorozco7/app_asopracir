@@ -55,7 +55,11 @@ export class AddRouteComponent {
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
-  mensaje = '';
+  
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
+
   confirmCallback: (() => void) | null = null;
 
   routeState: { [key: number]: string } = {
@@ -67,7 +71,10 @@ export class AddRouteComponent {
   };
 
   constructor(private service: AsociacionService, private router: Router) {
-    
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
   }
 
   cerrarTodo() {
@@ -95,8 +102,16 @@ export class AddRouteComponent {
     this.service.appendOrderToRoute(routeID, this.orderID).subscribe(result => {
       if (result['state'] === 'Ok') {
         console.log("Orden agregada", result);
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha agregado la órden`;
+        this.cerrarTodo();
       } else {
         console.log("Orden no agregada", result);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = `Ha ocurrido un error`;
+        this.cerrarTodo();
       }
     })
   }

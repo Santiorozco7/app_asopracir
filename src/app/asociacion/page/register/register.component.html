@@ -1,4 +1,4 @@
-<div *ngIf="!searchFlag">
+<div *ngIf="!searchFlag && !searchValidator">
   <div class="header">
     <h1 class="title">registro de nuevo usuario</h1>
   </div>
@@ -21,7 +21,7 @@
   </form>
 </div>
 
-<span class="error" *ngIf="searchValidator"><p>Este usuario ya ha sido registrado</p></span>
+<!-- <span class="error" *ngIf="searchValidator"><p>Este usuario ya ha sido registrado</p></span> -->
 
 <!-- Registrar nuevo usuario -->
 <div *ngIf="searchFlag">
@@ -35,7 +35,7 @@
     <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
   </div>
 
-  <form [formGroup]="loteForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <div class="section__header">
       <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
@@ -121,8 +121,9 @@
       <span class="mr"><h3 class="subtitle inline">Tipo de usuario a registrar</h3></span>
       <select class="form__input select" name="select" id="userType" (change)="onSelectUserType($event)">
         <option value="0">Agricultor</option>
-        <option value="1">Transportador</option>
+        <option value="1">Asociado</option>
         <option value="2">Colaborador</option>
+        <option value="3">Transportador</option>
       </select>
     </div>
     
@@ -207,13 +208,23 @@
     
     <!-- Crear Colaborador -->
     <div class="form__section" *ngIf="collaboratorRegister">
+      <p>Escribir "Tesorero" para registrarlo como colaborador</p>
       <div class="section__item">
-        <label class="required" for="licenseType">nombre colaborador</label>
-        <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
+        <label class="required" for="roleNameCollab">nombre colaborador</label>
+        <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
+      </div>     
+    </div>
+    
+    <!-- Crear Asociado -->
+    <div class="form__section" *ngIf="assocRegister">
+      <p>Escribir "Admin" para registrarlo como asociado</p>
+      <div class="section__item">
+        <label class="required" for="roleNameAssoc">nombre colaborador</label>
+        <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
       </div>     
     </div>
 
-    <button class="button button--success" type="submit" [disabled]="!loteForm.valid || (farmerRegister && !areAgricultorFieldsValid()) || (transporterRegister && !areTransporterFieldsValid())">
+    <button class="button button--success" type="submit" [disabled]="!userForm.valid || (farmerRegister && !areAgricultorFieldsValid()) || (transporterRegister && !areTransporterFieldsValid())">
       <div *ngIf="farmerRegister">Crear Agricultor</div>
       <div *ngIf="transporterRegister">Crear Transportador</div>
       <div *ngIf="collaboratorRegister">Crear Colaborador</div>
@@ -221,4 +232,156 @@
     
   </form>
 </div>
-<app-notification *ngIf="showDialog" [message]="message" [positiveNotification]="positiveNotification" (closeNotification)="closeNotification()"></app-notification>
+
+<!-- Asignar mas roles-->
+<div *ngIf="searchValidator">
+  <div class="header">
+    <div>
+      <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+        <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+      </svg>
+      <span><h2 class="title inline">usuario ya registrado</h2></span>
+    </div>
+    <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
+  </div>
+
+  <div class="section__header">
+    <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+    </svg>
+    <span><h3 class="subtitle inline">Roles asociados al usuario</h3></span>
+  </div>
+  <div class="section__item">
+    <ng-container *ngIf="!userFarmer && !userAssoc && !userCollaborator && !userTransporter; else rolesSelect">
+      <p>Aun no cuenta con un rol asignado</p>
+    </ng-container>
+    <ng-template #rolesSelect>
+      <select class="form__input select" [disabled]="userFarmer || userAssoc || userCollaborator || userTransporter">
+        <option [ngValue]="'Farmer'" *ngIf="userFarmer">Agricultor</option>
+        <option [ngValue]="'Assoc'" *ngIf="userAssoc">Asociado</option>
+        <option [ngValue]="'Collaborator'" *ngIf="userCollaborator">Colaborador</option>
+        <option [ngValue]="'Transporter'" *ngIf="userTransporter">Transportador</option>
+      </select>    
+    </ng-template>  
+  </div>
+
+  <div class="section__header">
+    <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+    </svg>
+    <span><h3 class="subtitle inline">posibles roles por agregar</h3></span>
+  </div>
+  <div class="form__section">
+    <div class="rolesSelect">
+      <button class="button button--success" *ngIf="!userFarmer" (click)="rolesAdd('0')">Agricultor</button>
+      <button class="button button--success" *ngIf="!userAssoc" (click)="rolesAdd('1')">Asociado</button>
+      <button class="button button--success" *ngIf="!userCollaborator" (click)="rolesAdd('2')">Colaborador</button>
+      <button class="button button--success" *ngIf="!userTransporter" (click)="rolesAdd('3')">Transportador</button>        
+    </div>
+  </div>
+  
+  <!-- Agregar nuevos roles a usuarios existentes -->
+  <form [formGroup]="roleAddForm" (ngSubmit)="submitRole()"> 
+    <!-- Crear Agricultor -->
+    <div class="form__section" *ngIf="farmerRegister">
+      <div class="section__item">
+        <label class="required" for="farmName">nombre del predio</label>
+        <input class="form__input" type="text" id="farmName" formControlName="farmName">
+      </div>
+      <div class="section__item">
+        <label class="required" for="zoneName">vereda</label>
+        <input class="form__input" type="text" id="zoneName" formControlName="zoneName">
+      </div>
+      <div class="section__item">
+        <label class="required" for="cityFarm">Ciudad</label>
+        <input class="form__input" type="text" id="cityFarm" formControlName="cityFarm">
+      </div>
+      <div class="section__item">
+        <label class="required" for="area">hectareas (ha)</label>
+        <input class="form__input" type="text" id="area" formControlName="area">
+      </div>
+      <div class="section__item">
+        <label for="GPSposition">posición GPS</label>
+        <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
+      </div>
+      <div class="section__item">
+        <label for="fileOwnerCertificate">certificado de propiedad</label>
+        <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
+      </div>        
+    </div>  
+
+    <!-- Crear Transportador -->
+    <div class="form__section" *ngIf="transporterRegister">
+      <div class="section__item">
+        <label class="required" for="licenseType">Tipo de Licencia</label>
+        <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
+      </div>    
+      <div class="section__item">
+        <label class="required" for="licenseExpiration">fecha de expiración</label>
+        <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
+      </div>
+      <div class="section__item">
+        <label class="required" for="plate">placa</label>
+        <input class="form__input" type="text" id="plate" formControlName="plate">
+      </div>
+      <div class="section__item">
+        <label class="required" for="soatExpiration">vencimiento de SOAT</label>
+        <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
+      </div>
+      <div class="section__item">
+        <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
+        <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
+      </div>
+      <div class="section__item">
+          <label class="required" for="type">tipo</label>
+          <select class="form__input select" name="docType" id="type" formControlName="type">
+            <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
+          </select>
+      </div>
+      <div class="section__item">
+          <label class="required" for="state">estado</label>
+          <select class="form__input select" name="docType" id="state" formControlName="state">
+            <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
+          </select>
+      </div>
+      <div class="section__item">
+        <label class="required" for="capacity">capacidad (T)</label>
+        <input class="form__input" type="number" id="capacity" formControlName="capacity">
+      </div>
+      <div class="section__item">
+        <label for="comments">comentarios</label>
+        <textarea rows="2" id="comments" formControlName="comments"></textarea>
+      </div>
+    </div>
+
+    <!-- Crear Colaborador -->
+    <div class="form__section" *ngIf="collaboratorRegister">
+      <p>Escribir "Tesorero" para registrarlo como colaborador</p>
+      <div class="section__item">
+        <label class="required" for="roleNameCollab">nombre colaborador</label>
+        <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
+      </div>     
+    </div>
+
+    <!-- Crear Asociado -->
+    <div class="form__section" *ngIf="assocRegister">
+      <p>Escribir "Admin" para registrarlo como asociado</p>
+      <div class="section__item">
+        <label class="required" for="roleNameAssoc">nombre colaborador</label>
+        <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
+      </div>     
+    </div>
+    
+    <button type="submit" [disabled]="roleAddForm.invalid" class="button button--success" *ngIf="farmerRegister || collaboratorRegister || transporterRegister || assocRegister">
+      <div *ngIf="farmerRegister">Crear Agricultor</div>
+      <div *ngIf="transporterRegister">Crear Transportador</div>
+      <div *ngIf="collaboratorRegister">Crear Colaborador</div>
+      <div *ngIf="assocRegister">Crear Asociado</div>
+    </button>
+  </form>
+</div>
+<app-notification *ngIf="showDialog" 
+[message]="message" 
+[positiveNotification]="positiveNotification" 
+(closeNotification)="closeNotification()">
+</app-notification>

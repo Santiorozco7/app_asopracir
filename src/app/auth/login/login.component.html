@@ -1,12 +1,24 @@
 <div class="card">
-  <form class="card__body" [formGroup]="formUser" (ngSubmit)="login()">
+  <p>Ingresar como:</p>
+      <div class="roleSelect">
+        <button (click)="roleSelect('0')">Agricultor</button>
+        <button (click)="roleSelect('1')">Colaborador</button>
+        <button (click)="roleSelect('3')">Asociado</button>
+      </div>
+  <form class="card__body" [formGroup]="userForm" (ngSubmit)="login()">
     <h2 class="card__header">Iniciar sesión</h2>
     <div class="card__items">
+      <div>
+        <label for="docType">Tipo de documento</label>
+        <select name="docType" id="docType" formControlName="docType" required>
+          <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+        </select>
+      </div>
       <div class="card__item">
         <label class="form__label" for="email">Numero de documento</label>
         <input class="form__input" type="number" id="email" formControlName="documento" placeholder="Ingrese el numero de documento"/>
-        <div class="alert alert-danger" [hidden]="formUser.get('documento')?.valid || formUser.get('documento')?.pristine">
-          <span *ngIf="formUser.get('documento')?.errors?.['required']">
+        <div class="alert alert-danger" [hidden]="userForm.get('documento')?.valid || userForm.get('documento')?.pristine">
+          <span *ngIf="userForm.get('documento')?.errors?.['required']">
             El usuario es obligatorio
           </span>
         </div>
@@ -22,6 +34,6 @@
       </div>
     </div>
     <span *ngIf="err">Documento o contraseña invalido</span>
-    <button class="button button--success" [disabled]="formUser.invalid">Iniciar sesión</button>
+    <button class="button button--success" [disabled]="userForm.invalid">Iniciar sesión</button>
   </form>
 </div>

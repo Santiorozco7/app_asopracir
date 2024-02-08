@@ -37,7 +37,7 @@
         <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
       </div>    
       <div class="section__item">
-        <label class="required" for="licenseExpiration">Fecha de expedición</label>
+        <label class="required" for="licenseExpiration">Fecha de expiración</label>
         <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
       </div>
     
@@ -69,6 +69,6 @@
       </div>
     </div>
     
-    <button class="button button--success" type="submit" [disabled]="infoVehicle.valid">Añadir vehículo</button>
+    <button class="button button--success" type="submit" [disabled]="infoVehicle.invalid">Añadir vehículo</button>
   </form>
 </div>
