@@ -1,0 +1,59 @@
+.notification {
+    left: 0; 
+    right: 0; 
+    opacity: 0;
+    gap: 0.5rem;
+    z-index: 999;
+    display: flex;
+    margin: 0 1rem;
+    color: white;
+    position: fixed;
+    bottom: 4.68rem;
+    padding: 1.1rem;
+    visibility: hidden;
+    align-items: center;
+    flex-direction: row;
+    border-radius: 0.5rem;
+    justify-content: center;
+    background-color: #2e7d32;
+    transform: translateY(30px);
+    animation: fade-in 3s linear;  
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notification__icon {
+    width: 1rem;
+    margin-right: 4px;
+    fill: #fff;
+  }
+
+  .notification.positive {
+    background-color: #2e7d32; /* Fondo verde para notificaciones positivas */
+  }
+  
+  .notification.negative {
+    background-color: #d32f2f; /* Fondo rojo para notificaciones negativas */
+  }
+  
+  /* Media Query para pantallas más grandes, por ejemplo, para pantallas de PC */
+  @media (min-width: 768px) {
+    .notification {
+      bottom: auto;
+      top: 50px; 
+      left: auto;
+      right: 135px; 
+      width: 400px;
+    }
+  }
+
+  @keyframes fade-in {
+    5% {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    95% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+  }

@@ -22,6 +22,7 @@ export class CrearCintaComponent {
   @Output() closeCreateTape = new EventEmitter<void>();
 
   showDialog = false;
+  positiveNotification = true;
   message = '';
   
   constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {}
@@ -32,6 +33,10 @@ export class CrearCintaComponent {
     variety: ['', [Validators.required]],
     color: ['#000000', [Validators.required]]
   });
+  
+  closeNotification(): void {
+    this.showDialog = false;
+  }
 
   onSubmit(): void {
     if (this.loteForm.valid) {
@@ -46,10 +51,14 @@ export class CrearCintaComponent {
       this.service.createTape(batchID, numBunches, variety, colorWithoutHash).subscribe(tapeCreated => {
         if (tapeCreated['state'] === 'Ok') {
           this.tapeCreated.emit();
-          this.showNotification(`Se ha creado una nueva cinta`);
+          this.showDialog = true;
+          this.positiveNotification = true;
+          this.message = `Se ha creado una nueva cinta`;
         } else {
           this.tapeCreated.emit();
-          this.showNotification(`¡Ha occurido un error!"`);
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = '¡Ha ocurrido un error!';
         }
       });
     }
@@ -69,14 +78,6 @@ export class CrearCintaComponent {
   
   getCreateTapeButtonMessage(): string {
     return this.loteForm.valid? 'Crear cinta' : 'Bloqueado';
-  }
-
-  showNotification(message: string) {
-    this.showDialog = true;
-    this.message = message;
-    setTimeout(() => {
-      this.showDialog = false;
-    }, 3000);
   }
 
   closeDialog(event: Event): void {

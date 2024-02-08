@@ -76,10 +76,14 @@ export class RoutesManagementComponent {
   transportersFlag:boolean = false;
   collaboratorsFlag:boolean = false;
   ordersFlag:boolean = false;
+  ordersAlert:boolean = false;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
-  mensaje = '';
+
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
   confirmCallback: (() => void) | null = null;
 
   docTypeselect: any[] = [
@@ -113,7 +117,10 @@ export class RoutesManagementComponent {
   };
 
   constructor(private service: AsociacionService, private router: Router) {
-    
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
   }
 
   cerrarTodo() {
@@ -159,9 +166,11 @@ export class RoutesManagementComponent {
       this.service.getPendingOrders().subscribe(orders => {
         if (orders['state'] === 'Fail') {
           console.log("No se encontraron ordenes pendientes ",orders);
+          this.ordersAlert = true;
         } else {
           this.orders = orders.data;
           console.log(orders.data);
+          this.ordersAlert = false;
         }  
       });
     }
@@ -214,7 +223,13 @@ export class RoutesManagementComponent {
     this.service.appendOrderToRoute(this.routeID, orderID).subscribe(order => {
       if (order['state'] === 'Fail') {
         console.log("No se logro asignar la orden a la ruta ",order);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = `No se ha podido agregar la órden`;
       } else {
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha agregado la órden`;
         console.log("Se agrego a la ruta ", order.data);
         this.cerrarTodo();
       }

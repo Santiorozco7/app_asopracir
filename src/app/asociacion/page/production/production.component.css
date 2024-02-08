@@ -1,13 +1,33 @@
-button {
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-    padding: 0;
-    cursor: pointer;
-    border: none;
-    color: inherit;
-    font: inherit;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mb {
+  margin-bottom: 50px;
+}
+
+.header__icon {
+  width: 1rem;
+}
+
+.icon--marginr {
+  margin-right: 0.5rem;
+}
+
+.title {
+  text-transform: uppercase;
+}
+
+.inline {
+  display: inline;
+}
+
+.subtitle {
+  text-transform: capitalize;
+}
+
   
   .orders {
     background-color: rgb(246, 246, 246);

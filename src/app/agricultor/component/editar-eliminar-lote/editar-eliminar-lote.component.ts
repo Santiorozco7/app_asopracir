@@ -22,6 +22,7 @@ export class EditarEliminarLoteComponent implements OnChanges {
 
   isValidForm = false;
   showDialog = false;
+  positiveNotification = true;
   message = '';
   originData: any;
   originDataTape: any;
@@ -82,6 +83,10 @@ export class EditarEliminarLoteComponent implements OnChanges {
     ) && this.tapeForm.valid;
   }
 
+  closeNotification(): void {
+    this.showDialog = false;
+  }
+  
   ngOnChanges(changes: SimpleChanges): void {
     // Detecta cambios en batchID y actualiza el formulario cuando coincida con itemLote.
     const itemLote = this.batches.find(item => item['batchID'] === this.batchID);
@@ -113,10 +118,14 @@ export class EditarEliminarLoteComponent implements OnChanges {
       this.service.updateBatch(this.batchID, batchName, responsible, mainVariety).subscribe(batchEdited => {
         if (batchEdited['state'] === 'Ok') {
           this.batchEdited.emit();
-          this.showNotification(`Se editó el lote correctamente`);
+          this.showDialog = true;
+          this.positiveNotification = true;
+          this.message = `Se editó el lote correctamente`;
         } else {
           this.batchEdited.emit();
-          this.showNotification(`¡Ha ocurrido un error!`);
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = '¡Ha ocurrido un error!';
         }
       });
     }
@@ -129,10 +138,14 @@ export class EditarEliminarLoteComponent implements OnChanges {
       this.service.updateTape(this.tapeID, numBunches, variety, colorWithoutHash).subscribe(tapeUpdated => {
         if (tapeUpdated['state'] === 'Ok') {
           this.batchEdited.emit();
-          this.showNotification(`Se ha actualizado la cinta`);
+          this.showDialog = true;
+          this.positiveNotification = true;
+          this.message = `Se ha actualizado la cinta`;
         } else {
           this.batchEdited.emit();
-          this.showNotification(`¡Ha ocurrido un error!`);
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = '¡Ha ocurrido un error!';
         }
       });
     }
@@ -144,10 +157,14 @@ export class EditarEliminarLoteComponent implements OnChanges {
     this.service.removeBatch(this.batchID).subscribe(batchDeleted => {
       if (batchDeleted['state'] === 'Ok') {
         this.batchDeleted.emit();
-        this.showNotification(`Se ha eliminado el lote "${this.getSelectedBatchName()}"`);
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha eliminado el lote "${this.getSelectedBatchName()}"`;
       } else {
         this.batchDeleted.emit();
-        this.showNotification(`¡Ha occurido un error!"`);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = '¡Ha ocurrido un error!';
       }
     });    
     this.closeManageBatch.emit();
@@ -220,14 +237,6 @@ export class EditarEliminarLoteComponent implements OnChanges {
   getSelectedBatchName(): string {
     const selectedBatch = this.batches.find(item => item.batchID === this.batchID);
     return selectedBatch ? selectedBatch.batchName : '';
-  }
-
-  showNotification(message: string) {
-    this.showDialog = true;
-    this.message = message;
-    setTimeout(() => {
-      this.showDialog = false;
-    }, 3000);
   }
 
   closeDialog(event: Event): void {

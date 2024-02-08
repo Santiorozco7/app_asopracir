@@ -1,185 +1,79 @@
-.modal-header {
-    align-items: baseline;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .modal-header a {
-    color: #1d594f;
-    transition: transform 0.3s;
-  }
-  
-  .modal-header a:hover {
-    transform: scale(1.5);
-  }
-  
-  .close {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    height: 16px;
-    text-decoration: none;
-    width: 16px;
-  }
-  
-  .modal-wrapper {
-    align-items: center;
-    background: rgba(0, 0, 0, 0.7);
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-  }
-
-  .infoTotal {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-
-  .infoUser, .infoFarm {
-    margin: 3%;
-  }
-
-  .form-group {
-    margin: 4px;
-  }
-  
-  #modal {
-    opacity: 0;
-    transition: opacity 0.25s ease-in-out;
-    visibility: hidden;
-  }
-  
-  #modal:target {
-    opacity: 1;
-    visibility: visible;
-    z-index: 999;
-  }
-  
-  #modal:target .modal-body {
-    opacity: 1;
-    transform: translateY(1);
-  }
-  
-  .modal-body {
-    transition: opacity 0.25s ease-in-out;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    margin: 2%;
-  }
-  
-  button {
-    margin: 2%;
-    width: 96%;
-  }
-  
-  #graphics-modal,
-  #filter-modal {
-    opacity: 0;
-    transition: opacity 0.25s ease-in-out;
-    visibility: hidden;
-  }
-  
-  #graphics-modal:target,
-  #filter-modal:target {
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  #graphics-modal:target .modal-body,
-  #filter-modal:target .modal-body {
-    opacity: 1;
-    transform: translateY(1);
-  }
-  
-  #graphics-modal .modal-body,
-  #filter-modal .modal-body {
-    max-width: 500px;
-    opacity: 0;
-    /* transform: translateY(-100px); */
-    transition: opacity 0.25s ease-in-out;
-    width: 100%;
-    z-index: 999;
-  }
-  
-  .outside-trigger {
-    bottom: 0;
-    cursor: default;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-  }
-  
-  
-  /* Estilos CSS para el modal y el overlay */
-    .modal-wrapper {
-    opacity: 0;
-    transition: opacity 0.25s ease-in-out;
-    visibility: hidden;
-    /* Estilos del overlay */
-  }
-  
-  
-  .mostrar-modal  {
-    background-color: white;
-    opacity: 1;
-    visibility: visible;
-    z-index: 999;
-  }
-
-  .avisoConfirmacion {
-    background-color: #1d594f;
-  }
-
-  /* Tabla ---------------------------------------------------------- */
-
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-a {
-    text-decoration: none;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #ffffff;
-    border-radius: 5px;
-  }
-
-.farm-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.farm-table th, .farm-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-.farm-table th {
-    background-color: #333;
-    color: white;
-}
-
-.farm-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.farm-table tbody tr:hover {
-    background-color: #ddd;
-}
-
-.transportManagement{
+.header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mb {
+  margin-bottom: 50px;
+}
+
+.header__icon {
+  width: 1rem;
+}
+
+.icon--marginr {
+  margin-right: 0.5rem;
+}
+
+.title {
+  text-transform: uppercase;
+}
+
+.inline {
+  display: inline;
+}
+
+.subtitle {
+  text-transform: capitalize;
+}
+
+.form__section {
+  display: flex;
+  flex-wrap: wrap;
+  border: solid 1px black;
+  border-radius: 15px;
+  padding: 15px;
+  padding-top: 35px;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.notbp {
+  padding: 0;
+  border: none;
+}
+
+.section__item {
+  display: flex;
+  align-items: center;
+}
+
+.form__item {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+  margin: 30px 0;
+}
+
+label {
+  margin-right: 10px;
+}
+
+.form__input {
+  height: 2rem;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.error {
+  text-align: center;
+  color: red;
 }

@@ -17,7 +17,7 @@ export class FarmsComponent {
   farms: any[] = [];
 
   infoUser = this.formBuilder.group({
-    state: ['all'] // Default value, you can set it to 'activo', 'inactivo', or 'todos'
+    state: ['all'] 
   });
 
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {

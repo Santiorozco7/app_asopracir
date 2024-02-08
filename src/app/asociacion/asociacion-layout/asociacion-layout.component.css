@@ -1,22 +1,14 @@
-/* Estilos para el layout principal */
 .layout {
-    display: grid;
-    grid-template-columns: 200px 1fr; /* Columnas: barra lateral de 200px y contenido principal restante */
-    grid-template-rows: auto;
-    grid-template-areas: "nav main"; /* Áreas del diseño */
-    min-height: 100vh; /* Altura mínima para ocupar la pantalla completa */
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "nav main";
+  min-height: 100vh;
+  background-color: #fff;
 }
 
-/* Estilos para la barra lateral (nav) */
-nav {
-    grid-area: nav;
-    background-color: #333;
-    color: white;
-    padding: 20px;
-}
-
-/* Estilos para el contenido principal (main) */
 main {
-    grid-area: main;
-    padding: 20px;
+  grid-area: main;
+  margin: 50px 135px 50px 0;
+  padding: 0 20px;
 }

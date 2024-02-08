@@ -1,134 +1,139 @@
-<div class="modal-wrapper" [ngClass]="{'mostrar-modal': modalVisible}">
-    <div class="modal-body card">
-      <div class="modal-header">
-        <!-- <button (click)="editarEliminar()">Editar/Eliminar</button> -->
-        <h1 class="heading">Actualizar información</h1>
-        <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i>X</a>
-      </div>
-      <div *ngIf="editareliminar">
-        
-          <h1>Eliminar Lote</h1>
-        
-        </div>
-      <div *ngIf="!editareliminar">
-        <!-- <div *ngFor="let itemLote of lote">
-           <div *ngIf="batchID === itemLote.batchID"> -->
-            <form class="infoTotal" [formGroup]="infoUser" (ngSubmit)="onSubmit()">
-              <div class="infoUser">
-                <div class="form-group">
-                  <label for="name">Nombre</label>
-                  <input type="text" id="name" formControlName="name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="firstLastname">Primer Apellido</label>
-                  <input type text id="firstLastname" formControlName="firstLastname" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="docType">Tipo de documento</label>
-                  <select name="docType" id="docType" formControlName="docType" required>
-                    <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="docNumber">Numero de documento</label>
-                  <input type="number" id="docNumber" formControlName="docNumber" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="secondLastname">Segundo Apellido</label>
-                  <input type="text" id="secondLastname" formControlName="secondLastname" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="docIssueDate">Fecha de Expedición de Documento</label>
-                  <input type="text" id="docIssueDate" formControlName="docIssueDate" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="docIssuePlace">Lugar de Expedición de Documento</label>
-                  <input type="text" id="docIssuePlace" formControlName="docIssuePlace" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="birthday">Fecha de Nacimiento</label>
-                  <input type="text" id="birthday" formControlName="birthday" class="form-control">
-                </div>
-                <!-- Agrega más campos adicionales aquí si es necesario -->
-                <div class="form-group">
-                  <label for="address">Dirección</label>
-                  <input type="text" id="address" formControlName="address" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="city">Ciudad</label>
-                  <input type="text" id="city" formControlName="city" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="phoneNumber">Número de Teléfono</label>
-                  <input type="text" id="phoneNumber" formControlName="phoneNumber" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="altPhoneNumber">Número de Teléfono Alternativo</label>
-                  <input type="text" id="altPhoneNumber" formControlName="altPhoneNumber" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="email">Correo Electrónico</label>
-                  <input type="email" id="email" formControlName="email" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="bankAccountBName">Nombre del Banco</label>
-                  <input type="text" id="bankAccountBName" formControlName="bankAccountBName" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="bankAccountType">Tipo de Cuenta Bancaria</label>
-                  <select name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
-                    <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="bankAccountNumber">Número de Cuenta Bancaria</label>
-                  <input type="text" id="bankAccountNumber" formControlName="bankAccountNumber" class="form-control">
-                </div>
-              </div>
-
-
-
-              <div class="infoFarm">
-                <div class="form-group">
-                  <label for="farmName">Nombre de la Granja</label>
-                  <input type="text" id="farmName" formControlName="farmName" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="zoneName">Nombre de la Zona</label>
-                  <input type="text" id="zoneName" formControlName="zoneName" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="cityFarm">Ciudad de la Granja</label>
-                  <input type="text" id="cityFarm" formControlName="cityFarm" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="area">Área de la Granja</label>
-                  <input type="text" id="area" formControlName="area" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label for="GPSposition">Posición GPS</label>
-                  <input type="text" id="GPSposition" formControlName="GPSposition" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="fileOwnerCertificate">Certificado de Propiedad (Opcional)</label>
-                  <input type="text" id="fileOwnerCertificate" formControlName="fileOwnerCertificate" class="form-control">
-                </div>
-                <div class="form-group">
-                  <label for="state">Estado de la Asociación</label>
-                  <select name="state" id="state" formControlName="state" required>
-                    <option value="0">Inactivo</option>
-                    <option value="1">Activo</option>
-                  </select>
-                </div>
-                <!-- Agrega más campos adicionales aquí si es necesario -->
-              </div>
-              <button type="submit" [disabled]="infoUser.invalid" class="btn btn-primary" *ngIf="formChanges">Actualizar información</button>
-            </form>
-           <!-- </div>
-         </div> -->
-     
-         {{ infoUser.value | json }}
-     </div>
-     
+<div *ngIf="modalVisible">
+  <div class="header">
+    <div>
+      <svg class="header__icon icon--marginr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+        <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+      </svg>
+      <span><h1 class="title inline">actualizar información</h1></span>
     </div>
+    <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
   </div>
+  <form [formGroup]="infoUser" (ngSubmit)="onSubmit()">
+    <div class="section__header mb">
+      <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+      </svg>  
+      <span class="mr"><h2 class="subtitle inline">Estado en la asociación</h2></span>
+      <select class="form__input select" name="state" id="state" formControlName="state" required>
+        <option value="0">Inactivo</option>
+        <option value="1">Activo</option>
+      </select>
+    </div>
+    <div class="section__header">
+      <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+      </svg>
+      <span><h2 class="subtitle inline">Datos personales</h2></span>
+    </div>
+    <div class="form__section">
+      <div class="section__item">
+        <label class="required" for="name">Nombres</label>
+        <input class="form__input col-3" type="text" id="name" formControlName="name" required>
+      </div>
+      <div class="section__item">
+        <label class="required" for="firstLastname">Primer Apellido</label>
+        <input class="form__input" type="text" id="firstLastname" formControlName="firstLastname" required>
+      </div>
+      <div class="section__item">
+        <label for="secondLastname">Segundo Apellido</label>
+        <input class="form__input" type="text" id="secondLastname" formControlName="secondLastname">
+      </div>
+      <div class="section__item">
+        <label class="required" for="docType">Tipo de documento</label>
+        <select class="form__input select" name="docType" id="docType" formControlName="docType" required>
+          <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+        </select>
+      </div>
+      <div class="section__item">
+        <label class="required" for="docNumber">N° de Identificación</label>
+        <input class="form__input" type="number" id="docNumber" formControlName="docNumber" required>
+      </div>
+      <div class="section__item">
+        <label for="docIssueDate">Fecha de Expedición</label>
+        <input class="form__input" type="date" id="docIssueDate" formControlName="docIssueDate">
+      </div>
+      <div class="section__item">
+        <label for="docIssuePlace">Lugar de Expedición</label>
+        <input class="form__input" type="text" id="docIssuePlace" formControlName="docIssuePlace">
+      </div>
+      <div class="section__item">
+        <label for="birthday">Fecha de Nacimiento</label>
+        <input class="form__input" type="date" id="birthday" formControlName="birthday">
+      </div>
+      <div class="section__item">
+        <label for="address">Dirección</label>
+        <input class="form__input" type="text" id="address" formControlName="address">
+      </div>
+      <div class="section__item">
+        <label for="city">Ciudad</label>
+        <input class="form__input" type="text" id="city" formControlName="city">
+      </div>
+      <div class="section__item">
+        <label class="required" for="phoneNumber">Teléfono/Celular</label>
+        <input class="form__input" type="number" id="phoneNumber" formControlName="phoneNumber">
+      </div>
+      <div class="section__item">
+        <label for="altPhoneNumber">Teléfono Alterno</label>
+        <input class="form__input" type="number" id="altPhoneNumber" formControlName="altPhoneNumber">
+      </div>
+      <div class="section__item">
+        <label for="email">Correo Electrónico</label>
+        <input class="form__input" type="email" id="email" formControlName="email">
+      </div>
+      <div class="section__item">
+        <label for="bankAccountBName">Nombre del Banco</label>
+        <input class="form__input" type="text" id="bankAccountBName" formControlName="bankAccountBName">
+      </div>
+      <div class="section__item">
+        <label for="bankAccountType">Tipo de Cuenta</label>
+        <select class="form__input select" name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
+          <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
+        </select>
+      </div>
+      <div class="section__item">
+        <label for="bankAccountNumber">Número de Cuenta</label>
+        <input class="form__input" type="number" id="bankAccountNumber" formControlName="bankAccountNumber">
+      </div>
+    </div>
+    <div class="section__header">
+      <svg class="header__icon icon--marginr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+        <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
+      </svg>
+      <span><h2 class="subtitle inline">Información de la finca</h2></span>
+    </div>
+    <div class="form__section">
+      <div class="section__item">
+        <label class="required" for="farmName">Nombre de la Finca</label>
+        <input class="form__input" type="text" id="farmName" formControlName="farmName">
+      </div>
+      <div class="section__item">
+        <label class="required" for="zoneName">Zona</label>
+        <input class="form__input" type="text" id="zoneName" formControlName="zoneName">
+      </div>
+      <div class="section__item">
+        <label class="required" for="cityFarm">Ciudad</label>
+        <input class="form__input" type="text" id="cityFarm" formControlName="cityFarm">
+      </div>
+      <div class="section__item">
+        <label class="required" for="area">Área</label>
+        <input class="form__input" type="text" id="area" formControlName="area">
+      </div>
+      <div class="section__item">
+        <label class="required" for="GPSposition">Posición GPS</label>
+        <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
+      </div>
+      <div class="section__item">
+        <label class="required" for="fileOwnerCertificate">Certificado de Propiedad</label>
+        <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
+      </div>        
+    </div>
+    
+    <button class="button button--success" type="submit" [disabled]="infoUser.invalid" *ngIf="formChanges">Actualizar información</button>
+  </form>
+</div>
+
+<app-notification *ngIf="showDialog" 
+  [message]="message" 
+  [positiveNotification]="positiveNotification" 
+  (closeNotification)="closeNotification()">
+</app-notification>

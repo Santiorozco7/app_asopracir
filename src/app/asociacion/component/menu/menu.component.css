@@ -1,44 +1,111 @@
-/* Estilos para la barra lateral */
 .menu {
-    text-align: center;
+  text-align: center;
+}
+
+.sidebar:hover,
+nav.sidebar.expanded {
+  width: 200px;
+  overflow: visible;
 }
 
 .sidebar {
-    background-color: #333;
-    color: white;
-    width: 200px; /* Ancho de la barra lateral */
-    height: 100%; /* Altura completa */
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-y: auto; /* Agregar una barra de desplazamiento vertical si es necesario */
+  background: #212121;
+  border-right: 1px solid #e5e5e5;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  left: 0;
+  width: 65px;
+  overflow: hidden;
+  -webkit-transition: width 0.05s linear;
+  transition: width 0.05s linear;
+  -webkit-transform: translateZ(0) scale(1, 1);
+  color: white;
+  padding: 1rem;
 }
 
-.sidebar ul {
-    list-style: none; /* Quita los marcadores de la lista */
-    padding: 0;
-    margin: 0;
+header {
+  display: table;
+  color: #999;
+  fill: #999;
+}
+
+.sidebar > ul {
+  margin: 7px 0;
 }
 
 .sidebar li {
-    padding: 10px 20px;
+  position: relative;
+  display: block;
 }
 
-.sidebar a {
-    color: white;
-    text-decoration: none; /* Elimina cualquier subrayado en los enlaces */
-    display: block;
-    padding: 10px 20px;
-    transition: background-color 0.3s;
-    border: none; /* Elimina los bordes */
-    outline: none; /* Elimina el enfoque */
+.sidebar li > a {
+  position: relative;
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: #999;
+  fill: #999;
+  font-family: arial;
+  font-size: 14px;
+  text-decoration: none;
+  -webkit-transform: translateZ(0) scale(1, 1);
+  -webkit-transition: all 0.1s linear;
+  transition: all 0.1s linear;
 }
 
-
-.sidebar a:hover {
-    background-color: #444; /* Cambio de color al pasar el mouse por encima */
+.sidebar .nav__icon {
+  position: relative;
+  display: table-cell;
+  width: 2rem;
+  height: 4rem;
+  vertical-align: middle;
 }
 
-.sidebar a:active, .sidebar a:focus {
-    outline: none; /* Elimina el borde al hacer clic o enfocar un enlace */
+.sidebar .nav__text {
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+  width: 190px;
+  padding-left: 1rem;
+}
+
+.sidebar > ul.logout {
+  position: absolute;
+  bottom: 0;
+}
+
+.no-touch .scrollable.hover {
+  overflow-y: hidden;
+}
+
+.no-touch .scrollable.hover:hover {
+  overflow-y: auto;
+  overflow: visible;
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+.sidebar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.sidebar ul,
+.sidebar li {
+  outline: 0;
+  margin: 0;
+  padding: 0;
+}
+.sidebar li:hover > a,
+.sidebar li.active > a {
+  color: #fff;
+  fill: #fff;
 }

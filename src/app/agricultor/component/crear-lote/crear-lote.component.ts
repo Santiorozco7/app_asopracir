@@ -15,6 +15,7 @@ export class CrearLoteComponent {
   @Output() closeCreateBatch = new EventEmitter<void>();
 
   showDialog = false;
+  positiveNotification = true;
   message = '';
 
   constructor(private formBuilder: FormBuilder, private service: AgricultorService, private router: Router, private renderer: Renderer2, private el: ElementRef) {}
@@ -25,6 +26,10 @@ export class CrearLoteComponent {
     mainVariety: ['', [Validators.required]]
   });
 
+  closeNotification(): void {
+    this.showDialog = false;
+  }
+
   onSubmit(): void {
     if (this.loteForm.valid) {
       const formData = this.loteForm.value;
@@ -34,10 +39,14 @@ export class CrearLoteComponent {
       this.service.createBatch(batchName, responsible, mainVariety).subscribe(batchCreated => {
         if (batchCreated['state'] === 'Ok') {
           this.batchCreated.emit();
-          this.showNotification(`Se ha creado el lote "${batchName}"`);
+          this.showDialog = true;
+          this.positiveNotification = true;
+          this.message = `Se ha creado el lote "${batchName}"`;
         } else {
           this.batchCreated.emit();
-          this.showNotification(`¡Ha occurido un error!"`);
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = '¡Ha ocurrido un error!';
         }
       });
     }
@@ -57,14 +66,6 @@ export class CrearLoteComponent {
   
   getCreateBatchButtonMessage(): string {
     return this.loteForm.valid? 'Crear lote' : 'Bloqueado';
-  }
-
-  showNotification(message: string) {
-    this.showDialog = true;
-    this.message = message;
-    setTimeout(() => {
-      this.showDialog = false;
-    }, 3000);
   }
 
   closeDialog(event: Event): void {

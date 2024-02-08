@@ -98,11 +98,14 @@ export class ModalRoutesComponent {
   collabotor:CollaboratorInformation | undefined;
   routerAux:number = 0;
   formattedDate: string | undefined = undefined;
-
+  showConfirmationModal: boolean = false;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
-  mensaje = '';
+  
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
   confirmCallback: (() => void) | null = null;
 
   docTypeselect: any[] = [
@@ -135,8 +138,44 @@ export class ModalRoutesComponent {
     4: 'Vendida'
   };
 
-  constructor(private service: AsociacionService, private router: Router, private datePipe: DatePipe) {
-    
+  constructor(private service: AsociacionService, private router: Router, private datePipe: DatePipe) {    
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
+  }
+
+  getTransporterName(): string {
+    if (this.managementFlag) {
+      return (this.routesData?.transporter?.names && this.routesData?.transporter?.firstLastname) ? 
+        `${this.routesData?.transporter?.names} ${this.routesData?.transporter?.firstLastname}` : 
+        'por definir';
+    } else {
+      return (this.transporter?.names && this.transporter?.firstLastname) ? 
+        `${this.transporter?.names} ${this.transporter?.firstLastname}` : 
+        'por definir';
+    }
+  }
+  getTransporterPlate(): string {
+    return this.managementFlag ? this.routesData?.plate || 'por definir' : this.transporter?.plate || 'por definir';
+  }
+  getTransporterPhone(): string {
+    return (this.managementFlag ? this.routesData?.transporter?.phoneNumber : this.transporter?.phoneNumber)?.toString() || 'por definir';
+  }
+  
+  getCollabName(): string {
+    if (this.managementFlag) {
+      return (this.routesData?.collab?.names && this.routesData?.collab?.firstLastname) ? 
+        `${this.routesData?.collab?.names} ${this.routesData?.collab?.firstLastname}` : 
+        'por definir';
+    } else {
+      return (this.collabotor?.names && this.collabotor?.firstLastname) ? 
+        `${this.collabotor?.names} ${this.collabotor?.firstLastname}` : 
+        'por definir';
+    }
+  }
+  getCollabPhone(): string {
+    return (this.managementFlag ? this.routesData?.collab?.phoneNumber : this.collabotor?.phoneNumber)?.toString() || 'por definir';
   }
 
   cerrarTodo() {
@@ -172,8 +211,14 @@ export class ModalRoutesComponent {
     this.service.removeOrderFromRoute(orderID).subscribe(result => {
       if (result['state'] === 'Fail') {
         console.log("No se legro eliminar la orden de la ruta ", result);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = 'no se ha podido eliminar, comprueba nuevamente';
       } else {
         console.log("Orden eliminada correctamente");
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha eliminado la órden`;
         this.ngOnChanges();
       }
     });
@@ -203,18 +248,29 @@ export class ModalRoutesComponent {
     this.collabotor = collabotor;
   }
 
-  crearRuta(){
+  createRoute() {
     const currentDate = new Date();
     this.formattedDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd')!;
-    console.log("Crear rutaaaaaaaaa y la fecha ", this.formattedDate);
+    console.log("Crear ruta y la fecha ", this.formattedDate);
+    this.showConfirmationModal = true;
+  }
+  
+  createRouteConfirmed() {
     this.service.createRoute(this.transporter?.transID, this.transporter?.vehID, this.collabotor?.collabID, this.formattedDate).subscribe(result => {
       if (result['state'] === 'Fail') {
-        console.log("No se logro crear la ruta ", result);
+        console.log("No se logró crear la ruta ", result);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = `No se ha podido crear la ruta`;
       } else {
-        console.log("Se logro crear la ruta ", result.data);
+        console.log("Se logró crear la ruta ", result.data);
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha creado la ruta`;
       }
     });
+    this.showConfirmationModal = false;
+    this.cerrarTodo();
+    this.ngOnChanges();
   }
-
-
 }

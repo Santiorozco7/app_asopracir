@@ -1,46 +1,154 @@
-<div class="modal-wrapper" [ngClass]="{ 'mostrar-modal': seeOrderVisible }">
-  <div class="modal-body card">
-    <div class="modal-header">
-      <h1 class="heading">Ver Orden</h1>
-      <a href="javascript:void(0);" role="button" class="close" (click)="cerrarTodo()"><i class="fa-solid fa-xmark"></i>X</a>
-    </div>
-    <section *ngFor="let order of orderData">
+<div *ngIf="seeOrderVisible">
+    <div class="header mb">
         <div>
-            <div class="cosecha">
-                <p>Fecha orden: {{ order.order.orderDate }}</p>
-                <p>Estado: {{ typeFilter[order.order.state] }}</p>
-                <p>Finca: {{ order.order.farmName }}</p>
-                <p>Vereda: {{ order.order.zoneName }}</p>
-                <p>Agricultor: {{ order.order.names }} {{ order.order.firstLastname }}</p>
-                <p>Teléfono: {{ order.order.phoneNumber }}</p>
-                <p>Email: {{ order.order.email }}</p>
-                <p>Peso (Kg): {{ order.order.weight }}</p>
-                <p>Número estimado recimos: {{ order.order.estBunches }}</p>
-                <p>Número racimos recolectados: {{ order.order.numBunches }}</p>
-                <p>Valor pagado: {{ order.order.payAmount }}</p>
-                <p>Fecha de pago: {{ order.order.payDate }}</p>
-                <p>Persona que aceptó orden</p>
+          <svg class="header__icon icon--marginr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+          </svg>
+          <span><h1 class="title inline">detalles de la órden</h1></span>
+        </div>
+        <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
+    </div>
+    
+    <div *ngFor="let order of orderData">
+        <div class="section__header">
+            <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
+            <span><h2 class="subtitle inline">detalles de la órden</h2></span>
+        </div>
+        <div class="form__section">
+            <div class="section__item">
+              <label for="orderDate">fecha de la órden</label>
+              <input class="form__input" type="text" id="orderDate" [value]="order.order.orderDate || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderState">estado</label>
+              <input class="form__input" type="text" id="orderState" [value]="typeFilter[order.order.state] || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderestBunches">número estimado de racimos</label>
+              <input class="form__input" type="text" id="orderestBunches" [value]="order.order.estBunches || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="ordernumBunches">número de racimos recolectados</label>
+              <input class="form__input" type="text" id="ordernumBunches" [value]="order.order.numBunches || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderWeight">peso</label>
+              <input class="form__input" type="text" id="orderWeight" [value]="order.order.weight || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderpayAmount">valor pagado</label>
+              <input class="form__input" type="text" id="orderpayAmount" [value]="order.order.payAmount || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderpayDate">fecha de pago</label>
+              <input class="form__input" type="text" id="orderpayDate" [value]="order.order.payDate || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderNameRecolect">persona que acepto la órden*NO ESTA*</label>
+              <input class="form__input" type="text" id="orderNameRecolect" [value]="order.order.payDate || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="routepickupDate">fecha de recolección</label>
+              <input class="form__input" type="text" id="routepickupDate" [value]="order?.route?.pickupDate || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="routestateAux">estado de la ruta</label>
+              <input class="form__input" type="text" id="routestateAux" [value]="routeState[routeStateAUX] || 'por definir'" disabled>
             </div>
         </div>
-        <div class="right-panel">
-            <div class="ruta">
-                <p>Fecha recolección: {{order?.route?.pickupDate}}</p>
-                <p>Estado ruta: {{ routeState[routeStateAUX] }}</p>
+
+        <div class="section__header">
+            <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
+            <span><h2 class="subtitle inline">información de la finca</h2></span>
+        </div>
+        <div class="form__section">
+            <div class="section__item">
+              <label for="orderfarmName">nombre</label>
+              <input class="form__input" type="text" id="orderfarmName" [value]="order.order.farmName || 'por definir'" disabled>
             </div>
-            <div class="transportador">
-                <p>Placas: {{ order?.route?.plate }}</p>
-                <p>Nombre transportador: {{ order?.route?.transporter?.names }} {{ order?.route?.transporter?.firstLastname }}</p>
-                <p>Documento transportador: {{ order?.route?.transporter?.docNumber }}</p>
-                <p>Teléfono: {{ order?.route?.transporter?.phoneNumber }}</p>
-                <p>Email: {{ order?.route?.transporter?.email }}</p>
-            </div>
-            <div class="encargo">
-                <p>Nombre colaborador: {{ order?.route?.collab?.names }} {{ order?.route?.collab?.firstLastname }}</p>
-                <p>Documeto colaborador: {{ order?.route?.collab?.docNumber }}</p>
-                <p>Teléfono: {{ order?.route?.collab?.phoneNumber }}</p>
-                <p>Email: {{ order?.route?.collab?.email }}</p>
+            <div class="section__item">
+              <label for="orderzoneName">vereda</label>
+              <input class="form__input" type="text" id="orderzoneName" [value]="order.order.zoneName || 'por definir'" disabled>
             </div>
         </div>
-    </section>
-  </div>
+
+        <div class="section__header">
+            <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
+            <span><h2 class="subtitle inline">detalles del agricultor</h2></span>
+        </div>
+        <div class="form__section">
+            <div class="section__item">
+              <label for="orderNames">nombre</label>
+              <input class="form__input" type="text" id="orderNames" [value]="order.order.names || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderphoNumber">teléfono/celular</label>
+              <input class="form__input" type="text" id="orderphoNumber" [value]="order.order.phoneNumber || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="orderEmail">email</label>
+              <input class="form__input" type="text" id="orderEmail" [value]="order.order.email || 'por definir'" disabled>
+            </div>
+        </div>
+
+        <div class="section__header">
+            <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
+            <span><h2 class="subtitle inline">detalles del transportador</h2></span>
+        </div>
+        <div class="form__section">
+            <div class="section__item">
+                <label for="routeTransorterNames">nombre</label>
+                <input class="form__input" type="text" id="routeTransorterNames" [value]="order?.route?.transporter?.names || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+                <label for="routeTransporterDocNumber">n° identificación</label>
+                <input class="form__input" type="text" id="routeTransporterDocNumber" [value]="order?.route?.transporter?.docNumber || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+              <label for="routePlate">placas</label>
+              <input class="form__input" type="text" id="routePlate" [value]="order?.route?.plate || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+                <label for="routeTransporterphoneNumber">teléfono/celular</label>
+                <input class="form__input" type="text" id="routeTransporterphoneNumber" [value]="order?.route?.transporter?.phoneNumber || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+                <label for="routeTransporterEmail">email</label>
+                <input class="form__input" type="text" id="routeTransporterEmail" [value]="order?.route?.transporter?.email || 'por definir'" disabled>
+            </div>
+        </div>
+
+        <div class="section__header">
+            <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
+            <span><h2 class="subtitle inline">detalles del colaborador</h2></span>
+        </div>
+        <div class="form__section">
+            <div class="section__item">
+                <label for="routeCollabNames">nombre</label>
+                <input class="form__input" type="text" id="routeCollabNames" [value]="order?.route?.collab?.names || 'por definir' || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+                <label for="routeCollabDocNumber">n° identificación</label>
+                <input class="form__input" type="text" id="routeCollabDocNumber" [value]="order?.route?.collab?.docNumber || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+                <label for="routeCollabphoneNumber">teléfono/celular</label>
+                <input class="form__input" type="text" id="routeCollabphoneNumber" [value]="order?.route?.collab?.phoneNumber || 'por definir'" disabled>
+            </div>
+            <div class="section__item">
+                <label for="routeCollabEmail">email</label>
+                <input class="form__input" type="text" id="routeCollabEmail" [value]="order?.route?.collab?.email || 'por definir'" disabled>
+            </div>
+        </div>
+    </div>
 </div>
