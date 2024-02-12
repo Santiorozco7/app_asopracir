@@ -224,8 +224,13 @@
       </div>     
     </div>
 
-    <button class="button button--success" type="submit" [disabled]="!userForm.valid || (farmerRegister && !areAgricultorFieldsValid()) || (transporterRegister && !areTransporterFieldsValid())">
+    <button class="button button--success" type="submit" [disabled]="!userForm.valid || 
+      (farmerRegister && !areAgricultorFieldsValid()) || 
+      (assocRegister && !areAssocFieldsValid()) ||
+      (collaboratorRegister && !areCollabFieldsValid()) || 
+      (transporterRegister && !areTransporterFieldsValid())">
       <div *ngIf="farmerRegister">Crear Agricultor</div>
+      <div *ngIf="assocRegister">Crear Asociado</div>
       <div *ngIf="transporterRegister">Crear Transportador</div>
       <div *ngIf="collaboratorRegister">Crear Colaborador</div>
     </button>

@@ -1,4 +1,5 @@
 import { Component, Renderer2, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
 
@@ -11,10 +12,20 @@ export class ProductionComponent {
   history: any[] = [];
   historyDetails: any = {};
   verificacionHistorial:boolean = false;
+  stateValue:string = "all";
 
   showModalHistory = false;
+  infoUser = this.formBuilder.group({
+    state: ['all'] 
+  });
 
-  constructor(private service: AsociacionService, private router: Router, private renderer: Renderer2, private el: ElementRef) {}
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
+    this.infoUser.valueChanges.subscribe(() => {
+      this.stateValue = this.infoUser.value.state ?? 'all';
+      console.log(this.stateValue);
+      this.View();
+    });
+  }
 
   ngOnInit(): void{
     this.View();
@@ -22,7 +33,7 @@ export class ProductionComponent {
 
   // Se cambio el View
   View() {
-    this.service.getStats().subscribe(HT => {
+    this.service.getStats(this.stateValue).subscribe(HT => {
       if (HT['state'] === 'Fail') {
         this.verificacionHistorial = true;
         console.log("No hay información en historial", HT);

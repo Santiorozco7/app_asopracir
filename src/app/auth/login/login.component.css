@@ -8,67 +8,136 @@
 }
 
 .card__body {
-  color: #ffffff;
-  width: 80%;
-  background: blue;
+  width: 90%;
+  min-width: 300px;
+  margin: auto;
+  max-width: 500px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 50px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10%;
+  justify-content: space-between;
+  height: 80%;
 }
 
-.card__items {
-  width: 100%;
-  margin-top: 30px;
-}
 
-.form__label {
-  font-weight: bold;
-  font-size: 16px;
+.card__header {
+  text-align: center;  
 }
 
 .card__item {
-  height: 95px;
+  margin-bottom: 15px; 
+}
+
+.form__label {
+  display: block; 
+  margin-bottom: 5px; 
 }
 
 .form__input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  width: 100%; 
+  padding: 8px; 
+  border: 1px solid #ccc; 
   border-radius: 5px;
-  font-size: 14px;
 }
 
-.alert.alert-danger {
-  background-color: #ffe6e6;
-  border-color: #ff6666;
-  color: #ff3333;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 14px;
+.alert {
+  color: #f00; 
+  font-size: 14px; 
+  margin-top: 5px; 
 }
 
-.button {
-  box-shadow: none;
-  cursor: pointer;
-  border: none;
-  width: 100%;
-  padding: 0.5rem;
-  font-weight: 500;
-  font-size: 1rem;
-  line-height: 1.25rem;
-  border-radius: 0.5rem;
+.options {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
 }
-  
-.button:disabled {
-  background-color: #e9ecef; 
-  color: #6c757d; 
+
+.options p {
+  text-align: center;
 }
-  
-.button--success {
-  background-color: #2e7d32; 
-  color: #ffffff;
+
+.buttons {
+  gap: 20px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
 }
+
+.button--option {
+  border-radius: 5px; 
+  cursor: pointer; 
+  width: 30%;
+  border: 1px solid gray;
+  background-color: #e9ecef;
+  color: #6c757d;
+}
+
+@media only screen and (min-width: 0px) and (max-width: 768px) {
+  .card {
+    margin: auto; 
+    padding: 40px;
+    border-radius: 10px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card__body {
+    padding: 0;
+  }
+
+  .card__header {
+    text-align: center;  
+  }
+
+  .card__item {
+    margin-bottom: 15px; 
+  }
+
+  .form__label {
+    display: block; 
+    margin-bottom: 5px; 
+  }
+
+  .form__input {
+    width: 100%; 
+    padding: 8px; 
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+  }
+
+  .alert {
+    color: #f00; 
+    font-size: 14px; 
+    margin-top: 5px; 
+  }
+
+  .options {
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .options p {
+    text-align: center;
+  }
+
+  .buttons {
+    gap: 20px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .button--option {
+    border-radius: 5px; 
+    cursor: pointer; 
+    width: 30%;
+    border: 1px solid gray;
+    background-color: #e9ecef;
+    color: #6c757d;
+  }
+} 
