@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter} from '@angular/core';
 import { AsociacionService } from '../../asociacion.service';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
@@ -99,6 +100,7 @@ export class ModalRoutesComponent {
   routerAux:number = 0;
   formattedDate: string | undefined = undefined;
   showConfirmationModal: boolean = false;
+  updateDate: boolean = false;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
@@ -138,7 +140,19 @@ export class ModalRoutesComponent {
     4: 'Vendida'
   };
 
-  constructor(private service: AsociacionService, private router: Router, private datePipe: DatePipe) {    
+  infoPickupDate = this.formBuilder.group({
+    pickupDate: ['0000-00-00']
+  });
+
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private datePipe: DatePipe) {
+    this.infoPickupDate.valueChanges.subscribe(() => {
+      if((this.infoPickupDate.value.pickupDate !== this.routesData?.pickupDate) && this.managementFlag){
+        this.updateDate = true;
+        console.log('Hubo cambio');
+      } else {
+        this.updateDate = false;
+      }
+    });
   }
 
   closeNotification(): void {
@@ -162,6 +176,9 @@ export class ModalRoutesComponent {
   getTransporterPhone(): string {
     return (this.managementFlag ? this.routesData?.transporter?.phoneNumber : this.transporter?.phoneNumber)?.toString() || 'por definir';
   }
+  getPickupDate(): string {
+    return this.managementFlag ? (this.routesData?.pickupDate || '0000-00-00') : '0000-00-00';
+  }
   
   getCollabName(): string {
     if (this.managementFlag) {
@@ -184,6 +201,7 @@ export class ModalRoutesComponent {
     this.routesData = undefined;
     this.transporter = undefined;
     this.collabotor = undefined;
+    this.updateDate = false;
   }
 
   ngOnChanges(): void {
@@ -196,6 +214,9 @@ export class ModalRoutesComponent {
           } else {
             this.routesData = route.data[0];
             this.routerAux = route.data[0].routeID;
+            this.infoPickupDate.setValue({
+              pickupDate: this.routesData?.pickupDate || '0000-00-00' // Aquí debes colocar el valor deseado
+            });
             console.log("Detalles de la orden: ", this.routesData);
           }
         });
@@ -224,6 +245,22 @@ export class ModalRoutesComponent {
     });
   }
 
+  onSubmit() {
+      console.log('Actualiza fecha de ruta');
+      if ((this.routesData?.routeID !== undefined) && this.infoPickupDate.value.pickupDate) {
+          this.service.updateRoute(this.routesData.routeID, this.infoPickupDate.value.pickupDate, undefined, undefined, undefined, undefined, undefined, undefined).subscribe(updateTransporter => {
+              if (updateTransporter['state'] === 'Fail') {
+                  console.log("No se logró actualizar ", updateTransporter);
+              } else {
+                  console.log("Se logró actualizar");
+                  this.cerrarTodo();
+              }
+          });
+      } else {
+          console.log("No se puede actualizar: routeID no está definido");
+      }
+  }
+
   // Gestion de rutas
   routesManagementVisible:boolean = false;
   actionFilter:number = 0;
@@ -249,8 +286,12 @@ export class ModalRoutesComponent {
   }
 
   createRoute() {
-    const currentDate = new Date();
-    this.formattedDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd')!;
+    if (this.infoPickupDate.value.pickupDate) {
+      this.formattedDate = this.infoPickupDate.value.pickupDate;
+    } else {
+      // Manejar el caso en que el valor sea null o undefined
+      console.error('El valor de la fecha es nulo o no está definido.');
+    }
     console.log("Crear ruta y la fecha ", this.formattedDate);
     this.showConfirmationModal = true;
   }

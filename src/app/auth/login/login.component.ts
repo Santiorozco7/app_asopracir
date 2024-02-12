@@ -76,25 +76,22 @@ export class LoginComponent {
             if (this.role === "0" && credenciales.roles.isFarmer) {
               console.log("entro como agricultor por medio la seleccion del rol ");
               this.router.navigate(['/agricultor']); // Redirigir al módulo de agricultor.
+            } else if (this.role === "1" && credenciales.roles.isCollab) {
+              console.log("entro como asociado por medio la seleccion del rol ");
+               this.router.navigate(['/colaborador']); // Redirigir al módulo de colaborador.
             } else if (this.role === "3" && credenciales.roles.isAdmin) {
               console.log("entro como asociado por medio la seleccion del rol ");
                this.router.navigate(['/asociacion']); // Redirigir al módulo de asociacion.
-            } //else if (credenciales['role'] === "1" && credenciales.roles.isCollab) {
-            //    this.router.navigate(['/colaborador']); // Redirigir al módulo de colaborador.
-            // }
+            }
           }else if (!this.role) {
             console.log("Sin rol");
             if (credenciales['role'] === "0" && credenciales.roles.isFarmer) {
               console.log("entro como agricultor por medio del rol inicial ");
               this.router.navigate(['/agricultor']); // Redirigir al módulo de agricultor.
-            } else if (credenciales['role'] === "1" && credenciales.roles.isAdmin) {
+            } else if (credenciales['role'] === "1" && credenciales.roles.isCollab) {
               console.log("entro como asociado por medio del rol inicial ");
-               this.router.navigate(['/asociacion']); // Redirigir al módulo de asociacion.
-            } //else if (credenciales['role'] === "1" && credenciales.roles.isCollab) {
-            //    this.router.navigate(['/colaborador']); // Redirigir al módulo de colaborador.
-            // }
-            
-
+               this.router.navigate(['/colaborador']); // Redirigir al módulo de colaborador.
+            }
           }
         } else if (credenciales['state'] === 'Fail'){
           console.log('No ingreso ',credenciales);

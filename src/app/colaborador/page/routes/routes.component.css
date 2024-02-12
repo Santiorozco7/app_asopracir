@@ -1,0 +1,54 @@
+/* routes.component.css */
+.container {
+    padding: 20px;
+  }
+  
+  .date-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .button-container {
+    margin-left: 10px;
+  }
+  
+  .button-container button {
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    margin-right: 5px;
+  }
+  
+  .order-container {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+  }
+  
+  /* routes.component.css */
+
+  .card-ordenes {
+    margin-top: 20px;
+  }
+  
+  .card-order {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-order p {
+    margin: 5px 0;
+  }
+  
+  .card-order p:first-child {
+    font-weight: bold;
+  }
+  

@@ -1,0 +1,57 @@
+<div class="container">
+  <div class="date-container">
+    <div class="button-container">
+      <button (click)="disminuirDia()">-</button>
+    </div>
+    <p>Fecha Actual: {{ fechaActual | date : "dd/MM/yyyy" }}</p>
+    <div class="button-container">
+      <button (click)="aumentarDia()">+</button>
+    </div>
+  </div>
+  <div class="order-container">
+    <p *ngIf="!alertFlag">Órdenes según la fecha</p>
+    <p *ngIf="alertFlag" style="color: red">No hay ordenes el dia de hoy</p>
+    <div class="transportador" *ngIf="!alertFlag">
+      <h2>transportador</h2>
+      <div *ngFor="let route of routes">
+        <div class="card-transporter">
+          <p>{{ route.transporter.names }} {{ route.transporter.firstLastname }}</p>
+          <p>{{ route.plate }}</p>
+          <p>{{ route.transporter.phoneNumber }}</p>
+        </div>
+
+        <button class="button button--success" (click)="startRoute(route.routeID, 0)" *ngIf="!(route.routeState != '0')">Iniciar ruta</button>
+
+        <div class="startRoute" *ngIf="startRouteFlag">
+            <form action="" [formGroup]="infoStartWeight" (ngSubmit)="startRoute(route.routeID, 1)">
+                <div class="section__item">
+                  <label for="startWeight">Peso inicial del vehiculo en (kg): </label>
+                  <input class="form__input" type="number" id="startWeight" formControlName="startWeight">
+                </div>
+        
+                <button class="button button--success" type="submit"><p>Aceptar</p></button>
+                <button class="button button--success" type="button" (click)="cancelStartRoute()">Cancelar</button>
+            </form>
+        </div>
+
+        <div class="card-ordenes">
+          <h3>Órdenes en la Ruta</h3>
+          <div *ngFor="let order of route.orders">
+            <div class="card-order">
+              <p>{{ order.farmName }}</p>
+              <p>{{ order.zoneName }}</p>
+              <p>{{ order.name }}</p>
+              <p>{{ order.phoneNumber }}</p>
+              <p>{{ order.numBunches }}</p>
+              <button (click)="orderF(order.orderID)">ver orden</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="!((route.routeState != '0') )">Cancelar ruta</button>
+        <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="((route.routeState != '0') )">Finalizar ruta</button>
+      </div>
+
+    </div>
+  </div>
+</div>
