@@ -11,12 +11,13 @@ import { formatDate } from '@angular/common';
 })
 export class LoginComponent {
   err:boolean =false;
-  role:string = '';
+  role:string = '0';
+  roleName:string = 'agricultor';
 
   docTypeselect: any[] = [
-    { id: 0, name: 'CC' },
-    { id: 1, name: 'TI' },
-    { id: 2, name: 'CE' },
+    { id: 0, name: 'Cédula de ciudadanía' },
+    { id: 1, name: 'Tarjeta de Identidad' },
+    { id: 2, name: 'Cédula de extranjería' },
     { id: 3, name: 'NIT' },
   ];
 
@@ -42,16 +43,19 @@ export class LoginComponent {
       case '0':
         this.role = role;
         console.log('Ingresa un agriculto');
+        this.roleName = "agricultor"
         break;
       
       case '1':
         this.role = role;
         console.log('Ingresa un colaborador');
+        this.roleName = "colaborador"
         break;
 
       case '3':
         this.role = role;
         console.log('Ingresa un asociado');
+        this.roleName = "asociado"
         break;
 
       default:
