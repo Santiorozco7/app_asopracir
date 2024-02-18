@@ -1,0 +1,104 @@
+<div class="container" *ngIf="modalVisible">
+    <div class="button--content">
+        <button class="button button--success" (click)="cerrar()" *ngIf="startFlag">Cerrar</button>
+
+        <button class="button button--success" (click)="editPickup()" *ngIf="!startFlag"> 
+            <p *ngIf="editFlag">+</p>
+            <p *ngIf="!editFlag">-</p>
+        </button>
+
+        <button class="button button--success" (click)="startPickup()" *ngIf="startFlag">Empezar a cargar</button>
+    </div>
+
+    <div class="card--position" *ngIf="!startFlag">
+        <div class="card">
+            <h2>Plátanos de primera</h2>
+            <div>
+                <label for="precioPorKilo">Precio por kilo:</label>
+                <input type="number" id="precioPorKilo" [(ngModel)]="precioPorKilo" disabled>
+            </div>
+            <ul>
+                <li *ngFor="let peso of platanos; let i = index">
+                    {{ peso }} kg
+                    <button (click)="eliminarPeso(i, 1)" *ngIf="editFlag">Eliminar</button>
+                </li>
+            </ul>
+            <div *ngIf="modalVisible && !editFlag">
+                <input type="number" [(ngModel)]="nuevoPeso" *ngIf="modalVisible" placeholder="Ingrese el peso (kg)">
+                <button (click)="agregarPeso(1)">Agregar peso</button>
+            </div>
+            <!-- <div>
+                <h2>Suma de pesos de plátanos</h2>
+                <p>{{ calcularSumaPlatanos() }} kg</p>
+            </div> -->
+            <!-- <div>
+                <p *ngIf="precioPorKilo !== undefined">Precio total: {{ calcularPrecioTotal() }}</p>
+            </div> -->
+        </div>
+    
+        <div class="card" *ngIf="!startFlag">
+            <h2>Plátanos de segunda</h2>
+            <div>
+                <label for="precioPorKiloCalidad">Precio por kilo:</label>
+                <input type="number" id="precioPorKiloCalidad" [(ngModel)]="precioPorKiloCalidad" disabled>
+            </div>
+            <ul>
+                <li *ngFor="let peso of platanosCalidad; let i = index">
+                    {{ peso }} kg
+                    <button (click)="eliminarPeso(i, 2)" *ngIf="editFlag">Eliminar</button>
+                </li>
+            </ul>
+            <div *ngIf="modalVisible && !editFlag">
+                <input type="number" [(ngModel)]="nuevoPesoCalidad" *ngIf="modalVisible" placeholder="Ingrese el peso (kg)">
+                <button (click)="agregarPeso(2)">Agregar peso</button>
+            </div>
+            <!-- <div>
+                <h2>Suma de pesos de plátanos calidad</h2>
+                <p>{{ calcularSumaPlatanosCalidad() }} kg</p>
+            </div> -->
+            <!-- <div>
+                <p *ngIf="precioPorKiloCalidad !== undefined">Precio total: {{ calcularPrecioTotalCalidad() }}</p>
+            </div> -->
+        </div>
+    </div>
+
+    <div class="table-container" *ngIf="!startFlag">
+        <table>
+            <thead>
+                <tr>
+                    <th>Calidad</th>
+                    <th>Cantidad</th>
+                    <th>Peso (kg)</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Primera</td>
+                    <td>{{ platanos.length }}</td>
+                    <td>{{ calcularSumaPlatanos() }}</td>
+                    <td>{{ calcularPrecioTotal() }}</td>
+                </tr>
+                <tr>
+                    <td>Segunda</td>
+                    <td>{{ platanosCalidad.length }}</td>
+                    <td>{{ calcularSumaPlatanosCalidad() }}</td>
+                    <td>{{ calcularPrecioTotalCalidad() }}</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>{{ platanos.length + platanosCalidad.length }}</td>
+                    <td>{{ calcularSumaPlatanos() + calcularSumaPlatanosCalidad() }}</td>
+                    <td>{{ calcularPrecioTotal() + calcularPrecioTotalCalidad() }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="!startFlag">
+        <br>
+        <label for="encargado">Nombre del encargado:</label>
+        <input type="text" id="encargado" [(ngModel)]="encargado">
+        <p>{{encargado}}</p>
+    </div>
+    <button class="button button--success" (click)="finish()" *ngIf="((platanos.length != 0) || (platanosCalidad.length != 0)) && (!startFlag) && (encargado != '')">Finalizar Carga</button>    
+</div>

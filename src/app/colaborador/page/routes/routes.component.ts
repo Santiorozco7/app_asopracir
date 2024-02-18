@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ColaboradorService } from '../../colaborador.service';
+import { OrderFormComponent } from '../../component/order-form/order-form.component';
 
 interface OrderInformation {
   collab: {
@@ -20,6 +22,7 @@ interface OrderInformation {
     orderID: string;
     phoneNumber: string; // Número de teléfono del cliente
     startDate: string; // Fecha de inicio
+    state: string;
     zoneName: string;
   }>;
   pickupDate: string;
@@ -45,10 +48,11 @@ interface OrderInformation {
   styleUrls: ['./routes.component.css']
 })
 export class RoutesComponent {
+  @ViewChild(OrderFormComponent) orderFormComponent!: OrderFormComponent;
   routes: OrderInformation[] = [];
   fechaActual: Date = new Date();
-  fechaHoy: Date = new Date();
   fechaActualFormato: string = "";
+  orderID:string = "";
   alertFlag: boolean = false;
   startRouteFlag: boolean = false;
 
@@ -56,15 +60,15 @@ export class RoutesComponent {
     startWeight: ["", [Validators.required]]
   })
 
-  constructor(private formBuilder: FormBuilder, private service: ColaboradorService) {}
+  constructor(private formBuilder: FormBuilder, private service: ColaboradorService, private router: Router) {}
 
   ngOnInit(): void {
     this.View(this.fechaActual);
   }
 
   View(fechaActual: Date) {
+    this.startRouteFlag = false;
     console.log(fechaActual);
-    console.log(this.fechaHoy);
     this.fechaActualFormato = `${fechaActual.getFullYear()}-${fechaActual.getMonth() + 1}-${fechaActual.getDate()}`;
     console.log(this.fechaActualFormato);
     this.service.getRoutes(undefined, this.fechaActualFormato, this.fechaActualFormato, undefined, undefined).subscribe(routes => {
@@ -72,12 +76,21 @@ export class RoutesComponent {
         // console.log(routes.data);
         this.routes = routes.data;
         this.alertFlag = false;
-        console.log(routes);
-      } else if (routes['state'] === 'Fail') {
+        console.log(routes.data[0]);
+      } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] !== 'Session expired')) {
         this.alertFlag = true;
+        console.log('No se encontraron rutas',routes);
+      } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] === 'Session expired')) {
+        this.router.navigate(['/']);
         console.log('No se encontraron rutas',routes);
       }
     });
+  }
+
+  price(): void {
+    if (this.orderFormComponent) {
+      this.orderFormComponent.View();
+    }
   }
 
   aumentarDia() {
@@ -101,12 +114,6 @@ export class RoutesComponent {
     //   }
     // });
     this.service.getRoute(routeID).subscribe(r => {
-      console.log(r.data);
-    });
-  }
-
-  orderF(orderID:string){
-    this.service.getOrder(orderID).subscribe(r => {
       console.log(r.data);
     });
   }
@@ -141,5 +148,25 @@ export class RoutesComponent {
 
   cancelStartRoute(){
     this.startRouteFlag = false;
+  }
+
+
+
+  modalVisible: boolean = false;
+  showOrderForm(orderID:string){
+    console.log(orderID);
+    this.orderID = orderID;
+    this.price();
+    this.modalVisible = true;
+    // this.service.updateOrder(orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '3').subscribe(result => {
+    //   if (result['state'] === 'Ok') {
+    //     console.log('Se actualizo la orden',result);
+    //   } else if (result['state'] === 'Fail') {
+    //     console.log('No se pudo actualizar la orden',result);
+    //   }
+    // });
+  }
+  closeOrderForm(){
+    this.modalVisible = false;
   }
 }

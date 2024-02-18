@@ -65,6 +65,58 @@ export class ColaboradorService {
     return this.http.get(this.addTimestamp(url));
   }
 
+  public getPrice(): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=getPrice&token=${localStorage.getItem('token')}`;
+    return this.http.get(this.addTimestamp(url));
+  }
+
+  public updateOrder(
+    orderID:string, 
+    weight1?:string, 
+    weight2?:string, 
+    numBunches1?:string, 
+    numBunches2?:string,
+    payAmount?:string, 
+    payDate?:string, 
+    signedBy?:string, 
+    state?:string
+    ): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    let url = `${this.API_ASOPRACIR}assoc.php?do=updateOrder&orderID=${orderID}`;
+
+    if (weight1) {
+      url += `&weight1=${weight1}`;
+    }
+    if (weight2) {
+      url += `&weight2=${weight2}`;
+    }
+    if (numBunches1) {
+      url += `&numBunches1=${numBunches1}`;
+    }
+    if (numBunches2) {
+      url += `&numBunches2=${numBunches2}`;
+    }
+    if (payAmount) {
+      url += `&payAmount=${payAmount}`;
+    }
+    if (payDate) {
+      url += `&payDate=${payDate}`;
+    }
+    if (signedBy) {
+      url += `&signedBy=${signedBy}`;
+    }
+    if (state) {
+      url += `&state=${state}`;
+    }
+    
+    url += `&token=${token}`;
+
+    url = this.addTimestamp(url);
+
+    return this.http.get(url);
+  }
+
   public updateRoute(
     routeID: string,
     pickupDate?: string,
