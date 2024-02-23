@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { ColaboradorService } from '../../colaborador.service';
 
 @Component({
@@ -12,7 +12,34 @@ export class OrderFormComponent {
   @Input() modalVisible: boolean = false;
   @Input() orderID: string = "";
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    // Aquí puedes realizar cualquier acción que desees antes de que la página se recargue o cierre
+    // Por ejemplo, puedes llamar a un método de tu servicio para realizar alguna tarea de limpieza
+    const orderID = this.orderID !== "" ? this.orderID : undefined;
+    const orderIDString = orderID !== undefined ? orderID : "";
+    console.log(orderIDString);
+    this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
+      if (result['state'] === 'Ok') {
+        console.log('Se actualizo la orden', result);
+      } else if (result['state'] === 'Fail') {
+        console.log('No se pudo actualizar la orden', result);
+      }
+    });
+    console.log('La página se está recargando o cerrando...');
+  }
+
   cerrar() {
+    const orderID = this.orderID !== "" ? this.orderID : undefined;
+    const orderIDString = orderID !== undefined ? orderID : "";
+    console.log(orderIDString);
+    this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
+      if (result['state'] === 'Ok') {
+        console.log('Se actualizo la orden', result);
+      } else if (result['state'] === 'Fail') {
+        console.log('No se pudo actualizar la orden', result);
+      }
+    });
     this.cerrarModal.emit();
     this.cerrarActualizar.emit();
   }
@@ -20,21 +47,20 @@ export class OrderFormComponent {
   platanos: number[] = [];
   nuevoPeso?: number;
   precioPorKilo?: number;
+  sumaPlatanos?: number;
+  precioPlatano?: number;
 
   platanosCalidad: number[] = [];
   nuevoPesoCalidad?: number;
   precioPorKiloCalidad?: number;
+  sumaPlatanosCalidad?: number;
+  precioPlatanoCalidad?: number;
 
   editFlag: boolean = false;
-  startFlag: boolean = true;
+  // startFlag: boolean = true;
   encargado: string = "";
 
   constructor(private service: ColaboradorService) {}
-
-  // ngOnInit(): void {
-  //   console.log("Se ejecuto en el componente de carga")
-  //   this.View();
-  // }
 
   View(){
     this.service.getPrice().subscribe(price => {
@@ -73,24 +99,28 @@ export class OrderFormComponent {
   }
 
   calcularSumaPlatanos(): number {
-    return this.platanos.reduce((acc, peso) => acc + peso, 0);
+    this.sumaPlatanos = this.platanos.reduce((acc, peso) => acc + peso, 0);
+    return this.sumaPlatanos;
   }
 
   
   calcularSumaPlatanosCalidad(): number {
-    return this.platanosCalidad.reduce((acc, peso) => acc + peso, 0);
+    this.sumaPlatanosCalidad = this.platanosCalidad.reduce((acc, peso) => acc + peso, 0);
+    return this.sumaPlatanosCalidad;
   }
 
   calcularPrecioTotal(): number {
     if (this.precioPorKilo !== undefined) {
-      return this.calcularSumaPlatanos() * this.precioPorKilo;
+      this.precioPlatano = this.calcularSumaPlatanos() * this.precioPorKilo;
+      return this.precioPlatano;
     }
     return 0;
   }
   
   calcularPrecioTotalCalidad(): number {
     if (this.precioPorKiloCalidad !== undefined) {
-      return this.calcularSumaPlatanosCalidad() * this.precioPorKiloCalidad;
+      this.precioPlatanoCalidad = this.calcularSumaPlatanosCalidad() * this.precioPorKiloCalidad;
+      return this.precioPlatanoCalidad;
     }
     return 0;
   }
@@ -99,19 +129,24 @@ export class OrderFormComponent {
     this.editFlag = !this.editFlag;
   }
 
-  startPickup(){
-    this.startFlag = false;
-  }
+  // startPickup(){
+  //   this.startFlag = false;
+  // }
 
   finish(){
-    console.log(this.orderID);
-    this.service.updateOrder(this.orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '3').subscribe(result => {
-      if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden',result);
-      } else if (result['state'] === 'Fail') {
-        console.log('No se pudo actualizar la orden',result);
-      }
-    });
-  }
-
+    // console.log(this.orderID);
+    const sumaPlatanosString = this.sumaPlatanos !== undefined ? this.sumaPlatanos.toString() : undefined;
+    const sumaPlatanosCalidadString = this.sumaPlatanosCalidad !== undefined ? this.sumaPlatanosCalidad.toString() : undefined;
+    const platanosLengthString = this.platanos.length.toString();
+    const platanosCalidadLengthString = this.platanosCalidad.length.toString();
+    const precioTotal = this.precioPlatano !== undefined && this.precioPlatanoCalidad !== undefined ? (this.precioPlatano + this.precioPlatanoCalidad).toString() : undefined;
+    console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal)
+    // this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, undefined, '4').subscribe(result => {
+    //   if (result['state'] === 'Ok') {
+    //     console.log('Se actualizo la orden',result);
+    //   } else if (result['state'] === 'Fail') {
+    //     console.log('No se pudo actualizar la orden',result);
+    //   }
+    // });
+}
 }

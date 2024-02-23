@@ -105,17 +105,17 @@ export class RoutesComponent {
 
   cancelRoute(routeID:string){
     console.log(routeID);
-    // this.service.cancelRoute(routeID).subscribe(cancel => {
-    //   if (cancel['state'] === 'Ok') {
-    //     console.log('Se cancelo la ruta',cancel);
-    //   } else if (cancel['state'] === 'Fail') {
-    //     this.alertFlag = true;
-    //     console.log('No se pudo cancelar',cancel);
-    //   }
-    // });
-    this.service.getRoute(routeID).subscribe(r => {
-      console.log(r.data);
+    this.service.cancelRoute(routeID).subscribe(cancel => {
+      if (cancel['state'] === 'Ok') {
+        console.log('Se cancelo la ruta',cancel);
+      } else if (cancel['state'] === 'Fail') {
+        this.alertFlag = true;
+        console.log('No se pudo cancelar',cancel);
+      }
     });
+    // this.service.getRoute(routeID).subscribe(r => {
+    //   console.log(r.data);
+    // });
   }
 
   startRoute(routeID:string, index:number){
@@ -158,13 +158,13 @@ export class RoutesComponent {
     this.orderID = orderID;
     this.price();
     this.modalVisible = true;
-    // this.service.updateOrder(orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '3').subscribe(result => {
-    //   if (result['state'] === 'Ok') {
-    //     console.log('Se actualizo la orden',result);
-    //   } else if (result['state'] === 'Fail') {
-    //     console.log('No se pudo actualizar la orden',result);
-    //   }
-    // });
+    this.service.updateOrder(orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '3').subscribe(result => {
+      if (result['state'] === 'Ok') {
+        console.log('Se actualizo la orden',result);
+      } else if (result['state'] === 'Fail') {
+        console.log('No se pudo actualizar la orden',result);
+      }
+    });
   }
   closeOrderForm(){
     this.modalVisible = false;
