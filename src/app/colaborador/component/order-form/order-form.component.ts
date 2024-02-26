@@ -28,6 +28,43 @@ export class OrderFormComponent {
     });
     console.log('La página se está recargando o cerrando...');
   }
+  
+  firstQualityWeights: number[] = [];
+  firstQualityPricePerKilo?: number;
+  secondQualityWeights: number[] = [];
+  secondQualityPricePerKilo?: number;
+  
+  newWeight?: number;
+  selectedQuality: string = 'first'; 
+
+  platanos: number[] = [];
+  nuevoPeso?: number;
+  precioPorKilo?: number;
+  sumaPlatanos?: number;
+  precioPlatano?: number;
+
+  platanosCalidad: number[] = [];
+  nuevoPesoCalidad?: number;
+  precioPorKiloCalidad?: number;
+  sumaPlatanosCalidad?: number;
+  precioPlatanoCalidad?: number;
+
+  encargado: string = "";
+  viewConfirmationModal: boolean = false;
+
+  constructor(private service: ColaboradorService) {}
+
+  View(){
+    this.service.getPrice().subscribe(price => {
+      if (price['state'] === 'Ok') {
+        this.firstQualityPricePerKilo = price.data.price1;
+        this.secondQualityPricePerKilo = price.data.price2;
+        console.log('Se obtuvo el precio',price);
+      } else if (price['state'] === 'Fail') {
+        console.log('No se obtuvo el precio',price);
+      }
+    })
+  }
 
   cerrar() {
     const orderID = this.orderID !== "" ? this.orderID : undefined;
@@ -44,97 +81,74 @@ export class OrderFormComponent {
     this.cerrarActualizar.emit();
   }
 
-  platanos: number[] = [];
-  nuevoPeso?: number;
-  precioPorKilo?: number;
-  sumaPlatanos?: number;
-  precioPlatano?: number;
-
-  platanosCalidad: number[] = [];
-  nuevoPesoCalidad?: number;
-  precioPorKiloCalidad?: number;
-  sumaPlatanosCalidad?: number;
-  precioPlatanoCalidad?: number;
-
-  editFlag: boolean = false;
-  // startFlag: boolean = true;
-  encargado: string = "";
-
-  constructor(private service: ColaboradorService) {}
-
-  View(){
-    this.service.getPrice().subscribe(price => {
-      if (price['state'] === 'Ok') {
-        this.precioPorKilo = price.data.price1;
-        this.precioPorKiloCalidad = price.data.price2;
-        console.log('Se obtuvo el precio',price);
-      } else if (price['state'] === 'Fail') {
-        console.log('No se obtuvo el precio',price);
-      }
-    })
-  }
-
-  agregarPeso(indexCalidad: number) {
-    if (indexCalidad === 1) {
-      if (this.nuevoPeso !== undefined && this.nuevoPeso > 0) {
-        this.platanos.push(this.nuevoPeso);
-        this.nuevoPeso = undefined; // Resetear el valor del nuevo peso después de agregarlo
-      }
+  addWeight(): void {
+    if (this.selectedQuality === 'first') {
+        if (this.newWeight !== undefined && this.newWeight > 0) {
+            this.firstQualityWeights.push(this.newWeight);
+            this.newWeight = undefined;
+        }
+    } else if (this.selectedQuality === 'second') {
+        if (this.newWeight !== undefined && this.newWeight > 0) {
+          this.secondQualityWeights.push(this.newWeight);
+          this.newWeight = undefined;
+        }
     }
-    if (indexCalidad === 2) {
-      if (this.nuevoPesoCalidad !== undefined && this.nuevoPesoCalidad > 0) {
-        this.platanosCalidad.push(this.nuevoPesoCalidad);
-        this.nuevoPesoCalidad = undefined; // Resetear el valor del nuevo peso después de agregarlo
-      }
-    }
-  }
-
-  eliminarPeso(index: number, indexCalidad: number) {
-    if (indexCalidad === 1) {
-      this.platanos.splice(index, 1);
-    }
-    if (indexCalidad === 2) {
-      this.platanosCalidad.splice(index, 1);
-    }
-  }
-
-  calcularSumaPlatanos(): number {
-    this.sumaPlatanos = this.platanos.reduce((acc, peso) => acc + peso, 0);
-    return this.sumaPlatanos;
-  }
-
-  
-  calcularSumaPlatanosCalidad(): number {
-    this.sumaPlatanosCalidad = this.platanosCalidad.reduce((acc, peso) => acc + peso, 0);
-    return this.sumaPlatanosCalidad;
-  }
-
-  calcularPrecioTotal(): number {
-    if (this.precioPorKilo !== undefined) {
-      this.precioPlatano = this.calcularSumaPlatanos() * this.precioPorKilo;
-      return this.precioPlatano;
-    }
-    return 0;
   }
   
-  calcularPrecioTotalCalidad(): number {
-    if (this.precioPorKiloCalidad !== undefined) {
-      this.precioPlatanoCalidad = this.calcularSumaPlatanosCalidad() * this.precioPorKiloCalidad;
-      return this.precioPlatanoCalidad;
+  mostrarTodos: boolean = false;
+  qualityFilter: boolean =false;
+  
+  toggleVerTodos() {
+    this.mostrarTodos = !this.mostrarTodos;
+  }
+
+  filter() {
+    this.qualityFilter = !this.qualityFilter;
+  }
+
+  deleteWeight(index: number): void {
+    if (this.selectedQuality === 'first') {
+      this.firstQualityWeights.splice(index, 1);
+    } else if (this.selectedQuality === 'second') {
+      this.secondQualityWeights.splice(index, 1);
     }
-    return 0;
   }
 
-  editPickup(){
-    this.editFlag = !this.editFlag;
+  calculateTotalBunches(weights: number[]): number {
+    return weights.length;
+  }
+  
+  calculateTotalWeight(weights: number[]): number {
+    return weights.reduce((acc, weight) => acc + weight, 0);
+  }
+  
+  calculateTotalPrice(weights: number[], pricePerKilo?: number): string {
+    if (pricePerKilo !== undefined) {
+      const totalPrice = this.calculateTotalWeight(weights) * pricePerKilo;
+      return totalPrice.toLocaleString('es-ES');
+    }
+    return '0';
+  }
+  
+  // Calcula el total de racimos sumando la longitud de los arreglos de pesos de ambas calidades
+  calculateTotalBunchesAll(): number {
+    return this.firstQualityWeights.length + this.secondQualityWeights.length;
   }
 
-  // startPickup(){
-  //   this.startFlag = false;
-  // }
+  // Calcula el total del peso sumando los pesos de ambas calidades
+  calculateTotalWeightAll(): number {
+    return this.calculateTotalWeight(this.firstQualityWeights) + this.calculateTotalWeight(this.secondQualityWeights);
+  }
+
+  // Calcula el precio total sumando los precios de ambas calidades
+  calculateTotalPriceAll(): string {
+    const totalPriceAll =
+      parseFloat(this.calculateTotalPrice(this.firstQualityWeights, this.firstQualityPricePerKilo)) +
+      parseFloat(this.calculateTotalPrice(this.secondQualityWeights, this.secondQualityPricePerKilo));
+    return totalPriceAll.toLocaleString('es-ES');
+  }  
 
   finish(){
-    // console.log(this.orderID);
     const sumaPlatanosString = this.sumaPlatanos !== undefined ? this.sumaPlatanos.toString() : undefined;
     const sumaPlatanosCalidadString = this.sumaPlatanosCalidad !== undefined ? this.sumaPlatanosCalidad.toString() : undefined;
     const platanosLengthString = this.platanos.length.toString();
@@ -148,5 +162,14 @@ export class OrderFormComponent {
     //     console.log('No se pudo actualizar la orden',result);
     //   }
     // });
-}
+    this.viewConfirmationModal = true;
+  }
+
+  onCancel() {
+    this.viewConfirmationModal = false;
+  }
+
+  onConfirm() {
+    this.viewConfirmationModal = false;
+  }
 }
