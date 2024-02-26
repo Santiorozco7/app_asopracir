@@ -165,7 +165,7 @@ export class RoutesComponent {
     this.modalVisible = true;
     this.service.updateOrder(orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '3').subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden',result);
+        console.log('Se actualizo la orden a 3',result);
       } else if (result['state'] === 'Fail') {
         console.log('No se pudo actualizar la orden',result);
       }

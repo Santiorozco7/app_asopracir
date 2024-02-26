@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, untracked, OnChanges, SimpleChanges } from '@angular/core';
 import { ColaboradorService } from '../../colaborador.service';
 
 @Component({
@@ -6,11 +6,13 @@ import { ColaboradorService } from '../../colaborador.service';
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.css']
 })
-export class OrderFormComponent {
+export class OrderFormComponent implements OnChanges {
   @Output() cerrarModal = new EventEmitter<void>();
   @Output() cerrarActualizar = new EventEmitter<void>();
   @Input() modalVisible: boolean = false;
   @Input() orderID: string = "";
+  orderIDtemp:string = "";
+  stateFlag:boolean = true;
 
   @HostListener('window:beforeunload', ['$event'])
   unloadHandler(event: Event) {
@@ -19,13 +21,15 @@ export class OrderFormComponent {
     const orderID = this.orderID !== "" ? this.orderID : undefined;
     const orderIDString = orderID !== undefined ? orderID : "";
     console.log(orderIDString);
-    this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
-      if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden', result);
-      } else if (result['state'] === 'Fail') {
-        console.log('No se pudo actualizar la orden', result);
-      }
-    });
+    if (this.stateFlag) {
+      this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
+        if (result['state'] === 'Ok') {
+          console.log('Se actualizo la orden a 2', result);
+        } else if (result['state'] === 'Fail') {
+          console.log('No se pudo actualizar la orden', result);
+        }
+      });
+    }
     console.log('La página se está recargando o cerrando...');
   }
 
@@ -35,7 +39,7 @@ export class OrderFormComponent {
     console.log(orderIDString);
     this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden', result);
+        console.log('Se actualizo la orden a 2', result);
       } else if (result['state'] === 'Fail') {
         console.log('No se pudo actualizar la orden', result);
       }
@@ -63,6 +67,9 @@ export class OrderFormComponent {
   constructor(private service: ColaboradorService) {}
 
   View(){
+    // if (this.orderID !== "" || this.orderID !== this.orderIDtemp) {
+      
+    // }
     this.service.getPrice().subscribe(price => {
       if (price['state'] === 'Ok') {
         this.precioPorKilo = price.data.price1;
@@ -71,7 +78,29 @@ export class OrderFormComponent {
       } else if (price['state'] === 'Fail') {
         console.log('No se obtuvo el precio',price);
       }
-    })
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Verificar si hay un cambio en la variable orderID
+    if (changes['orderID'] && !changes['orderID'].firstChange) {
+      console.log("Se actualizo toda la informacion");
+      this.orderIDtemp = this.orderID;
+      this.platanos = [];
+      this.nuevoPeso = undefined;
+      this.precioPorKilo = undefined;
+      this.sumaPlatanos = undefined;
+      this.precioPlatano = undefined;
+
+      this.platanosCalidad = [];
+      this.nuevoPesoCalidad = undefined;
+      this.precioPorKiloCalidad = undefined;
+      this.sumaPlatanosCalidad = undefined;
+      this.precioPlatanoCalidad = undefined;
+
+      this.encargado = "";
+      this.stateFlag = true;
+    }
   }
 
   agregarPeso(indexCalidad: number) {
@@ -140,13 +169,16 @@ export class OrderFormComponent {
     const platanosLengthString = this.platanos.length.toString();
     const platanosCalidadLengthString = this.platanosCalidad.length.toString();
     const precioTotal = this.precioPlatano !== undefined && this.precioPlatanoCalidad !== undefined ? (this.precioPlatano + this.precioPlatanoCalidad).toString() : undefined;
-    console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal)
-    // this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, undefined, '4').subscribe(result => {
-    //   if (result['state'] === 'Ok') {
-    //     console.log('Se actualizo la orden',result);
-    //   } else if (result['state'] === 'Fail') {
-    //     console.log('No se pudo actualizar la orden',result);
-    //   }
-    // });
+    console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal, ' ', this.encargado)
+    this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
+      if (result['state'] === 'Ok') {
+        console.log('Se actualizo la orden',result);
+        this.stateFlag = false;
+        this.cerrarModal.emit();
+        this.cerrarActualizar.emit();
+      } else if (result['state'] === 'Fail') {
+        console.log('No se pudo actualizar la orden',result);
+      }
+    });
 }
 }

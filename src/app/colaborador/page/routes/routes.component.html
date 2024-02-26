@@ -63,11 +63,12 @@
                 <p>{{ order.phoneNumber }}</p>
                 <p>{{ order.numBunches }}</p>
               </div>
-              <button class="button button--success" (click)="showOrderForm(order.orderID)">recoger</button>
+              {{order.state}}
+              <button class="button button--success" (click)="showOrderForm(order.orderID)" *ngIf="order.state === '2'">recoger</button>
             </div>
           </div>
         </div>
-        <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="!(route.routeState != '0') && !startRouteFlag && !mostrarTodos">Cancelar ruta</button>
+        <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="!(route.routeState === '1') && !startRouteFlag && !mostrarTodos">Cancelar ruta</button>
         <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState != '0' && !mostrarTodos">Finalizar ruta</button>
       </div>
     </ng-container>

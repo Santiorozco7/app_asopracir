@@ -70,6 +70,11 @@ export class ColaboradorService {
     return this.http.get(this.addTimestamp(url));
   }
 
+  public purgeRoute(routeID: string): Observable<any> {
+    const url = `${this.API_ASOPRACIR}assoc.php?do=purgeRoute&token=${localStorage.getItem('token')}&routeID=${routeID}`;
+    return this.http.get(this.addTimestamp(url));
+  }
+
   public updateOrder(
     orderID:string, 
     weight1?:string, 
@@ -111,8 +116,6 @@ export class ColaboradorService {
     }
     
     url += `&token=${token}`;
-
-    url = this.addTimestamp(url);
 
     return this.http.get(url);
   }
