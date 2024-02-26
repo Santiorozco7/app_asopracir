@@ -37,18 +37,6 @@ export class OrderFormComponent {
   newWeight?: number;
   selectedQuality: string = 'first'; 
 
-  platanos: number[] = [];
-  nuevoPeso?: number;
-  precioPorKilo?: number;
-  sumaPlatanos?: number;
-  precioPlatano?: number;
-
-  platanosCalidad: number[] = [];
-  nuevoPesoCalidad?: number;
-  precioPorKiloCalidad?: number;
-  sumaPlatanosCalidad?: number;
-  precioPlatanoCalidad?: number;
-
   encargado: string = "";
   viewConfirmationModal: boolean = false;
 
@@ -149,13 +137,13 @@ export class OrderFormComponent {
   }  
 
   finish(){
-    const sumaPlatanosString = this.sumaPlatanos !== undefined ? this.sumaPlatanos.toString() : undefined;
-    const sumaPlatanosCalidadString = this.sumaPlatanosCalidad !== undefined ? this.sumaPlatanosCalidad.toString() : undefined;
-    const platanosLengthString = this.platanos.length.toString();
-    const platanosCalidadLengthString = this.platanosCalidad.length.toString();
-    const precioTotal = this.precioPlatano !== undefined && this.precioPlatanoCalidad !== undefined ? (this.precioPlatano + this.precioPlatanoCalidad).toString() : undefined;
-    console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal)
-    // this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, undefined, '4').subscribe(result => {
+    // const sumaPlatanosString = this.sumaPlatanos !== undefined ? this.sumaPlatanos.toString() : undefined;
+    // const sumaPlatanosCalidadString = this.sumaPlatanosCalidad !== undefined ? this.sumaPlatanosCalidad.toString() : undefined;
+    // const platanosLengthString = this.platanos.length.toString();
+    // const platanosCalidadLengthString = this.platanosCalidad.length.toString();
+    // const precioTotal = this.precioPlatano !== undefined && this.precioPlatanoCalidad !== undefined ? (this.precioPlatano + this.precioPlatanoCalidad).toString() : undefined;
+    // console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal)
+    // // this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, undefined, '4').subscribe(result => {
     //   if (result['state'] === 'Ok') {
     //     console.log('Se actualizo la orden',result);
     //   } else if (result['state'] === 'Fail') {
