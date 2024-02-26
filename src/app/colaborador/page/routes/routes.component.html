@@ -5,74 +5,86 @@
         <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"></path>
       </svg>   
     </a>
-    <span class="fecha-actual">{{ fechaActual.toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) }}</span>    
+    <span class="fecha-actual">{{ fechaActual.toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric'}) }}</span>    
     <a href="javascript:void(0);" class="show" (click)="aumentarDia()">
       <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
       </svg>
     </a>
   </div>
-  <div class="order-container">
-    <div class="container__error" *ngIf="alertFlag">
-      <svg class="icon--error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
-      </svg>
-      <h2 class="error">¡Vaya, parece que no tienes órdenes para el día de hoy!</h2>
-    </div>
-    <ng-container *ngIf="!alertFlag">
-      <div class="transportador" *ngFor="let route of routes">
-        <div *ngIf="!startRouteFlag && !mostrarTodos">
-          <h3 class="subtitle">transportador</h3>
-          <div class="card-transporter">
+  <div class="container__error" *ngIf="alertFlag">
+    <svg class="icon--error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
+    </svg>
+    <h2 class="error">¡Vaya, parece que no tienes órdenes para el día de hoy!</h2>
+  </div>
+  <ng-container *ngIf="!alertFlag">
+    <div class="transportador" *ngFor="let route of routes">
+      <div *ngIf="!startRouteFlag && !mostrarTodos">
+        <h3 class="subtitle">transportador</h3>
+        <div class="card-transporter">
+          <div class="datos">
             <p>{{ route.transporter.names }} {{ route.transporter.firstLastname }}</p>
             <p>{{ route.plate }}</p>
-            <p>{{ route.transporter.phoneNumber }}</p>
-            <button class="button button--success" (click)="startRoute(route.routeID, 0)" *ngIf="!(route.routeState != '0') && !startRouteFlag">Iniciar ruta</button>
           </div>
+          <a class="phone-icon" href="tel:{{ route.transporter.phoneNumber }}">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
+            </svg>
+          </a>
         </div>
-        <div class="startRoute" *ngIf="startRouteFlag">
-          <form [formGroup]="infoStartWeight" (ngSubmit)="startRoute(route.routeID, 1)">
-            <div class="section__item">
-              <label for="startWeight">Peso inicial del vehiculo en (kg): </label>
-              <input class="form__input" type="number" id="startWeight" formControlName="startWeight">
-            </div>
-            <div class="buttons__options">
-              <button class="button button--success" type="submit"><p>Aceptar</p></button>
-              <button class="button button--success" type="button" (click)="cancelStartRoute()">Cancelar</button>
-            </div>
-          </form>
-        </div>
+      </div>
+      <button class="button button--success" (click)="startRoute(route.routeID, 0)" *ngIf="!(route.routeState != '0') && !startRouteFlag && !mostrarTodos">Iniciar ruta</button>
+      <div class="startRoute" *ngIf="startRouteFlag">
+        <form [formGroup]="infoStartWeight" (ngSubmit)="startRoute(route.routeID, 1)">
+          <div class="section__item">
+            <label for="startWeight">Peso inicial del vehiculo en (kg): </label>
+            <input class="form__input" type="number" id="startWeight" formControlName="startWeight">
+          </div>
+          <div class="buttons__options">
+            <button class="button button--success" type="submit"><p>Aceptar</p></button>
+            <button class="button button--success" type="button" (click)="cancelStartRoute()">Cancelar</button>
+          </div>
+        </form>
+      </div>
 
-        <div class="container__cards" *ngIf="!startRouteFlag">
-          <div class="header" [ngClass]="{'vertical__header': mostrarTodos}">
-            <h3 class="subtitle" *ngIf="!startRouteFlag" [ngClass]="{'vertical__subtitle': mostrarTodos}">órdenes</h3>
-            <a href="javascript:void(0);" class="show" (click)="toggleVerTodos()">
-              <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" *ngIf="mostrarTodos">
-                <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
-              </svg>       
-              <span *ngIf="mostrarTodos">Atrás</span>        
-              <span *ngIf="!mostrarTodos">Ver todos</span>
-            </a>
-          </div>
-          <div class="card-ordenes" [ngClass]="{'vertical': mostrarTodos}">
-            <div class="card-order" *ngFor="let order of route.orders" (click)="showOrderForm(order.orderID)">
-              <div>  
-                <p>{{ order.farmName }}</p>
-                <p>{{ order.zoneName }}</p>
-                <p>{{ order.name }}</p>
-                <p>{{ order.phoneNumber }}</p>
-                <p>{{ order.numBunches }}</p>
+      <div class="container__cards" *ngIf="!startRouteFlag">
+        <div class="header" [ngClass]="{'vertical__header': mostrarTodos}">
+          <h3 class="subtitle" *ngIf="!startRouteFlag" [ngClass]="{'vertical__subtitle': mostrarTodos}">órdenes</h3>
+          <a href="javascript:void(0);" class="show" (click)="toggleVerTodos()">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" *ngIf="mostrarTodos">
+              <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+            </svg>       
+            <span *ngIf="mostrarTodos">Atrás</span>        
+            <span *ngIf="!mostrarTodos">Ver todos</span>
+          </a>
+        </div>
+        <div class="card-ordenes" [ngClass]="{'vertical': mostrarTodos}">
+          <div class="card-order" *ngFor="let order of route.orders">
+            <div class="order__info">
+              <h2>{{ order.farmName }}</h2>
+              <div class="info">  
+                <div class="datos">
+                  <p>{{ order.name }}</p>
+                  <p>{{ order.zoneName }}</p>
+                  <p>{{ order.numBunches }}</p>
+                </div>
+                <a class="phone-icon" href="tel:{{ order.phoneNumber }}" (click)="$event.stopPropagation()">
+                  <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
+                  </svg>
+                </a>
+              </div>
               </div>
               {{order.state}}
               <button class="button button--success" (click)="showOrderForm(order.orderID)" *ngIf="order.state === '2'">recoger</button>
-            </div>
           </div>
         </div>
-        <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="!(route.routeState === '1') && !startRouteFlag && !mostrarTodos">Cancelar ruta</button>
-        <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState != '0' && !mostrarTodos">Finalizar ruta</button>
       </div>
-    </ng-container>
-  </div>
+      <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="!(route.routeState === '1') && !startRouteFlag && !mostrarTodos">Cancelar ruta</button>
+      <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState != '0' && !mostrarTodos">Finalizar ruta</button>
+    </div>
+  </ng-container>
 </div>
 
 <app-order-form [modalVisible]="modalVisible" [orderID]="orderID" (cerrarModal)="closeOrderForm()" (cerrarActualizar)="View(fechaActual)"></app-order-form>

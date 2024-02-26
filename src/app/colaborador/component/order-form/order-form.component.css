@@ -1,37 +1,142 @@
-.container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+ul, li {
+  outline: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-/* .button--content{
+.container {
+  padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.header {
+    height: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.link {
+  color: #999;
+  fill: #999;
+  font-size: 14px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.main__content {
+    height: 90%;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-} */
+  }
 
 .card {
-    width: 300px;
-    margin: 10px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    height: 90%;
 }
 
 .table-container {
-    overflow-x: auto;
+  overflow-x: auto;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
+
+label {
+  margin-right: 10px;
+  text-transform: capitalize;
+}
+
+.section__item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.section__item:nth-last-child(1) {
+  margin-bottom: 0;
+}
+
+.form__input {
+  height: 2rem;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+
+
+
+
+.confirmation-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+  }
+  
+  .modal-header h2 {
+    margin: 0;
+  }
+  
+  hr {
+    margin-top: 20px;
+  }
+
+  .modal-body {
+    margin-top: 25px;
+    margin-bottom: 35px;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+  }
+
+  .confirmation-modal .button--success {
+    margin-top: 0;
+    width: 7rem;
+  }
