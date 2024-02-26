@@ -41,18 +41,6 @@ export class OrderFormComponent implements OnChanges {
   newWeight?: number;
   selectedQuality: string = 'first'; 
 
-  platanos: number[] = [];
-  nuevoPeso?: number;
-  precioPorKilo?: number;
-  sumaPlatanos?: number;
-  precioPlatano?: number;
-
-  platanosCalidad: number[] = [];
-  nuevoPesoCalidad?: number;
-  precioPorKiloCalidad?: number;
-  sumaPlatanosCalidad?: number;
-  precioPlatanoCalidad?: number;
-
   encargado: string = "";
   viewConfirmationModal: boolean = false;
 
@@ -78,17 +66,13 @@ export class OrderFormComponent implements OnChanges {
     if (changes['orderID'] && !changes['orderID'].firstChange) {
       console.log("Se actualizo toda la informacion");
       this.orderIDtemp = this.orderID;
-      this.platanos = [];
-      this.nuevoPeso = undefined;
-      this.precioPorKilo = undefined;
-      this.sumaPlatanos = undefined;
-      this.precioPlatano = undefined;
 
-      this.platanosCalidad = [];
-      this.nuevoPesoCalidad = undefined;
-      this.precioPorKiloCalidad = undefined;
-      this.sumaPlatanosCalidad = undefined;
-      this.precioPlatanoCalidad = undefined;
+      this.firstQualityWeights = [];
+      this.firstQualityPricePerKilo = undefined;
+      this.secondQualityWeights = [];
+      this.secondQualityPricePerKilo = undefined;
+      
+      this.newWeight = undefined;
 
       this.encargado = "";
       this.stateFlag = true;
@@ -151,12 +135,12 @@ export class OrderFormComponent implements OnChanges {
     return weights.reduce((acc, weight) => acc + weight, 0);
   }
   
-  calculateTotalPrice(weights: number[], pricePerKilo?: number): string {
+  calculateTotalPrice(weights: number[], pricePerKilo?: number): number {
     if (pricePerKilo !== undefined) {
       const totalPrice = this.calculateTotalWeight(weights) * pricePerKilo;
-      return totalPrice.toLocaleString('es-ES');
+      return totalPrice;
     }
-    return '0';
+    return 0;
   }
   
   // Calcula el total de racimos sumando la longitud de los arreglos de pesos de ambas calidades
@@ -170,29 +154,42 @@ export class OrderFormComponent implements OnChanges {
   }
 
   // Calcula el precio total sumando los precios de ambas calidades
-  calculateTotalPriceAll(): string {
+  calculateTotalPriceAll(): number {
     const totalPriceAll =
-      parseFloat(this.calculateTotalPrice(this.firstQualityWeights, this.firstQualityPricePerKilo)) +
-      parseFloat(this.calculateTotalPrice(this.secondQualityWeights, this.secondQualityPricePerKilo));
-    return totalPriceAll.toLocaleString('es-ES');
+      this.calculateTotalPrice(this.firstQualityWeights, this.firstQualityPricePerKilo) +
+      this.calculateTotalPrice(this.secondQualityWeights, this.secondQualityPricePerKilo);
+    return totalPriceAll;
   }  
 
   finish(){
-    const sumaPlatanosString = this.sumaPlatanos !== undefined ? this.sumaPlatanos.toString() : undefined;
-    const sumaPlatanosCalidadString = this.sumaPlatanosCalidad !== undefined ? this.sumaPlatanosCalidad.toString() : undefined;
-    const platanosLengthString = this.platanos.length.toString();
-    const platanosCalidadLengthString = this.platanosCalidad.length.toString();
-    const precioTotal = this.precioPlatano !== undefined && this.precioPlatanoCalidad !== undefined ? (this.precioPlatano + this.precioPlatanoCalidad).toString() : undefined;
+    this.viewConfirmationModal = true;
+  }
+    
+
+  onCancel() {
+    this.viewConfirmationModal = false;
+  }
+
+  onConfirm() {
+    const platanosLengthString = this.calculateTotalBunches(this.firstQualityWeights).toString();
+    const platanosCalidadLengthString = this.calculateTotalBunches(this.secondQualityWeights).toString();
+    const sumaPlatanosString = this.calculateTotalWeight(this.firstQualityWeights) !== undefined ? this.calculateTotalWeight(this.firstQualityWeights).toString() : undefined;
+    const sumaPlatanosCalidadString = this.calculateTotalWeight(this.secondQualityWeights) !== undefined ? this.calculateTotalWeight(this.secondQualityWeights).toString() : undefined;
+    const precioTotal = this.firstQualityPricePerKilo !== undefined && this.secondQualityPricePerKilo !== undefined ? this.calculateTotalPriceAll().toString() : undefined;
+    
+    
     console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal, ' ', this.encargado)
-    this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
-      if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden',result);
-        this.stateFlag = false;
-        this.cerrarModal.emit();
-        this.cerrarActualizar.emit();
-      } else if (result['state'] === 'Fail') {
-        console.log('No se pudo actualizar la orden',result);
-      }
-    });
-}
+    // this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
+    //   if (result['state'] === 'Ok') {
+    //     console.log('Se actualizo la orden',result);
+    //     this.stateFlag = false;
+    //     this.viewConfirmationModal = false;
+    //     this.cerrarModal.emit();
+    //     this.cerrarActualizar.emit();
+    //   } else if (result['state'] === 'Fail') {
+    //     console.log('No se pudo actualizar la orden',result);
+    //   }
+    // });
+    this.viewConfirmationModal = false;
+  }
 }
