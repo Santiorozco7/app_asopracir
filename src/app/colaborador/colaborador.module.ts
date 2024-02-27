@@ -6,7 +6,7 @@ import { ColaboradorLayoutComponent } from './colaborador-layout/colaborador-lay
 import { RoutesComponent } from './page/routes/routes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderFormComponent } from './component/order-form/order-form.component';
-
+import { NotificationModule } from '../notification/notification.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,8 @@ import { OrderFormComponent } from './component/order-form/order-form.component'
     CommonModule,
     ColaboradorRoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NotificationModule
   ]
 })
 export class ColaboradorModule { }

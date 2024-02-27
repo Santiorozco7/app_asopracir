@@ -60,13 +60,16 @@ export class RoutesComponent {
   startRouteFlag: boolean = false;
   orderWithState2:boolean = false;
 
-  infoStartWeight = this.formBuilder.group({
-    startWeight: ["", [Validators.required]]
-  })
+  startWeight: number = 0;
+  endWeight: number = 0;
 
-  infoFinishWeight = this.formBuilder.group({
-    endWeight: ["", [Validators.required]]
-  })
+  // infoStartWeight = this.formBuilder.group({
+  //   startWeight: ["", [Validators.required]]
+  // })
+
+  // infoFinishWeight = this.formBuilder.group({
+  //   endWeight: ["", [Validators.required]]
+  // })
 
   constructor(private formBuilder: FormBuilder, private service: ColaboradorService, private router: Router) {}
 
@@ -153,27 +156,27 @@ export class RoutesComponent {
   }
 
   end2Route(routeID:string){
-    const formData = this.infoFinishWeight.value;
-    const endWeight: string = formData.endWeight || "";
-    console.log(routeID, ' ', endWeight);
-    this.service.updateRoute(routeID, undefined, undefined, endWeight, "2", undefined, undefined).subscribe(result => {
-      if (result['state'] === 'Ok') {
-        console.log('Se cancelo la ruta',result);
-        this.ngOnInit();
-      } else if (result['state'] === 'Fail') {
-        this.alertFlag = true;
-        console.log('No se pudo cancelar',result);
-      }
-    });
-    if (this.orderWithState2) {
-      this.service.purgeRoute(routeID).subscribe(resultCancel => {
-        if (resultCancel['state'] === 'Ok') {
-          console.log('Se cancelo la ruta',resultCancel);
-        } else if (resultCancel['state'] === 'Fail') {
+    console.log(routeID, ' ', this.endWeight);
+    if (this.endWeight !== undefined && this.endWeight > 0) {
+      this.service.updateRoute(routeID, undefined, undefined, this.endWeight.toString(), "2", undefined, undefined).subscribe(result => {
+        if (result['state'] === 'Ok') {
+          console.log('Se cancelo la ruta',result);
+          this.ngOnInit();
+        } else if (result['state'] === 'Fail') {
           this.alertFlag = true;
-          console.log('No se pudo cancelar',resultCancel);
+          console.log('No se pudo cancelar',result);
         }
       });
+      if (this.orderWithState2) {
+        this.service.purgeRoute(routeID).subscribe(resultCancel => {
+          if (resultCancel['state'] === 'Ok') {
+            console.log('Se cancelo la ruta',resultCancel);
+          } else if (resultCancel['state'] === 'Fail') {
+            this.alertFlag = true;
+            console.log('No se pudo cancelar',resultCancel);
+          }
+        });
+      }
     }
   }
 
@@ -182,7 +185,7 @@ export class RoutesComponent {
       console.log(routeID);
       this.startRouteFlag = true;
     } else if (index === 1) {
-      const startWeight:string = this.infoStartWeight.value.startWeight || "";
+      const startWeight:string = this.startWeight.toString();
       console.log(startWeight);
       this.service.updateRoute(routeID, undefined, startWeight, undefined, '1', undefined, undefined, undefined).subscribe(result => {
         if (result['state'] === 'Ok') {
@@ -193,7 +196,7 @@ export class RoutesComponent {
       });
       this.service.startRoute(routeID).subscribe(resultStart => {
         if (resultStart['state'] === 'Ok') {
-          console.log('Se inicio la ruta',resultStart);
+          console.log('Se inicio la ruta',resultStart, startWeight);
         } else if (resultStart['state'] === 'Fail') {
           console.log('No se pudo iniciar la ruta',resultStart);
         }

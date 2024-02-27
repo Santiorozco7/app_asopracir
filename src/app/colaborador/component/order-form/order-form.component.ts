@@ -44,6 +44,11 @@ export class OrderFormComponent implements OnChanges {
   encargado: string = "";
   viewConfirmationModal: boolean = false;
 
+  
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
+
   constructor(private service: ColaboradorService) {}
 
   View(){
@@ -120,10 +125,16 @@ export class OrderFormComponent implements OnChanges {
   }
 
   deleteWeight(index: number): void {
-    if (this.selectedQuality === 'first') {
+    if (this.qualityFilter) {
       this.firstQualityWeights.splice(index, 1);
-    } else if (this.selectedQuality === 'second') {
+      this.showDialog = true;
+      this.positiveNotification = true;
+      this.message = `Se ha eliminado el racimo de primera`;              
+    } else if (!this.qualityFilter) {
       this.secondQualityWeights.splice(index, 1);
+      this.showDialog = true;
+      this.positiveNotification = true;
+      this.message = `Se ha eliminado el racimo de segunda`;
     }
   }
 
@@ -177,19 +188,31 @@ export class OrderFormComponent implements OnChanges {
     const sumaPlatanosCalidadString = this.calculateTotalWeight(this.secondQualityWeights) !== undefined ? this.calculateTotalWeight(this.secondQualityWeights).toString() : undefined;
     const precioTotal = this.firstQualityPricePerKilo !== undefined && this.secondQualityPricePerKilo !== undefined ? this.calculateTotalPriceAll().toString() : undefined;
     
-    
     console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal, ' ', this.encargado)
     this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
       if (result['state'] === 'Ok') {
         console.log('Se actualizo la orden',result);
-        this.stateFlag = false;
-        this.viewConfirmationModal = false;
-        this.cerrarModal.emit();
-        this.cerrarActualizar.emit();
+        
+        this.showDialog = true;
+        this.positiveNotification = true;
+        this.message = `Se ha cargado con exito la órden`;  
+        setTimeout(() => {
+          this.stateFlag = false;
+          this.viewConfirmationModal = false;
+          this.cerrarModal.emit();
+          this.cerrarActualizar.emit();
+        }, 3200);
       } else if (result['state'] === 'Fail') {
         console.log('No se pudo actualizar la orden',result);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = `¡Ha ocurrido un error al crear la órden!`;  
       }
     });
     this.viewConfirmationModal = false;
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
   }
 }
