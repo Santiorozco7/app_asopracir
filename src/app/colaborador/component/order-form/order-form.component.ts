@@ -179,17 +179,17 @@ export class OrderFormComponent implements OnChanges {
     
     
     console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal, ' ', this.encargado)
-    // this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
-    //   if (result['state'] === 'Ok') {
-    //     console.log('Se actualizo la orden',result);
-    //     this.stateFlag = false;
-    //     this.viewConfirmationModal = false;
-    //     this.cerrarModal.emit();
-    //     this.cerrarActualizar.emit();
-    //   } else if (result['state'] === 'Fail') {
-    //     console.log('No se pudo actualizar la orden',result);
-    //   }
-    // });
+    this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
+      if (result['state'] === 'Ok') {
+        console.log('Se actualizo la orden',result);
+        this.stateFlag = false;
+        this.viewConfirmationModal = false;
+        this.cerrarModal.emit();
+        this.cerrarActualizar.emit();
+      } else if (result['state'] === 'Fail') {
+        console.log('No se pudo actualizar la orden',result);
+      }
+    });
     this.viewConfirmationModal = false;
   }
 }
