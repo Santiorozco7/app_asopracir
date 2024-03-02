@@ -19,6 +19,7 @@ export class TransportComponent {
   buttonFlag:boolean = false;
   searchFlag:boolean = false;
   docNumberInput?:number;
+  originalTransporters: any[] = []; // Copia de respaldo de los datos originales
   Transporters: any[] = [];
 
   typeSelect: { [key: number]: string } = {
@@ -53,15 +54,17 @@ export class TransportComponent {
     this.buttonFlag = false;
     this.searchFlag = false;
     this.service.getTransporters(this.stateValue).subscribe(Transporters => {
-      if (Transporters['state'] === 'Fail') {
-        this.stateFlag = true;
-        console.log("No hay usuarios para mostrar");
-        this.Transporters = [];
-      } else {
+      if (Transporters['state'] === 'Ok'){
+        this.originalTransporters = Transporters.data; 
         this.Transporters = Transporters.data;
         this.stateFlag = false;
         console.log(Transporters.data);
-      }  
+      } else if (Transporters['state'] === 'Fail') {
+        this.stateFlag = true;
+        console.log("No hay usuarios para mostrar");
+        this.Transporters = [];
+        this.originalTransporters = [];
+      }
     });
   }
 
@@ -69,22 +72,22 @@ export class TransportComponent {
     console.log(this.docNumberInput);
   
     // Verifica si el número de documento es un valor numérico antes de realizar la búsqueda
-    if (this.docNumberInput !== undefined && this.docNumberInput !== null && !isNaN(this.docNumberInput)) {
-      const resultFind = this.Transporters.filter(person => person.docNumber === this.docNumberInput!.toString());
-      this.Transporters = [];
-      this.buttonFlag = true;
+   if (this.docNumberInput) {
+      const resultFind = this.originalTransporters.filter(person => person.docNumber.toString() === this.docNumberInput!.toString());
+
       if (resultFind.length > 0) {
         console.log('Persona encontrada:', resultFind);
-        // Puedes almacenar el objeto encontrado en otra variable si es necesario
-        // this.personFound = resultFind;
         this.Transporters = resultFind;
         this.searchFlag = false;
       } else {
         this.searchFlag = true;
         console.log('Persona no encontrada');
+        this.Transporters = []; // Limpiar los resultados actuales si no se encuentra ninguna coincidencia
       }
     } else {
       console.log('Número de documento no válido');
+      this.Transporters = this.originalTransporters;
+      this.searchFlag = false;
     }
   }
   // Modal -----------------------------------------------------------

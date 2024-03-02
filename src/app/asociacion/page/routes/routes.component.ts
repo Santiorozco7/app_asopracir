@@ -148,6 +148,8 @@ export class RoutesComponent {
 
   cerrarmodalRutas() {
     this.rutasVisible = false;
-    this.View();
+    setTimeout(() => {
+      this.View();
+    }, 0);
   }
 }

@@ -13,12 +13,15 @@ export class RegisterComponent {
   assocRegister:boolean = false;
   transporterRegister:boolean = false;
   collaboratorRegister:boolean = false;
+
   searchFlag:boolean = false;
   searchValidator:boolean = false;
 
   docTypeaux:string = '';
   docNumberaux:string = '';
   userID:string = '';
+  userData: any; // Declara una variable para almacenar los datos del usuario
+
   
   // Roles del usuario
   userFarmer:boolean = false;
@@ -63,9 +66,6 @@ export class RegisterComponent {
     this.userForm.valueChanges.subscribe(() => {
       if (this.infoUser.value.docNumber !== this.userForm.value.docNumber ||
         this.infoUser.value.docType !== this.userForm.value.docType) {
-          this.farmerRegister = false;
-          this.transporterRegister = false;
-          this.collaboratorRegister = false;
           this.searchFlag = false;
         console.log("Hubo cambios en el formulario");
       }
@@ -73,11 +73,8 @@ export class RegisterComponent {
     this.infoUser.valueChanges.subscribe(() => {
       if (this.infoUser.value.docNumber !== this.docNumberaux ||
         this.infoUser.value.docType !== this.docTypeaux) {
-          this.farmerRegister = false;
-          this.transporterRegister = false;
-          this.collaboratorRegister = false;
           this.searchValidator = false;
-        console.log("Hubo cambios en el formulario");
+        console.log("noseque");
       }
     });
     
@@ -89,10 +86,10 @@ export class RegisterComponent {
   });
 
   userForm = this.formBuilder.group({
-    name: ['', [Validators.required]],
-    firstLastname: ['', [Validators.required]],
-    docType: ['', [Validators.required]],
-    docNumber: ['', [Validators.required]],
+    name: [''],
+    firstLastname: [''],
+    docType: [''],
+    docNumber: [''],
     secondLastname: [''],  // este sea opcional
     docIssueDate: [''],
     docIssuePlace: [''],
@@ -106,34 +103,6 @@ export class RegisterComponent {
     bankAccountType: [],
     bankAccountNumber: [''],
 
-    //Agricultor
-    GPSposition: [''],
-    area: [],
-    cityFarm: [''],
-    farmName: [''],
-    fileOwnerCertificate: [''],
-    zoneName: [''],
-
-    //Transportador
-    licenseExpiration: [''],
-    licenseType: [''],
-    comments: [''],
-
-    plate: [''],
-    soatExpiration: [''],
-    techExpiration: [''],
-    type: [''],
-    state: [''],
-    capacity: [''],
-
-    //Colaborador
-    roleNameCollab: [''],
-
-    //Asociado
-    roleNameAssoc: [''],
-  });
-
-  roleAddForm = this.formBuilder.group({
     //Agricultor
     GPSposition: [''],
     area: [],
@@ -177,7 +146,7 @@ export class RegisterComponent {
     }
   }
 
-  onSubmit(): void {
+  onSubmit(actionType: number): void {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
   
@@ -226,27 +195,131 @@ export class RegisterComponent {
       //Datos asociado
       const roleNameAssoc: string = formData.roleNameAssoc ?? "";
 
-      this.service.createUser(
-        names,
-        firstLastname,
-        docType,
-        docNumber,
-        secondLastname,
-        docIssueDate,
-        docIssuePlace,
-        birthday,
-        address,
-        city,
-        phoneNumber,
-        altPhoneNumber,
-        email,
-        bankAccountBName,
-        bankAccountType,
-        bankAccountNumber
-      ).subscribe(resultUser => {
-        if (resultUser['state'] === 'Ok') {
-          console.log('Usuario creado con id:', resultUser.data.userID);
-
+      switch(actionType) {
+        case 1: 
+          this.service.createUser(
+            names,
+            firstLastname,
+            docType,
+            docNumber,
+            secondLastname,
+            docIssueDate,
+            docIssuePlace,
+            birthday,
+            address,
+            city,
+            phoneNumber,
+            altPhoneNumber,
+            email,
+            bankAccountBName,
+            bankAccountType,
+            bankAccountNumber
+          ).subscribe(resultUser => {
+            if (resultUser['state'] === 'Ok') {
+              console.log('Usuario creado con id:', resultUser.data.userID);
+              if (this.farmerRegister) {  //Crear Agricultor
+                console.log("Creando agricultor.....................");
+                console.log(farmName,' ',zoneName,' ',cityFarm,' ',area,' ',GPSposition);
+                this.service.createFarm(
+                  farmName,
+                  zoneName,
+                  cityFarm,
+                  area,
+                  GPSposition
+                ).subscribe(resultFarm=>{
+                  if (resultFarm['state'] === 'Ok') {
+                    console.log('Finca creada con id:', resultFarm.data.farmID);
+                    this.service.createFarmer(resultUser.data.userID, resultFarm.data.farmID).subscribe(resultFarmer => {
+                      if (resultFarmer['state'] === 'Ok') {
+                        console.log('Agricultor fue creado');
+                        this.showDialog = true;
+                        this.positiveNotification = true;
+                        this.message = `Se ha registrado un nuevo usuario con éxito`;
+                        setTimeout(() => {
+                          this.View();
+                        }, 3200);
+                      } if(resultFarmer['state'] === 'Fail') {
+                        console.log('Agricultor no fue creado',resultFarm);
+                        this.showDialog = true;
+                        this.positiveNotification = false;
+                        this.message = '¡Ha ocurrido un error!';
+                      }                  
+                    })
+                  } if(resultFarm['state'] === 'Fail') {
+                    console.log('Finca no fue creado');
+                    this.showDialog = true;
+                    this.positiveNotification = false;
+                    this.message = '¡Ha ocurrido un error!';
+                  }
+                })
+              }
+              if (this.transporterRegister) {  //Crear Transportador
+                console.log("Creando trasnportador...................");
+                this.service.createVehicle(
+                  plate,
+                  soatExpiration,
+                  techExpiration,
+                  type,
+                  capacity,
+                  comments,
+                ).subscribe(resultVehicle => {
+                  if (resultVehicle['state'] === 'Ok') {
+                    console.log('Vehículo creada con id:', resultVehicle.data.vehID);
+                    this.service.createTransporter(resultUser.data.userID, resultVehicle.data.vehID, licenseType, licenseExpiration).subscribe(resultTransport => {
+                      if (resultTransport['state'] === 'Ok') {
+                        console.log("Transportador Creado");
+                        this.showDialog = true;
+                        this.positiveNotification = true;
+                        this.message = `Se ha registrado un nuevo usuario con éxito`;
+                        setTimeout(() => {
+                          this.View();
+                        }, 3200);
+                      }if (resultVehicle['state'] === 'Fail') {
+                        console.log("Trasnportador no creado");
+                        this.showDialog = true;
+                        this.positiveNotification = false;
+                        this.message = '¡Ha ocurrido un error!';
+                      }
+                    })
+                  }if (resultVehicle['state'] === 'Fail') {
+                    console.log("Vehiculo no creado");
+                    this.showDialog = true;
+                    this.positiveNotification = false;
+                    this.message = '¡Ha ocurrido un error!';
+                  }
+                })
+              }
+              if (this.collaboratorRegister) {  //Crear Colaborador
+                console.log("Creando colaborador...................");
+                this.service.createCollab(resultUser.data.userID, roleNameCollab).subscribe(resultCollab => {
+                  if (resultCollab['state'] === 'Ok') {
+                    console.log("Colaborador Creado");
+                    this.View();
+                  }if (resultCollab['state'] === 'Fail') {
+                    console.log("Colaborador no creado");
+                  }
+                });
+              }
+              if (this.assocRegister) {  //Crear Asociado
+                console.log("Creando colaborador...................");
+                this.service.createCollab(resultUser.data.userID, roleNameAssoc).subscribe(resultAssoc => {
+                  if (resultAssoc['state'] === 'Ok') {
+                    console.log("Asociado Creado");
+                    this.View();
+                  }if (resultAssoc['state'] === 'Fail') {
+                    console.log("Asociado no creado");
+                  }
+                });
+              }
+            }if(resultUser['state'] === 'Fail') {
+              console.log('Usuario no fue creado');
+              this.showDialog = true;
+              this.positiveNotification = false;
+              this.message = '¡Ha ocurrido un error!';
+            }
+          });
+          break;
+        case 2: 
           if (this.farmerRegister) {  //Crear Agricultor
             console.log("Creando agricultor.....................");
             console.log(farmName,' ',zoneName,' ',cityFarm,' ',area,' ',GPSposition);
@@ -259,27 +332,16 @@ export class RegisterComponent {
             ).subscribe(resultFarm=>{
               if (resultFarm['state'] === 'Ok') {
                 console.log('Finca creada con id:', resultFarm.data.farmID);
-                this.service.createFarmer(resultUser.data.userID, resultFarm.data.farmID).subscribe(resultFarmer => {
+                this.service.createFarmer(this.userID, resultFarm.data.farmID).subscribe(resultFarmer => {
                   if (resultFarmer['state'] === 'Ok') {
                     console.log('Agricultor fue creado');
-                    this.showDialog = true;
-                    this.positiveNotification = true;
-                    this.message = `Se ha registrado un nuevo usuario con éxito`;
-                    setTimeout(() => {
-                      this.View();
-                    }, 3200);
+                    this.View(); 
                   } if(resultFarmer['state'] === 'Fail') {
                     console.log('Agricultor no fue creado',resultFarm);
-                    this.showDialog = true;
-                    this.positiveNotification = false;
-                    this.message = '¡Ha ocurrido un error!';
-                  }                  
+                  }
                 })
               } if(resultFarm['state'] === 'Fail') {
                 console.log('Finca no fue creado');
-                this.showDialog = true;
-                this.positiveNotification = false;
-                this.message = '¡Ha ocurrido un error!';
               }
             })
           }
@@ -295,33 +357,22 @@ export class RegisterComponent {
             ).subscribe(resultVehicle => {
               if (resultVehicle['state'] === 'Ok') {
                 console.log('Vehículo creada con id:', resultVehicle.data.vehID);
-                this.service.createTransporter(resultUser.data.userID, resultVehicle.data.vehID, licenseType, licenseExpiration).subscribe(resultTransport => {
+                this.service.createTransporter(this.userID, resultVehicle.data.vehID, licenseType, licenseExpiration).subscribe(resultTransport => {
                   if (resultTransport['state'] === 'Ok') {
                     console.log("Transportador Creado");
-                    this.showDialog = true;
-                    this.positiveNotification = true;
-                    this.message = `Se ha registrado un nuevo usuario con éxito`;
-                    setTimeout(() => {
-                      this.View();
-                    }, 3200);
+                    this.View();
                   }if (resultVehicle['state'] === 'Fail') {
                     console.log("Trasnportador no creado");
-                    this.showDialog = true;
-                    this.positiveNotification = false;
-                    this.message = '¡Ha ocurrido un error!';
                   }
                 })
               }if (resultVehicle['state'] === 'Fail') {
                 console.log("Vehiculo no creado");
-                this.showDialog = true;
-                this.positiveNotification = false;
-                this.message = '¡Ha ocurrido un error!';
               }
             })
           }
           if (this.collaboratorRegister) {  //Crear Colaborador
             console.log("Creando colaborador...................");
-            this.service.createCollab(resultUser.data.userID, roleNameCollab).subscribe(resultCollab => {
+            this.service.createCollab(this.userID, roleNameCollab).subscribe(resultCollab => {
               if (resultCollab['state'] === 'Ok') {
                 console.log("Colaborador Creado");
                 this.View();
@@ -332,7 +383,7 @@ export class RegisterComponent {
           }
           if (this.assocRegister) {  //Crear Asociado
             console.log("Creando colaborador...................");
-            this.service.createCollab(resultUser.data.userID, roleNameAssoc).subscribe(resultAssoc => {
+            this.service.createCollab(this.userID, roleNameAssoc).subscribe(resultAssoc => {
               if (resultAssoc['state'] === 'Ok') {
                 console.log("Asociado Creado");
                 this.View();
@@ -341,13 +392,10 @@ export class RegisterComponent {
               }
             });
           }
-        }if(resultUser['state'] === 'Fail') {
-          console.log('Usuario no fue creado');
-          this.showDialog = true;
-          this.positiveNotification = false;
-          this.message = '¡Ha ocurrido un error!';
-        }
-      });
+          break;
+        default:
+          console.log("Tipo de acción no reconocido");
+      }
     }
   }
 
@@ -428,40 +476,22 @@ export class RegisterComponent {
   getHeader(): string {
     switch (this.selectedValue) {
         case '0':
-            return 'Información del Agricultor';
+            return 'Información del predio';
         case '1':
             return 'Información del Asociado';
         case '2':
             return 'Información del Colaborador';
         case '3':
-            return 'Información del Transportador';
+            return 'Detalles de la licencia';
         default:
             return 'Información';
     }
   }
+  
   cerrarTodo() {
     this.searchFlag = false;
     this.searchValidator = false;
   }
-
-  areAgricultorFieldsValid(): boolean {
-    const agricultorFields = ['farmName', 'zoneName', 'cityFarm', 'area'];
-    return agricultorFields.every(field => this.userForm.get(field)?.value !== null && this.userForm.get(field)?.value !== '');
-  }
-  
-  areAssocFieldsValid(): boolean {
-    return this.userForm.get('roleNameAssoc')?.value === 'Admin';
-  }
-  
-  areCollabFieldsValid(): boolean {
-    return this.userForm.get('roleNameCollab')?.value === 'Tesorero';
-  }
-  
-  areTransporterFieldsValid(): boolean {
-    const transporterFields = ['licenseType', 'licenseExpiration', 'plate', 'soatExpiration', 'techExpiration', 'type', 'state', 'capacity'];
-    return transporterFields.every(field => this.userForm.get(field)?.value !== null && this.userForm.get(field)?.value !== '');
-  }
-  
   
   onSubmitUser(): void {
     if (this.infoUser.valid) {
@@ -473,6 +503,8 @@ export class RegisterComponent {
 
       this.service.getUser(this.docTypeaux, this.docNumberaux).subscribe(userData => {
         if (userData['state'] === 'Ok') {
+          this.userData = userData.data; // Asigna los datos del usuario a la variable userData
+
           this.userID = userData.data.userID;
           this.farmerRegister = false;
           this.transporterRegister = false;
@@ -552,110 +584,27 @@ export class RegisterComponent {
     }
   }
 
-  submitRole():void {
-    console.log("entro")
-    if (this.roleAddForm.valid) {
-      const formData = this.roleAddForm.value;
-
-      //Datos de la fica
-      const GPSposition: string = formData.GPSposition ?? "";
-      const area: string = formData.area ?? "";
-      const cityFarm: string = formData.cityFarm ?? "";
-      const farmName: string = formData.farmName ?? "";
-      const fileOwnerCertificate: string = formData.fileOwnerCertificate ?? "";
-      const zoneName: string = formData.zoneName ?? "";
-
-      //Datos transportador
-      const licenseExpiration: string = formData.licenseExpiration ?? "";
-      const licenseType: string = formData.licenseType ?? "";
-      const plate: string = formData.plate ?? "";
-      const soatExpiration: string = formData.soatExpiration ?? "";
-      const techExpiration: string = formData.techExpiration ?? "";
-      const type: string = formData.type ?? "";
-      const state: string = formData.state ?? "";
-      const capacity: string = formData.capacity ?? "";
-      const comments: string = formData.comments ?? "";
-
-      //Datos colaborador
-      const roleNameCollab: string = formData.roleNameCollab ?? "";
-
-      //Datos asociado
-      const roleNameAssoc: string = formData.roleNameAssoc ?? "";
-
-      if (this.farmerRegister) {  //Crear Agricultor
-        console.log("Creando agricultor.....................");
-        console.log(farmName,' ',zoneName,' ',cityFarm,' ',area,' ',GPSposition);
-        this.service.createFarm(
-          farmName,
-          zoneName,
-          cityFarm,
-          area,
-          GPSposition
-        ).subscribe(resultFarm=>{
-          if (resultFarm['state'] === 'Ok') {
-            console.log('Finca creada con id:', resultFarm.data.farmID);
-            this.service.createFarmer(this.userID, resultFarm.data.farmID).subscribe(resultFarmer => {
-              if (resultFarmer['state'] === 'Ok') {
-                console.log('Agricultor fue creado');
-                this.View(); 
-              } if(resultFarmer['state'] === 'Fail') {
-                console.log('Agricultor no fue creado',resultFarm);
-              }
-            })
-          } if(resultFarm['state'] === 'Fail') {
-            console.log('Finca no fue creado');
-          }
-        })
-      }
-      if (this.transporterRegister) {  //Crear Transportador
-        console.log("Creando trasnportador...................");
-        this.service.createVehicle(
-          plate,
-          soatExpiration,
-          techExpiration,
-          type,
-          capacity,
-          comments,
-        ).subscribe(resultVehicle => {
-          if (resultVehicle['state'] === 'Ok') {
-            console.log('Vehículo creada con id:', resultVehicle.data.vehID);
-            this.service.createTransporter(this.userID, resultVehicle.data.vehID, licenseType, licenseExpiration).subscribe(resultTransport => {
-              if (resultTransport['state'] === 'Ok') {
-                console.log("Transportador Creado");
-                this.View();
-              }if (resultVehicle['state'] === 'Fail') {
-                console.log("Trasnportador no creado");
-              }
-            })
-          }if (resultVehicle['state'] === 'Fail') {
-            console.log("Vehiculo no creado");
-          }
-        })
-      }
-      if (this.collaboratorRegister) {  //Crear Colaborador
-        console.log("Creando colaborador...................");
-        this.service.createCollab(this.userID, roleNameCollab).subscribe(resultCollab => {
-          if (resultCollab['state'] === 'Ok') {
-            console.log("Colaborador Creado");
-            this.View();
-          }if (resultCollab['state'] === 'Fail') {
-            console.log("Colaborador no creado");
-          }
-        });
-      }
-      if (this.assocRegister) {  //Crear Asociado
-        console.log("Creando colaborador...................");
-        this.service.createCollab(this.userID, roleNameAssoc).subscribe(resultAssoc => {
-          if (resultAssoc['state'] === 'Ok') {
-            console.log("Asociado Creado");
-            this.View();
-          }if (resultAssoc['state'] === 'Fail') {
-            console.log("Asociado no creado");
-          }
-        });
-      }
-    }else{
-      console.log("Pero no hizo nada")
-    }
+  areRequiredFieldsValid(): boolean {
+    const requiredFields = ['name', 'firstLastname', 'docType', 'docNumber', 'phoneNumber'];
+    return requiredFields.every(field => this.userForm.get(field)?.value !== null && this.userForm.get(field)?.value !== '');
   }
+
+  areAgricultorFieldsValid(): boolean {
+    const agricultorFields = ['farmName', 'zoneName', 'cityFarm', 'area'];
+    return agricultorFields.every(field => this.userForm.get(field)?.value !== null && this.userForm.get(field)?.value !== '');
+  }
+  
+  areAssocFieldsValid(): boolean {
+    return this.userForm.get('roleNameAssoc')?.value === 'Admin';
+  }
+  
+  areCollabFieldsValid(): boolean {
+    return this.userForm.get('roleNameCollab')?.value === 'Tesorero';
+  }
+  
+  areTransporterFieldsValid(): boolean {
+    const transporterFields = ['licenseType', 'licenseExpiration', 'plate', 'soatExpiration', 'techExpiration', 'type', 'state', 'capacity'];
+    return transporterFields.every(field => this.userForm.get(field)?.value !== null && this.userForm.get(field)?.value !== '');
+  }
+  
 }

@@ -35,7 +35,7 @@
     <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
   </div>
 
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit(1)">
     <div class="section__header">
       <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
@@ -163,48 +163,59 @@
     </div>
 
     <!-- Crear Transportador -->
-    <div class="form__section" *ngIf="transporterRegister">
-      <div class="section__item">
-        <label class="required" for="licenseType">Tipo de Licencia</label>
-        <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
-      </div>    
-      <div class="section__item">
-        <label class="required" for="licenseExpiration">fecha de expiración</label>
-        <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
+    <ng-container *ngIf="transporterRegister">
+      <div class="form__section">
+        <div class="section__item">
+          <label class="required" for="licenseType">Tipo de Licencia</label>
+          <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
+        </div>
+        <div class="section__item">
+          <label class="required" for="licenseExpiration">fecha de expiración</label>
+          <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
+        </div> 
       </div>
-      <div class="section__item">
-        <label class="required" for="plate">placa</label>
-        <input class="form__input" type="text" id="plate" formControlName="plate">
+  
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h3 class="subtitle inline">información del vehiculo</h3></span>
       </div>
-      <div class="section__item">
-        <label class="required" for="soatExpiration">vencimiento de SOAT</label>
-        <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
+      <div class="form__section">
+        <div class="section__item">
+          <label class="required" for="plate">placa</label>
+          <input class="form__input" type="text" id="plate" formControlName="plate">
+        </div>
+        <div class="section__item">
+          <label class="required" for="soatExpiration">vencimiento de SOAT</label>
+          <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
+        </div>
+        <div class="section__item">
+          <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
+          <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
+        </div>
+        <div class="section__item">
+            <label class="required" for="type">tipo</label>
+            <select class="form__input select" name="docType" id="type" formControlName="type">
+              <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="section__item">
+            <label class="required" for="state">estado</label>
+            <select class="form__input select" name="docType" id="state" formControlName="state">
+              <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="section__item">
+          <label class="required" for="capacity">capacidad (T)</label>
+          <input class="form__input" type="number" id="capacity" formControlName="capacity">
+        </div>
+        <div class="section__item">
+          <label for="comments">comentarios</label>
+          <textarea rows="2" id="comments" formControlName="comments"></textarea>
+        </div>
       </div>
-      <div class="section__item">
-        <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
-        <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
-      </div>
-      <div class="section__item">
-          <label class="required" for="type">tipo</label>
-          <select class="form__input select" name="docType" id="type" formControlName="type">
-            <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
-          </select>
-      </div>
-      <div class="section__item">
-          <label class="required" for="state">estado</label>
-          <select class="form__input select" name="docType" id="state" formControlName="state">
-            <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
-          </select>
-      </div>
-      <div class="section__item">
-        <label class="required" for="capacity">capacidad (T)</label>
-        <input class="form__input" type="number" id="capacity" formControlName="capacity">
-      </div>
-      <div class="section__item">
-        <label for="comments">comentarios</label>
-        <textarea rows="2" id="comments" formControlName="comments"></textarea>
-      </div>
-    </div>
+    </ng-container>
     
     <!-- Crear Colaborador -->
     <div class="form__section" *ngIf="collaboratorRegister">
@@ -224,7 +235,8 @@
       </div>     
     </div>
 
-    <button class="button button--success" type="submit" [disabled]="!userForm.valid || 
+    <button class="button button--success" type="submit" [disabled]=" 
+      !(areRequiredFieldsValid()) ||
       (farmerRegister && !areAgricultorFieldsValid()) || 
       (assocRegister && !areAssocFieldsValid()) ||
       (collaboratorRegister && !areCollabFieldsValid()) || 
@@ -250,6 +262,60 @@
     <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
   </div>
 
+  <div class="form__section">
+    <div class="section__item">
+      <label for="nameReg">Nombres</label>
+      <input class="form__input col-3" type="text" id="nameReg"  [value]="userData.names || 'por definir'" disabled>
+    </div>
+    <div class="section__item">
+      <label for="firstLastnameReg">Primer Apellido</label>
+      <input class="form__input" type text id="firstLastnameReg" [value]="userData.firstLastname" disabled>
+    </div>
+    <div class="section__item">
+      <label for="secondLastnameReg">Segundo Apellido</label>
+      <input class="form__input" type="text" id="secondLastnameReg"  [value]="userData.secondLastname" disabled>
+    </div>
+    <div class="section__item">
+      <label for="docTypeReg">Tipo de documento</label>
+      <select class="form__input select" name="docTypeReg" id="docTypeReg"  [value]="userData.docType" disabled>
+        <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+      </select>
+    </div>
+    <div class="section__item">
+      <label for="docNumberReg">N° de Identificación</label>
+      <input class="form__input" type="number" id="docNumberReg"  [value]="userData.docNumber" disabled required>
+    </div>
+    <div class="section__item">
+      <label for="docIssueDateReg">Fecha de Expedición</label>
+      <input class="form__input" type="date" id="docIssueDateReg"  [value]="userData.docIssueDate" disabled>
+    </div>
+    <div class="section__item">
+      <label for="birthdayReg">Fecha de Nacimiento</label>
+      <input class="form__input" type="date" id="birthdayReg"  [value]="userData.birthday" disabled>
+    </div>
+    <div class="section__item">
+      <label for="addressReg">Dirección</label>
+      <input class="form__input" type="text" id="addressReg"  [value]="userData.address" disabled>
+    </div>
+    <div class="section__item">
+      <label for="cityReg">Ciudad</label>
+      <input class="form__input" type="text" id="cityReg"  [value]="userData.city" disabled>
+    </div>
+    <div class="section__item">
+      <label for="phoneNumberReg">Teléfono/Celular</label>
+      <input class="form__input" type="number" id="phoneNumberReg"  [value]="userData.phoneNumber" disabled required>
+    </div>
+    <div class="section__item">
+      <label for="altPhoneNumberReg">Teléfono Alterno</label>
+      <input class="form__input" type="number" id="altPhoneNumberReg"  [value]="userData.altPhoneNumber" disabled>
+    </div>
+    <div class="section__item">
+      <label for="emailReg">Correo Electrónico</label>
+      <input class="form__input" type="email" id="emailReg"  [value]="userData.email" disabled>
+    </div>
+  </div>
+
+  
   <div class="section__header">
     <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
       <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
@@ -261,13 +327,11 @@
       <p>Aun no cuenta con un rol asignado</p>
     </ng-container>
     <ng-template #rolesSelect>
-      <select class="form__input select" [disabled]="userFarmer || userAssoc || userCollaborator || userTransporter">
-        <option [ngValue]="'Farmer'" *ngIf="userFarmer">Agricultor</option>
-        <option [ngValue]="'Assoc'" *ngIf="userAssoc">Asociado</option>
-        <option [ngValue]="'Collaborator'" *ngIf="userCollaborator">Colaborador</option>
-        <option [ngValue]="'Transporter'" *ngIf="userTransporter">Transportador</option>
-      </select>    
-    </ng-template>  
+      <input class="form__input" type="text" value="Agricultor" *ngIf="userFarmer" disabled>
+      <input class="form__input" type="text" value="Asociado" *ngIf="userAssoc" disabled>
+      <input class="form__input" type="text" value="Colaborador" *ngIf="userCollaborator" disabled>
+      <input class="form__input" type="text" value="Transportador" *ngIf="userTransporter" disabled>
+    </ng-template>
   </div>
 
   <div class="section__header">
@@ -286,7 +350,7 @@
   </div>
   
   <!-- Agregar nuevos roles a usuarios existentes -->
-  <form [formGroup]="roleAddForm" (ngSubmit)="submitRole()"> 
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit(2)"> 
     <!-- Crear Agricultor -->
     <div class="form__section" *ngIf="farmerRegister">
       <div class="section__item">
@@ -377,7 +441,12 @@
       </div>     
     </div>
     
-    <button type="submit" [disabled]="roleAddForm.invalid" class="button button--success" *ngIf="farmerRegister || collaboratorRegister || transporterRegister || assocRegister">
+    <button type="submit" class="button button--success" [disabled]=" 
+      (farmerRegister && !areAgricultorFieldsValid()) || 
+      (assocRegister && !areAssocFieldsValid()) ||
+      (collaboratorRegister && !areCollabFieldsValid()) || 
+      (transporterRegister && !areTransporterFieldsValid())"
+      *ngIf="farmerRegister || collaboratorRegister || transporterRegister || assocRegister">
       <div *ngIf="farmerRegister">Crear Agricultor</div>
       <div *ngIf="transporterRegister">Crear Transportador</div>
       <div *ngIf="collaboratorRegister">Crear Colaborador</div>

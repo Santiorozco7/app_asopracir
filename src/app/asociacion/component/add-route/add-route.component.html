@@ -15,27 +15,32 @@
               <th>Fecha</th>
               <th>Placa Vehículo</th>
               <th>Conductor</th>
-              <th>Tel. Conductor</th>
+              <!-- <th>Tel. Conductor</th> -->
               <th>Colaborador</th>
-              <th>Finca</th>
+              <!-- <th>Finca</th> -->
               <th>No. Racimos</th>
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let route of filteredRoutes" (click)="addOrderToRoute(route.routeID)">
-              <td>{{ routeState[route.routeState] }}</td>
-              <td>{{ route.pickupDate }}</td>
-              <td>{{ route.plate }}</td>
+          <tr *ngFor="let route of routes" (click)="addOrder(route.routeID)">
+              <td>{{ routeState[route.routeState] || 'no disponible'}}</td>
+              <td>{{ route.pickupDate || 'no disponible'}}</td>
+              <td>{{ route.plate || 'no disponible'}}</td>
               <td>{{ route.transporter.names }} {{ route.transporter.firstLastname }}</td>
-              <td>{{ route.transporter.phoneNumber }}</td>
+              <!-- <td>{{ route.transporter.phoneNumber }}</td> -->
               <td>{{ route.collab.names }} {{ route.collab.firstLastname }}</td>
-              <td>{{ route.orders[0].farmName }}</td>
-              <td>{{ route.totalBunches }}</td>
+              <!-- <td>{{ route && route.orders && route.orders[0] && route.orders[0].farmName || 'Nombre no disponible' }}</td> -->
+              <td>{{ route.totalBunches || 'no disponible'}}</td>
           </tr>
       </tbody>
     </table>
 </div>
-
+<app-confirmation-modal *ngIf="showConfirmationModal" 
+[title]="'Crear órden'"
+  [description]="'¿Está seguro de agregar esta órden a la ruta?'"
+  (confirm)="addOrderToRoute(routesAUX)"
+  (cancel)="showConfirmationModal = false">
+</app-confirmation-modal>
 <app-notification *ngIf="showDialog" 
   [message]="message" 
   [positiveNotification]="positiveNotification" 

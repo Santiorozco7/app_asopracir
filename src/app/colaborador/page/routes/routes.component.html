@@ -34,7 +34,7 @@
           </a>
         </div>
       </div>
-      <button class="button button--success" (click)="startRoute(route.routeID, 0)" *ngIf="!(route.routeState != '0') && !mostrarTodos">Iniciar ruta</button>
+      <button class="button button--success" (click)="startRoute(route.routeID, 0)" *ngIf="route.routeState === '0' && !mostrarTodos">Iniciar ruta</button>
       <div class="confirmation-modal" *ngIf="startRouteFlag">
         <div class="modal-content">
           <div class="modal-header">
@@ -84,13 +84,17 @@
                     </a>
                   </div>
                 </div>
-                {{order.state}}
                 <button class="button button--success" (click)="showOrderForm(order.orderID)" *ngIf="order.state === '2'">recoger</button>
               </div>
             </ng-container>
           </ng-container>
         </div>
-        
+        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState !== '2'">
+          <p>Todas las órdenes han sido recogidas. Haga clic en finalizar ruta para continuar.</p>
+        </div>
+        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState === '2'">
+          <p>Esta ruta ha sido finalizada</p>
+        </div>
       </div>
 
       <div class="confirmation-modal" *ngIf="alertendflag">
@@ -129,35 +133,8 @@
         </div>
       </div>
 
-      <!-- <div class="finishRoute" *ngIf="alertendflag">
-        <form (ngSubmit)="nextendRoute()">
-          <div class="section__item">
-            <p>Hay órdenes pendientes por recoger.
-              Si estas no pueden ser recogidas y requiere agendarlas de nuevo de clic en continuar para suspender la ruta
-            </p>
-          </div>
-          <div class="buttons__options">
-            <button class="button button--success" type="submit"><p>Aceptar</p></button>
-            <button class="button button--success" type="button" (click)="cancelStartRoute()">Cancelar</button>
-          </div>
-        </form>
-      </div> -->
-
-      <!-- <div class="finishRoute" *ngIf="alertendendflag">
-        <form [formGroup]="infoFinishWeight" (ngSubmit)="end2Route(route.routeID)">
-          <div class="section__item">
-            <label for="endWeight">Peso final del vehiculo en (kg): </label>
-            <input class="form__input" type="number" id="endWeight" formControlName="endWeight">
-          </div>
-          <div class="buttons__options">
-            <button class="button button--success" type="submit"><p>Aceptar</p></button>
-            <button class="button button--success" type="button" (click)="cancelStartRoute()">Cancelar</button>
-          </div>
-        </form>
-      </div> -->
-
-      <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="!(route.routeState === '1') && !mostrarTodos">Cancelar ruta</button>
-      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState != '0' && !mostrarTodos">Finalizar ruta</button>
+      <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState === '0' && !mostrarTodos">Cancelar ruta</button>
+      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="route.routeState === '2'">Finalizar ruta</button>
     </div>
   </ng-container>
 </div>

@@ -20,7 +20,9 @@
                   <tr>
                     <th>Placa</th>
                     <th>Nombre</th>
-                    <th>Tel.</th>
+                    <th>Tel.</th>        
+                    <th>Tipo de vehiculo</th>
+                    <th>Capacidad (T)</th>
                     <th>Email</th>
                   </tr>
               </thead>
@@ -29,6 +31,8 @@
                     <td>{{transporter.plate}}</td>
                     <td>{{transporter.names}} {{transporter.firstLastname}}</td>
                     <td>{{transporter.phoneNumber}}</td>
+                    <td>{{typeSelect[transporter.type] }}</td>
+                    <td>{{transporter.capacity }}</td>
                     <td>{{transporter.email}}</td>
                     <td class="col__icon">
                         <a class="col__link" href="javascript:void(0);" (click)="updateTransporter(transporter.transID, transporter.vehID, transporter)">

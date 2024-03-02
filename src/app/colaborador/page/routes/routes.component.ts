@@ -59,6 +59,7 @@ export class RoutesComponent {
   alertendendflag: boolean = false;
   startRouteFlag: boolean = false;
   orderWithState2:boolean = false;
+  todasOrdenesRecogidasFlag: boolean = false;
 
   startWeight: number = 0;
   endWeight: number = 0;
@@ -101,6 +102,7 @@ export class RoutesComponent {
           this.orderWithState2 = false;
           console.log('No se encontró una orden con state igual a 2.', this.orderWithState2);
         }
+        this.todasOrdenesRecogidasFlag = this.routes && this.routes[0]?.orders.every(order => order.state === '4');
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] !== 'Session expired')) {
         this.alertFlag = true;
         console.log('No se encontraron rutas',routes);

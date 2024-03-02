@@ -3,6 +3,7 @@ import { AsociacionService } from '../../asociacion.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { state } from '@angular/animations';
 
 interface OrderInformation {
   collab: {
@@ -298,20 +299,19 @@ export class ModalRoutesComponent {
   
   createRouteConfirmed() {
     this.service.createRoute(this.transporter?.transID, this.transporter?.vehID, this.collabotor?.collabID, this.formattedDate).subscribe(result => {
-      if (result['state'] === 'Fail') {
-        console.log("No se logró crear la ruta ", result);
-        this.showDialog = true;
-        this.positiveNotification = false;
-        this.message = `No se ha podido crear la ruta`;
-      } else {
+      if (result['state'] === 'Ok') {
         console.log("Se logró crear la ruta ", result.data);
         this.showDialog = true;
         this.positiveNotification = true;
         this.message = `Se ha creado la ruta`;
+      } else if (result['state'] === 'Fail') {
+        console.log("No se logró crear la ruta ", result);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = `No se ha podido crear la ruta`;
       }
     });
     this.showConfirmationModal = false;
     this.cerrarTodo();
-    this.ngOnChanges();
   }
 }

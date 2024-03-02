@@ -174,5 +174,6 @@ export class OrdersComponent {
 
   cerrarAddRoute(){
     this.addRuteVisible = false;
+    this.View();
   }
 }

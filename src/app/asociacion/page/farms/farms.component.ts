@@ -14,6 +14,7 @@ export class FarmsComponent {
   buttonFlag:boolean = false;
   searchFlag:boolean = false;
   docNumberInput?:number;
+  originalFarms: any[] = []; 
   farms: any[] = [];
 
   infoUser = this.formBuilder.group({
@@ -37,15 +38,16 @@ export class FarmsComponent {
     this.buttonFlag = false;
     this.searchFlag = false;
     this.service.getFarms(this.stateValue, undefined, undefined).subscribe(farms => {
-      if (farms['state'] === 'Fail') {
-        this.stateFlag = true;
-        console.log("No hay usuarios para mostrar");
-        this.farms = [];
-      }
       if (farms['state'] === 'Ok'){
+        this.originalFarms = farms.data; 
         this.farms = farms.data;
         this.stateFlag = false;
         console.log(farms.data);
+      } else if (farms['state'] === 'Fail') {
+        this.stateFlag = true;
+        console.log("No hay usuarios para mostrar");
+        this.farms = [];
+        this.originalFarms = [];
       }
     });
   }
@@ -53,25 +55,25 @@ export class FarmsComponent {
   docSearch() {
     console.log(this.docNumberInput);
   
-    // Verifica si el número de documento es un valor numérico antes de realizar la búsqueda
-    if (this.docNumberInput !== undefined && this.docNumberInput !== null && !isNaN(this.docNumberInput)) {
-      const resultFind = this.farms.find(person => person.docNumber === this.docNumberInput!.toString());
-      this.farms = [];
-      this.buttonFlag = true;
-      if (resultFind) {
+    if (this.docNumberInput) {
+      const resultFind = this.originalFarms.filter(person => person.docNumber.toString() === this.docNumberInput!.toString());
+  
+      if (resultFind.length > 0) {
         console.log('Persona encontrada:', resultFind);
-        // Puedes almacenar el objeto encontrado en otra variable si es necesario
-        // this.personFound = resultFind;
-        this.farms = [resultFind];
+        this.farms = resultFind;
         this.searchFlag = false;
       } else {
         this.searchFlag = true;
         console.log('Persona no encontrada');
+        this.farms = []; // Limpiar los resultados actuales si no se encuentra ninguna coincidencia
       }
     } else {
       console.log('Número de documento no válido');
+      this.farms = this.originalFarms;
+      this.searchFlag = false;
     }
   }
+  
   
 
   // Modal -----------------------------------------------------------

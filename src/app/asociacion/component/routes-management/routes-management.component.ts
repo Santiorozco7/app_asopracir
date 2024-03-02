@@ -116,6 +116,17 @@ export class RoutesManagementComponent {
     4: 'Vendida'
   };
 
+  typeSelect: { [key: string]: string } = {
+    0: 'Sencillo',
+    1: 'Camioneta estacas',
+    2: 'Camioneta platón',
+    3: 'Turbo',
+    4: 'Furgoneta',
+    5: 'Dobletroque',
+    6: 'Minimula',
+    7: 'Tractomula',
+  };
+
   constructor(private service: AsociacionService, private router: Router) {
   }
 

@@ -78,7 +78,7 @@ export class AsociacionService {
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=getRoutes`;
 
-    if (filter) {
+    if (filter !== undefined && filter !== null) {
       url += `&filter=${filter}`;
     }
     if (limit) {

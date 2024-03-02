@@ -51,11 +51,13 @@ export class AddRouteComponent {
   @Input() orderID:number = 0;
 
   routes: OrderInformation[] = [];
-  filteredRoutes: OrderInformation[] = [];
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
   
+  showConfirmationModal: boolean = false;
+
+
   showDialog = false;
   positiveNotification = true;
   message = '';
@@ -81,20 +83,39 @@ export class AddRouteComponent {
     this.cerrarModal.emit();
   }
 
+  // ngOnChanges(): void {
+  //   console.log("boolean ", this.addRouteVisible);
+  //   console.log("orderID", this.orderID);
+  //   this.service.getRoutes(0).subscribe(routes => {
+  //     if (routes['state'] === 'Ok') {
+  //       this.routes = routes.data;
+  //       console.log("rutas no iniciadas", this.routes);
+  //     } else if (routes['state'] === 'Fail'){
+  //       this.routes = routes.data;
+  //       console.log("No se encontraron las rutas", this.routes);
+  //     }
+  //   })
+  // } 
+
   ngOnChanges(): void {
     console.log("boolean ", this.addRouteVisible);
     console.log("orderID", this.orderID);
-    this.service.getRoutes().subscribe(routes => {
-      if (routes['state'] === 'Ok') {
-        this.routes = routes.data;
-        console.log("Se encontraron las rutas", this.routes);
-        this.filteredRoutes = this.routes.filter(route => route.routeState.toString().trim() === '0' || route.routeState.toString().trim() === '1');
-        console.log("Rutas con estado 0:", this.filteredRoutes);
-      } else {
-        this.routes = routes.data;
-        console.log("No se encontraron las rutas", this.routes);
+    this.service.getRoutes(0).subscribe(response => {
+      console.log("Respuesta del backend:", response); // Imprimir la respuesta completa
+      if (response['state'] === 'Ok') {
+        this.routes = response.data;
+        console.log("rutas no iniciadas", this.routes);
+      } else if (response['state'] === 'Fail') {
+        console.log("No se encontraron las rutas", response.data);
       }
-    })
+    });
+  }
+
+  routesAUX:number = 0;
+
+  addOrder(routeID:number) {
+    this.showConfirmationModal = true;
+    this.routesAUX = routeID;
   }
 
   addOrderToRoute(routeID:number){
@@ -113,7 +134,8 @@ export class AddRouteComponent {
         this.message = `Ha ocurrido un error`;
         this.cerrarTodo();
       }
-    })
+    });
+    this.showConfirmationModal = false;
   }
 
 }
