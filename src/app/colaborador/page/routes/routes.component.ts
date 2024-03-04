@@ -60,17 +60,16 @@ export class RoutesComponent {
   startRouteFlag: boolean = false;
   orderWithState2:boolean = false;
   todasOrdenesRecogidasFlag: boolean = false;
+  ordenRecogida: boolean = false;
+  ordenes: boolean = false;
 
   startWeight: number = 0;
   endWeight: number = 0;
+  
+  showDialog = false;
+  positiveNotification = true;
+  message = '';
 
-  // infoStartWeight = this.formBuilder.group({
-  //   startWeight: ["", [Validators.required]]
-  // })
-
-  // infoFinishWeight = this.formBuilder.group({
-  //   endWeight: ["", [Validators.required]]
-  // })
 
   constructor(private formBuilder: FormBuilder, private service: ColaboradorService, private router: Router) {}
 
@@ -102,7 +101,12 @@ export class RoutesComponent {
           this.orderWithState2 = false;
           console.log('No se encontró una orden con state igual a 2.', this.orderWithState2);
         }
+        this.ordenes = routes.data[0].orders.length > 0;
+        console.log(this.ordenes)
         this.todasOrdenesRecogidasFlag = this.routes && this.routes[0]?.orders.every(order => order.state === '4');
+        this.ordenRecogida = this.routes && this.routes.some(route => route.orders.some(order => order.state === '4'));
+
+        console.log(this.todasOrdenesRecogidasFlag, this.ordenRecogida)
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] !== 'Session expired')) {
         this.alertFlag = true;
         console.log('No se encontraron rutas',routes);
@@ -169,16 +173,16 @@ export class RoutesComponent {
           console.log('No se pudo cancelar',result);
         }
       });
-      if (this.orderWithState2) {
-        this.service.purgeRoute(routeID).subscribe(resultCancel => {
-          if (resultCancel['state'] === 'Ok') {
-            console.log('Se cancelo la ruta',resultCancel);
-          } else if (resultCancel['state'] === 'Fail') {
-            this.alertFlag = true;
-            console.log('No se pudo cancelar',resultCancel);
-          }
-        });
-      }
+    }
+    if (this.orderWithState2) {
+      this.service.purgeRoute(routeID).subscribe(resultCancel => {
+        if (resultCancel['state'] === 'Ok') {
+          console.log('Se cancelo la ruta',resultCancel);
+        } else if (resultCancel['state'] === 'Fail') {
+          this.alertFlag = true;
+          console.log('No se pudo cancelar',resultCancel);
+        }
+      });
     }
   }
 
@@ -192,8 +196,17 @@ export class RoutesComponent {
       this.service.updateRoute(routeID, undefined, startWeight, undefined, '1', undefined, undefined, undefined).subscribe(result => {
         if (result['state'] === 'Ok') {
           console.log('Se actualizo la ruta',result);
+          this.showDialog = true;
+          this.positiveNotification = true;
+          this.message = `Se ha iniciado la ruta con exito`;
+          setTimeout(() => {
+            this.ngOnInit();
+          }, 1000);
         } else if (result['state'] === 'Fail') {
           console.log('No se pudo actualizar la ruta',result);
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = `Ha ocurrido un error`;
         }
       });
       this.service.startRoute(routeID).subscribe(resultStart => {
@@ -239,5 +252,9 @@ export class RoutesComponent {
   }
   closeOrderForm(){
     this.modalVisible = false;
+  }
+
+  closeNotification(): void {
+    this.showDialog = false;
   }
 }

@@ -34,7 +34,7 @@
           </a>
         </div>
       </div>
-      <button class="button button--success" (click)="startRoute(route.routeID, 0)" *ngIf="route.routeState === '0' && !mostrarTodos">Iniciar ruta</button>
+      <button class="button button--success" (click)="startRoute(route.routeID, 0)" *ngIf="route.routeState === '0' && !mostrarTodos" [disabled]="!ordenes">Iniciar ruta</button>
       <div class="confirmation-modal" *ngIf="startRouteFlag">
         <div class="modal-content">
           <div class="modal-header">
@@ -57,7 +57,7 @@
       <div class="container__cards">
         <div class="header" [ngClass]="{'vertical__header': mostrarTodos}">
           <h3 class="subtitle" [ngClass]="{'vertical__subtitle': mostrarTodos}">órdenes</h3>
-          <a href="javascript:void(0);" class="show" (click)="toggleVerTodos()">
+          <a href="javascript:void(0);" class="show" (click)="toggleVerTodos()" *ngIf="ordenes">
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" *ngIf="mostrarTodos">
               <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
             </svg>       
@@ -89,12 +89,15 @@
             </ng-container>
           </ng-container>
         </div>
-        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState !== '2'">
+        <div class="card-transporter" *ngIf="!ordenes">
+          <p>Aun no hay ordenes agregadas a esta ruta</p>
+        </div>
+        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState !== '2' && ordenes">
           <p>Todas las órdenes han sido recogidas. Haga clic en finalizar ruta para continuar.</p>
         </div>
         <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState === '2'">
           <p>Esta ruta ha sido finalizada</p>
-        </div>
+        </div>        
       </div>
 
       <div class="confirmation-modal" *ngIf="alertendflag">
@@ -133,10 +136,17 @@
         </div>
       </div>
 
-      <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState === '0' && !mostrarTodos">Cancelar ruta</button>
-      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="route.routeState === '2'">Finalizar ruta</button>
+      <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState === '0' && !mostrarTodos" [disabled]="!ordenes">Cancelar ruta</button>
+      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="(todasOrdenesRecogidasFlag && route.routeState === '2') || !ordenRecogida">Finalizar ruta</button>
     </div>
   </ng-container>
 </div>
 
 <app-order-form [modalVisible]="modalVisible" [orderID]="orderID" (cerrarModal)="closeOrderForm()" (cerrarActualizar)="View(fechaActual)"></app-order-form>
+
+
+<app-notification *ngIf="showDialog" 
+[message]="message" 
+[positiveNotification]="positiveNotification" 
+(closeNotification)="closeNotification()">
+</app-notification>

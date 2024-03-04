@@ -98,10 +98,11 @@ export class ModalRoutesComponent {
   routesData:OrderInformation | undefined;
   transporter:transporterInformation | undefined;
   collabotor:CollaboratorInformation | undefined;
-  routerAux:number = 0;
-  formattedDate: string | undefined = undefined;
+
   showConfirmationModal: boolean = false;
   updateDate: boolean = false;
+
+  edit:boolean = false;
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
@@ -141,20 +142,9 @@ export class ModalRoutesComponent {
     4: 'Vendida'
   };
 
-  infoPickupDate = this.formBuilder.group({
-    pickupDate: ['0000-00-00']
-  });
+  pickupDate: string | undefined = undefined;
 
-  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private datePipe: DatePipe) {
-    this.infoPickupDate.valueChanges.subscribe(() => {
-      if((this.infoPickupDate.value.pickupDate !== this.routesData?.pickupDate) && this.managementFlag){
-        this.updateDate = true;
-        console.log('Hubo cambio');
-      } else {
-        this.updateDate = false;
-      }
-    });
-  }
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private datePipe: DatePipe) {  }
 
   closeNotification(): void {
     this.showDialog = false;
@@ -210,16 +200,15 @@ export class ModalRoutesComponent {
       if (this.managementFlag === true) {
         console.log("en el modal los datos son: ", this.routeID);
         this.service.getRoute(this.routeID).subscribe(route => {
-          if (route['state'] === 'Fail') {
-            console.log("No se encontraron detalles de la orden ", route);        
-          } else {
+          if (route['state'] === 'Ok'){
             this.routesData = route.data[0];
-            this.routerAux = route.data[0].routeID;
-            this.infoPickupDate.setValue({
-              pickupDate: this.routesData?.pickupDate || '0000-00-00' // Aquí debes colocar el valor deseado
-            });
             console.log("Detalles de la orden: ", this.routesData);
-          }
+            console.log("state", this.routesData?.routeState)
+            this.edit = this.routesData?.routeState === '0';
+            console.log(this.edit)
+          } else if (route['state'] === 'Fail') {
+            console.log("No se encontraron detalles de la orden ", route);        
+          } 
         });
       }
       if (this.managementFlag === false) {
@@ -248,14 +237,19 @@ export class ModalRoutesComponent {
 
   onSubmit() {
       console.log('Actualiza fecha de ruta');
-      if ((this.routesData?.routeID !== undefined) && this.infoPickupDate.value.pickupDate) {
-          this.service.updateRoute(this.routesData.routeID, this.infoPickupDate.value.pickupDate, undefined, undefined, undefined, undefined, undefined, undefined).subscribe(updateTransporter => {
-              if (updateTransporter['state'] === 'Fail') {
-                  console.log("No se logró actualizar ", updateTransporter);
-              } else {
-                  console.log("Se logró actualizar");
-                  this.cerrarTodo();
-              }
+      if ((this.routesData?.routeID !== undefined) && this.pickupDate) {
+          this.service.updateRoute(this.routesData.routeID, this.pickupDate, undefined, undefined, undefined, undefined, undefined, undefined).subscribe(updateTransporter => {
+            if (updateTransporter['state'] === 'Ok') {
+              console.log("Se logró actualizar");      
+              this.showDialog = true;
+              this.positiveNotification = true;
+              this.message = `La fecha ha sido actualizada`;
+            } else if (updateTransporter['state'] === 'Fail') {      
+              this.showDialog = true;
+              this.positiveNotification = false;
+              this.message = `No se ha sido actualizada`;
+              console.log("No se logró actualizar ", updateTransporter);
+            } 
           });
       } else {
           console.log("No se puede actualizar: routeID no está definido");
@@ -287,18 +281,18 @@ export class ModalRoutesComponent {
   }
 
   createRoute() {
-    if (this.infoPickupDate.value.pickupDate) {
-      this.formattedDate = this.infoPickupDate.value.pickupDate;
+    if (this.pickupDate) {
+      this.pickupDate = this.pickupDate;
     } else {
       // Manejar el caso en que el valor sea null o undefined
       console.error('El valor de la fecha es nulo o no está definido.');
     }
-    console.log("Crear ruta y la fecha ", this.formattedDate);
+    console.log("Crear ruta y la fecha ", this.pickupDate);
     this.showConfirmationModal = true;
   }
   
   createRouteConfirmed() {
-    this.service.createRoute(this.transporter?.transID, this.transporter?.vehID, this.collabotor?.collabID, this.formattedDate).subscribe(result => {
+    this.service.createRoute(this.transporter?.transID, this.transporter?.vehID, this.collabotor?.collabID, this.pickupDate).subscribe(result => {
       if (result['state'] === 'Ok') {
         console.log("Se logró crear la ruta ", result.data);
         this.showDialog = true;

@@ -52,9 +52,6 @@ export class OrderFormComponent implements OnChanges {
   constructor(private service: ColaboradorService) {}
 
   View(){
-    // if (this.orderID !== "" || this.orderID !== this.orderIDtemp) {
-      
-    // }
     this.service.getPrice().subscribe(price => {
       if (price['state'] === 'Ok') {
         this.firstQualityPricePerKilo = price.data.price1;
@@ -201,7 +198,7 @@ export class OrderFormComponent implements OnChanges {
           this.viewConfirmationModal = false;
           this.cerrarModal.emit();
           this.cerrarActualizar.emit();
-        }, 3200);
+        }, 1500);
       } else if (result['state'] === 'Fail') {
         console.log('No se pudo actualizar la orden',result);
         this.showDialog = true;

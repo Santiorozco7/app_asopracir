@@ -135,33 +135,44 @@
     </div>
 
     <!-- Crear Agricultor -->
-    <div class="form__section" *ngIf="farmerRegister">
-      <div class="section__item">
-        <label class="required" for="farmName">nombre del predio</label>
-        <input class="form__input" type="text" id="farmName" formControlName="farmName">
+    <ng-container *ngIf="farmerRegister">
+      <div class="form__section">
+        <div class="section__item">
+          <label class="required" for="farmName">nombre del predio</label>
+          <input class="form__input" type="text" id="farmName" formControlName="farmName">
+        </div>
+        <div class="section__item">
+          <label class="required" for="zoneName">vereda</label>
+          <input class="form__input" type="text" id="zoneName" formControlName="zoneName">
+        </div>
+        <div class="section__item">
+          <label class="required" for="cityFarm">Ciudad</label>
+          <input class="form__input" type="text" id="cityFarm" formControlName="cityFarm">
+        </div>
+        <div class="section__item">
+          <label class="required" for="area">hectareas (ha)</label>
+          <input class="form__input" type="text" id="area" formControlName="area">
+        </div>
+        <div class="section__item">
+          <label for="GPSposition">posición GPS</label>
+          <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
+        </div>       
       </div>
-      <div class="section__item">
-        <label class="required" for="zoneName">vereda</label>
-        <input class="form__input" type="text" id="zoneName" formControlName="zoneName">
-      </div>
-      <div class="section__item">
-        <label class="required" for="cityFarm">Ciudad</label>
-        <input class="form__input" type="text" id="cityFarm" formControlName="cityFarm">
-      </div>
-      <div class="section__item">
-        <label class="required" for="area">hectareas (ha)</label>
-        <input class="form__input" type="text" id="area" formControlName="area">
-      </div>
-      <div class="section__item">
-        <label for="GPSposition">posición GPS</label>
-        <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
-      </div>
-      <div class="section__item">
-        <label for="fileOwnerCertificate">certificado de propiedad</label>
-        <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
-      </div>        
-    </div>
 
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="getHeaderIcon().viewBox">
+          <path [attr.d]="getHeaderIcon().path"/>
+        </svg>
+        <span><h3 class="subtitle inline">carga de archivos</h3></span>
+      </div>
+      <div class="form__section">
+        <div class="section__item">
+          <label for="fileOwnerCertificate">certificado de propiedad</label>
+          <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
+        </div> 
+      </div>
+    </ng-container>
+      
     <!-- Crear Transportador -->
     <ng-container *ngIf="transporterRegister">
       <div class="form__section">

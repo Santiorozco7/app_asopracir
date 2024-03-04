@@ -76,7 +76,7 @@
         </tbody>        
       </table>
     </div>
-    <button class="button button--success" (click)="finish()" [disabled]="(firstQualityWeights.length === 0 && secondQualityWeights.length === 0) || !encargado" *ngIf="!mostrarTodos">
+    <button class="button button--success" (click)="finish()" [disabled]="(firstQualityWeights.length === 0 && secondQualityWeights.length === 0) || !encargado || viewConfirmationModal" *ngIf="!mostrarTodos">
       Finalizar Carga
     </button>
   </div>
@@ -102,11 +102,15 @@
       </div>
       <hr />
       <div class="modal-body">
-        <p>total a pagar</p>
-        <h2>${{ calculateTotalPriceAll() }}</h2>
-        <p>encargado {{encargado}}</p>
-        <p>Primera <span>${{calculateTotalBunches(firstQualityWeights)}} /Kg</span></p>
-        <p>Segunda <span>${{calculateTotalBunches(secondQualityWeights)}} /Kg</span></p>
+        <div class="group">  
+          <p class="item">total a pagar</p>
+          <p class="item total">$   {{ calculateTotalPriceAll() }}</p>
+        </div>
+        <p class="item">nombre del encargado <span class="item--value">{{encargado}}</span></p>
+        <div class="group">
+          <p class="item">racimos de primera <span class="item--value">{{calculateTotalWeight(firstQualityWeights)}} /Kg</span></p>
+          <p class="item">racimos de segunda <span class="item--value">{{calculateTotalWeight(secondQualityWeights)}} /Kg</span></p>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="button button--cancel" (click)="onCancel()">Cancelar</button>

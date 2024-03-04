@@ -135,7 +135,6 @@ export class RoutesManagementComponent {
   }
 
   cerrarTodo() {
-    this.actionFilter = 0;
     this.cerrarModal.emit();
   }
 
@@ -175,14 +174,14 @@ export class RoutesManagementComponent {
       this.ordersFlag = true;
       console.log("Entro a la accion 3");
       this.service.getPendingOrders().subscribe(orders => {
-        if (orders['state'] === 'Fail') {
-          console.log("No se encontraron ordenes pendientes ",orders);
-          this.ordersAlert = true;
-        } else {
+        if (orders['state'] === 'Ok') {
           this.orders = orders.data;
           console.log(orders.data);
           this.ordersAlert = false;
-        }  
+        } else if (orders['state'] === 'Fail') {
+          console.log("No se encontraron ordenes pendientes ",orders);
+          this.ordersAlert = true;
+        } 
       });
     }
   }
@@ -192,12 +191,18 @@ export class RoutesManagementComponent {
     if (this.managementFlag === true) {
       console.log(this.routeID," ",transID," ",vehID);
       this.service.updateRoute(this.routeID, undefined, undefined, undefined, undefined, transID, vehID, undefined).subscribe(updateTransporter => {
-        if (updateTransporter['state'] === 'Fail') {
-          console.log("No se logro actualizar ", updateTransporter);
-        } else {
+        if (updateTransporter['state'] === 'Ok') {
+          this.showDialog = true;
+          this.positiveNotification = true;
+          this.message = `Se ha actualizado el transportador`;
           console.log("Se logro actualizar");
           this.cerrarTodo();
-        }
+        } else if (updateTransporter['state'] === 'Fail') {
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = `ha ocurrido un error al actualizar`;
+          console.log("No se logro actualizar ", updateTransporter);
+        } 
       });
     }
     if (this.managementFlag === false) {
@@ -213,12 +218,18 @@ export class RoutesManagementComponent {
     if (this.managementFlag === true) {
       console.log(this.routeID," ",collabID);
       this.service.updateRoute(this.routeID, undefined, undefined, undefined, undefined, undefined, undefined, collabID).subscribe(updateTransporter => {
-        if (updateTransporter['state'] === 'Fail') {
-          console.log("No se logro actualizar ", updateTransporter);
-        } else {
+        if (updateTransporter['state'] === 'Ok'){
+          this.showDialog = true;
+          this.positiveNotification = true;
+          this.message = `Se ha actualizado el colaborador`;
           console.log("Se logro actualizar");
           this.cerrarTodo();
-        }
+        } else if (updateTransporter['state'] === 'Fail') {
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = `ha ocurrido un error al actualizar`;
+          console.log("No se logro actualizar ", updateTransporter);
+        } 
       });      
     }
     if (this.managementFlag === false) {
@@ -232,19 +243,18 @@ export class RoutesManagementComponent {
   addOrderToRoute(orderID:number){
     console.log(this.routeID," ",orderID);
     this.service.appendOrderToRoute(this.routeID, orderID).subscribe(order => {
-      if (order['state'] === 'Fail') {
-        console.log("No se logro asignar la orden a la ruta ",order);
-        this.showDialog = true;
-        this.positiveNotification = false;
-        this.message = `No se ha podido agregar la órden`;
-      } else {
+      if (order['state'] === 'Ok') {
         this.showDialog = true;
         this.positiveNotification = true;
         this.message = `Se ha agregado la órden`;
         console.log("Se agrego a la ruta ", order.data);
         this.cerrarTodo();
-      }
+      } else if (order['state'] === 'Fail') {
+        console.log("No se logro asignar la orden a la ruta ",order);
+        this.showDialog = true;
+        this.positiveNotification = false;
+        this.message = `No se ha podido agregar la órden`;
+      } 
     });
   }
-
 }

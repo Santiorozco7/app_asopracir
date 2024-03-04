@@ -80,9 +80,6 @@ export class RoutesComponent {
       console.log(this.filterValue);
       this.View();
     });
-    // Llama a la funciones con los valores iniciales
-    // this.month({ target: { value: this.months } });
-    // this.onSelectFilter({ target: { value: this.selectedValueAux } });
   }
 
   closeNotification(): void {

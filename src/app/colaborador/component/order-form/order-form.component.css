@@ -1,4 +1,5 @@
-ul, li {
+ul,
+li {
   outline: 0;
   margin: 0;
   padding: 0;
@@ -14,7 +15,7 @@ ul, li {
 }
 
 .header {
-    height: 5%;
+  height: 5%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30,14 +31,14 @@ ul, li {
 }
 
 .main__content {
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
 .card {
-    height: 90%;
+  height: 90%;
 }
 
 .table-container {
@@ -90,53 +91,77 @@ label {
 }
 
 .disabled {
-    pointer-events: none;
+  pointer-events: none;
 }
 
-
-
-
-
 .confirmation-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-  }
-  
-  .modal-header h2 {
-    margin: 0;
-  }
-  
-  hr {
-    margin-top: 20px;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
 
-  .modal-body {
-    margin-top: 25px;
-    margin-bottom: 35px;
-  }
-  
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: .5rem;
-  }
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+}
 
-  .confirmation-modal .button--success {
-    margin-top: 0;
-    width: 7rem;
-  }
+.modal-header h2 {
+  margin: 0;
+}
+
+hr {
+  margin-top: 20px;
+}
+
+.modal-body {
+  margin-top: 25px;
+  margin-bottom: 35px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-transform: capitalize;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.item--value {
+  text-transform: uppercase;
+}
+
+.total {
+  justify-content: center;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.confirmation-modal .button--success {
+  margin-top: 0;
+  width: 7rem;
+}
