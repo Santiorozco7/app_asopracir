@@ -71,7 +71,7 @@
     <div class="form__section">
       <div class="section__item">
         <label for="pickupDate">Fecha</label>
-        <input class="form__input" type="date" id="pickupDate" [(ngModel)]="pickupDate" (ngModelChange)="onSubmit()" [value]="getPickupDate()" [disabled]="!edit">
+        <input class="form__input" type="date" id="pickupDate" [(ngModel)]="pickupDate" (ngModelChange)="onSubmit()" [value]="getPickupDate()" [disabled]="!edit && managementFlag">
       </div>
     </div>
     

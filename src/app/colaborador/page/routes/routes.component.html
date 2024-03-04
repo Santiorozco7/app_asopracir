@@ -106,13 +106,17 @@
             <h2>Alerta</h2>
           </div>
           <hr />
-          <div class="modal-body">
+          <div class="modal-body" *ngIf="ordenRecogida">
             <h2>Aún hay órdenes pendientes por recoger</h2>
-            <p>Si estas no pueden ser recogidas y requiere recogerlas de nuevo, de clic en continuar para suspender la ruta</p>
+            <p>Si estas no pueden ser recogidas y requiere recogerlas de nuevo, de clic en continuar</p>
+          </div>
+          <div class="modal-body" *ngIf="!ordenRecogida">
+            <h2>niguna orden ha sido recogida</h2>
+            <p>Si estas no pueden ser recogidas y requiere recogerlas de nuevo, de clic en continuar</p>
           </div>
           <div class="modal-footer">
             <button class="button button--cancel" (click)="cancelStartRoute()">Cancelar</button>
-            <button class="button button--success" (click)="nextendRoute()">Aceptar</button>
+            <button class="button button--success" (click)="nextendRoute()">continuar</button>
           </div>
         </div>
       </div>
@@ -137,7 +141,7 @@
       </div>
 
       <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState === '0' && !mostrarTodos" [disabled]="!ordenes">Cancelar ruta</button>
-      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="(todasOrdenesRecogidasFlag && route.routeState === '2') || !ordenRecogida">Finalizar ruta</button>
+      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="(todasOrdenesRecogidasFlag && route.routeState === '2')">Finalizar ruta</button>
     </div>
   </ng-container>
 </div>
