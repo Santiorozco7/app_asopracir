@@ -40,12 +40,18 @@ export class ModalTransportComponent {
   message = '';
   confirmCallback: (() => void) | null = null;
 
-  
+  pictureFilePath: string | null = null;
+  documentFilePath: string | null = null;
+  rutFilePath: string | null = null;
+  runtFilePath: string | null = null;
+  soatFilePath: string | null = null;
+  techrevFilePath: string | null = null;
 
   docTypeselect: any[] = [
     { id: 0, name: 'Cédula de ciudadanía' },
-    { id: 1, name: 'Cédula de extranjería' },
-    { id: 2, name: 'NIT' },
+    { id: 1, name: 'Tarjeta de Identidad' },
+    { id: 2, name: 'Cédula de Extranjería' },
+    { id: 3, name: 'NIT' },
   ];
 
   bankAccountTypeselect: any[] = [
@@ -176,6 +182,14 @@ export class ModalTransportComponent {
           const transporterData = infoTransporter.data.transporter;
           const vehiclesData = infoTransporter.data.vehicles;
           
+          this.pictureFilePath = userData.filePicture;
+          this.documentFilePath = userData.fileDocument;
+          this.rutFilePath = userData.fileRUT;
+
+          this.runtFilePath = vehiclesData.fileRUNT;
+          this.soatFilePath = vehiclesData.fileSOAT;
+          this.techrevFilePath = vehiclesData.fileTechRev;
+
           // Se obtiene todo los datos del vehículo que pertenece a la placa
           this.vehicles = vehiclesData.filter((vehicle:Vehicle) => vehicle.plate === this.modalData.placa);
           console.log('Vehículo encontrado:', this.vehicles);
@@ -219,8 +233,12 @@ export class ModalTransportComponent {
       });
     }
   }
-
   
+  openDocument(filePath: string) {
+    if (filePath) {
+      window.open('http://localhost/uqplatanos/' + filePath, '_blank');
+    }
+  }
 
   onSubmit(): void {
     if (this.infoUser.valid) {

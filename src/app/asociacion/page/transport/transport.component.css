@@ -107,13 +107,13 @@ tbody {
 }
 
 .valid-cell {
-  background-color: green;
+  background-color: lightgreen;
   color: black;
 }
 
 .invalid-cell {
-  background-color: red;
-  color: white;
+  background-color: lightcoral;
+  color: black;
 }
 
 .button {

@@ -9,7 +9,6 @@ interface FarmInformation {
     city: string;
     farmID: string;
     farmName: string;
-    fileOwnerCertificate: string;
     zoneName: string;
   };
   farmerID: string;
@@ -27,9 +26,6 @@ interface FarmInformation {
     docNumber: string;
     docType: string;
     email: string;
-    fileDocument: string;
-    filePicture: string;
-    fileRUT: string;
     firstLastname: string;
     names: string;
     phoneNumber: string;
@@ -60,10 +56,17 @@ export class ModalFarmComponent {
   message = '';
   confirmCallback: (() => void) | null = null;
 
+  isStateActive: boolean = false; 
+
+  pictureFilePath: string | null = null;
+  documentFilePath: string | null = null;
+  rutFilePath: string | null = null;
+  fileOwnerCertificateFilePath: string | null = null;
+
   docTypeselect: any[] = [
-    { id: 0, name: 'CC' },
-    { id: 1, name: 'TI' },
-    { id: 2, name: 'CE' },
+    { id: 0, name: 'Cédula de ciudadanía' },
+    { id: 1, name: 'Tarjeta de Identidad' },
+    { id: 2, name: 'Cédula de Extranjería' },
     { id: 3, name: 'NIT' },
   ];
 
@@ -95,7 +98,6 @@ export class ModalFarmComponent {
     cityFarm: [''],
     farmID: [''],
     farmName: [''],
-    fileOwnerCertificate: [''],
     zoneName: [''],
     state: []
   });
@@ -129,7 +131,6 @@ export class ModalFarmComponent {
         currentFormValues.area !== originalFarmData.area ||
         currentFormValues.cityFarm !== originalFarmData.city ||
         currentFormValues.farmName !== originalFarmData.farmName ||
-        currentFormValues.fileOwnerCertificate !== originalFarmData.fileOwnerCertificate ||
         currentFormValues.zoneName !== originalFarmData.zoneName) {
         this.formChanges = true;
         this.verificaActualizar = 1;
@@ -141,6 +142,11 @@ export class ModalFarmComponent {
         this.formChanges = true;
         this.verificaActualizar = 2;
         console.log("Hubo cambios en el formulario");
+        if (currentFormValues.state !== null && currentFormValues.state !== undefined && currentFormValues.state === '1') {
+          this.isStateActive = true;
+        } else {
+          this.isStateActive = false;
+        }
       } else {
         this.formChanges = false;
         this.verificaActualizar = 0;
@@ -169,6 +175,12 @@ export class ModalFarmComponent {
           const userData = infoFarmer.data.user; 
           const farmData = infoFarmer.data.farm;
           const farmerStatus = infoFarmer.data.farmerStatus;
+
+          this.pictureFilePath = userData.filePicture;
+          this.documentFilePath = userData.fileDocument;
+          this.rutFilePath = userData.fileRUT;
+          this.fileOwnerCertificateFilePath = farmData.fileOwnerCertificate;
+
           console.log(farmerStatus);
           this.infoUser.patchValue({
             name: userData.names,
@@ -192,17 +204,27 @@ export class ModalFarmComponent {
             area: farmData.area,
             cityFarm: farmData.city,
             farmName: farmData.farmName,
-            fileOwnerCertificate: farmData.fileOwnerCertificate,
             zoneName: farmData.zoneName,
             
             state: farmerStatus
           });
+          if (this.infoUser.value.state !== null && this.infoUser.value.state !== undefined && this.infoUser.value.state === '1') {
+            this.isStateActive = true;
+          } else {
+            this.isStateActive = false;
+          }
           console.log("este es el estado del ususrio: ",this.infoUser.value);
       } else {
           console.log("El estado no es 'Ok'");
           console.log(infoFarmer);
       }
       });
+    }
+  }
+
+  openDocument(filePath: string) {
+    if (filePath) {
+      window.open('http://localhost/uqplatanos/' + filePath, '_blank');
     }
   }
 
@@ -230,7 +252,6 @@ export class ModalFarmComponent {
       const area: string = formData.area ?? "";
       const cityFarm: string = formData.cityFarm ?? "";
       const farmName: string = formData.farmName ?? "";
-      const fileOwnerCertificate: string = formData.fileOwnerCertificate ?? "";
       const zoneName: string = formData.zoneName ?? "";
 
       const farmerStatus:string = formData.state ?? "";

@@ -21,8 +21,6 @@
   </form>
 </div>
 
-<!-- <span class="error" *ngIf="searchValidator"><p>Este usuario ya ha sido registrado</p></span> -->
-
 <!-- Registrar nuevo usuario -->
 <div *ngIf="searchFlag">
   <div class="header">
@@ -32,89 +30,86 @@
       </svg>
       <span><h2 class="title inline">agregar nuevo usuario a asopracir</h2></span>
     </div>
-    <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
+    <button class="button button--cancel" (click)="cerrarTodo()">regresar</button>
   </div>
 
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit(1)">
+  <form class="form" [formGroup]="userForm" (ngSubmit)="onSubmit(1)">
+    <div>
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h3 class="subtitle inline">datos personales del usuario</h3></span>
+      </div>
+      <div class="form__section">
+        <div class="section__item">
+          <label class="required" for="name">Nombre completo</label>
+          <div class="item--name">
+            <input class="form__input col-4" type="text" id="name" formControlName="name" required>
+            <input class="form__input col-2" type="text" id="firstLastname" formControlName="firstLastname" placeholder="1er apellido" required>
+            <input class="form__input col-2" type="text" id="secondLastname" formControlName="secondLastname" placeholder="2do apellido">
+          </div>
+        </div>
+        <div class="section__item">
+          <label class="required" for="docType">Tipo de documento</label>
+          <select class="form__input select col-4" name="docType" id="docType" formControlName="docType" required>
+            <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="section__item">
+          <label class="required" for="docNumber">N° de Identificación</label>
+          <input class="form__input col-3" type="number" id="docNumber" formControlName="docNumber" required>
+        </div>
+        <div class="section__item">
+          <label for="docIssueDate">Fecha de Expedición</label>
+          <input class="form__input col-3" type="date" id="docIssueDate" formControlName="docIssueDate">
+        </div>
+        <div class="section__item">
+          <label for="docIssuePlace">Lugar de Expedición</label>
+          <input class="form__input col-4" type="text" id="docIssuePlace" formControlName="docIssuePlace">
+        </div>
+        <div class="section__item">
+          <label for="birthday">Fecha de Nacimiento</label>
+          <input class="form__input col-3" type="date" id="birthday" formControlName="birthday">
+        </div>
+        <div class="section__item">
+          <label for="address">Dirección</label>
+          <input class="form__input col-4" type="text" id="address" formControlName="address">
+        </div>
+        <div class="section__item">
+          <label for="city">Ciudad</label>
+          <input class="form__input col-4" type="text" id="city" formControlName="city">
+        </div>
+        <div class="section__item">
+          <label class="required" for="phoneNumber">Teléfono/Celular</label>
+          <input class="form__input col-3" type="number" id="phoneNumber" formControlName="phoneNumber">
+        </div>
+        <div class="section__item">
+          <label for="altPhoneNumber">Teléfono Alterno</label>
+          <input class="form__input col-3" type="number" id="altPhoneNumber" formControlName="altPhoneNumber">
+        </div>
+        <div class="section__item">
+          <label for="email">Correo Electrónico</label>
+          <input class="form__input col-4" type="email" id="email" formControlName="email">
+        </div>
+        <div class="section__item">
+          <label for="bankAccountBName">Nombre del Banco</label>
+          <input class="form__input col-3" type="text" id="bankAccountBName" formControlName="bankAccountBName">
+        </div>
+        <div class="section__item">
+          <label for="bankAccountType">Tipo de Cuenta</label>
+          <select class="form__input select col-3" name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
+            <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="section__item">
+          <label for="bankAccountNumber">Número de Cuenta</label>
+          <input class="form__input col-4" type="number" id="bankAccountNumber" formControlName="bankAccountNumber">
+        </div>
+      </div>
+    </div>
+
     <div class="section__header">
-      <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
-      </svg>
-      <span><h3 class="subtitle inline">datos personales del usuario</h3></span>
-    </div>
-
-    <div class="form__section">
-      <div class="section__item">
-        <label class="required" for="name">Nombres</label>
-        <input class="form__input col-3" type="text" id="name" formControlName="name" required>
-      </div>
-      <div class="section__item">
-        <label class="required" for="firstLastname">Primer Apellido</label>
-        <input class="form__input" type text id="firstLastname" formControlName="firstLastname" required>
-      </div>
-      <div class="section__item">
-        <label for="secondLastname">Segundo Apellido</label>
-        <input class="form__input" type="text" id="secondLastname" formControlName="secondLastname">
-      </div>
-      <div class="section__item">
-        <label class="required" for="docType">Tipo de documento</label>
-        <select class="form__input select" name="docType" id="docType" formControlName="docType" required>
-          <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
-        </select>
-      </div>
-      <div class="section__item">
-        <label class="required" for="docNumber">N° de Identificación</label>
-        <input class="form__input" type="number" id="docNumber" formControlName="docNumber" required>
-      </div>
-      <div class="section__item">
-        <label for="docIssueDate">Fecha de Expedición</label>
-        <input class="form__input" type="date" id="docIssueDate" formControlName="docIssueDate">
-      </div>
-      <div class="section__item">
-        <label for="docIssuePlace">Lugar de Expedición</label>
-        <input class="form__input" type="text" id="docIssuePlace" formControlName="docIssuePlace">
-      </div>
-      <div class="section__item">
-        <label for="birthday">Fecha de Nacimiento</label>
-        <input class="form__input" type="date" id="birthday" formControlName="birthday">
-      </div>
-      <div class="section__item">
-        <label for="address">Dirección</label>
-        <input class="form__input" type="text" id="address" formControlName="address">
-      </div>
-      <div class="section__item">
-        <label for="city">Ciudad</label>
-        <input class="form__input" type="text" id="city" formControlName="city">
-      </div>
-      <div class="section__item">
-        <label class="required" for="phoneNumber">Teléfono/Celular</label>
-        <input class="form__input" type="number" id="phoneNumber" formControlName="phoneNumber" required>
-      </div>
-      <div class="section__item">
-        <label for="altPhoneNumber">Teléfono Alterno</label>
-        <input class="form__input" type="number" id="altPhoneNumber" formControlName="altPhoneNumber">
-      </div>
-      <div class="section__item">
-        <label for="email">Correo Electrónico</label>
-        <input class="form__input" type="email" id="email" formControlName="email">
-      </div>
-      <div class="section__item">
-        <label for="bankAccountBName">Nombre del Banco</label>
-        <input class="form__input" type="text" id="bankAccountBName" formControlName="bankAccountBName">
-      </div>
-      <div class="section__item">
-        <label for="bankAccountType">Tipo de Cuenta</label>
-        <select class="form__input select" name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
-          <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
-        </select>
-      </div>
-      <div class="section__item">
-        <label for="bankAccountNumber">Número de Cuenta</label>
-        <input class="form__input" type="number" id="bankAccountNumber" formControlName="bankAccountNumber">
-      </div>
-    </div>
-
-    <div class="section__header mb">
       <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path d="M128 40c0-22.1 17.9-40 40-40s40 17.9 40 40V188.2c8.5-7.6 19.7-12.2 32-12.2c20.6 0 38.2 13 45 31.2c8.8-9.3 21.2-15.2 35-15.2c25.3 0 46 19.5 47.9 44.3c8.5-7.7 19.8-12.3 32.1-12.3c26.5 0 48 21.5 48 48v48 16 48c0 70.7-57.3 128-128 128l-16 0H240l-.1 0h-5.2c-5 0-9.9-.3-14.7-1c-55.3-5.6-106.2-34-140-79L8 336c-13.3-17.7-9.7-42.7 8-56s42.7-9.7 56 8l56 74.7V40zM240 304c0-8.8-7.2-16-16-16s-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304zm48-16c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304c0-8.8-7.2-16-16-16zm80 16c0-8.8-7.2-16-16-16s-16 7.2-16 16v96c0 8.8 7.2 16 16 16s16-7.2 16-16V304z"/>
       </svg>
@@ -127,16 +122,344 @@
       </select>
     </div>
     
-    <div class="section__header">
-      <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="getHeaderIcon().viewBox">
-        <path [attr.d]="getHeaderIcon().path"/>
-      </svg>
-      <span><h3 class="subtitle inline">{{ getHeader() }}</h3></span>
+    <div>
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="getHeaderIcon().viewBox">
+          <path [attr.d]="getHeaderIcon().path"/>
+        </svg>
+        <span><h3 class="subtitle inline">{{ getHeader() }}</h3></span>
+      </div>
+      <!-- Crear Agricultor -->
+      <ng-container *ngIf="farmerRegister">
+        <div class="form__section">
+          <div class="section__item">
+            <label class="required" for="farmName">nombre del predio</label>
+            <input class="form__input" type="text" id="farmName" formControlName="farmName">
+          </div>
+          <div class="section__item">
+            <label class="required" for="zoneName">vereda</label>
+            <input class="form__input" type="text" id="zoneName" formControlName="zoneName">
+          </div>
+          <div class="section__item">
+            <label class="required" for="cityFarm">Ciudad</label>
+            <input class="form__input" type="text" id="cityFarm" formControlName="cityFarm">
+          </div>
+          <div class="section__item">
+            <label class="required" for="area">hectareas (ha)</label>
+            <input class="form__input" type="text" id="area" formControlName="area">
+          </div>
+          <div class="section__item">
+            <label for="GPSposition">posición GPS</label>
+            <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
+          </div>       
+        </div>
+  
+        <div class="section__header">
+          <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="getHeaderIcon().viewBox">
+            <path [attr.d]="getHeaderIcon().path"/>
+          </svg>
+          <span><h3 class="subtitle inline">carga de archivos</h3></span>
+        </div>
+        <div class="form__section">
+          <div class="section__item">
+            <label for="fileOwnerCertificate">certificado de propiedad</label>
+            <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
+          </div> 
+        </div>
+      </ng-container>
+        
+      <!-- Crear Transportador -->
+      <ng-container *ngIf="transporterRegister">
+        <div class="form__section">
+          <div class="section__item">
+            <label class="required" for="licenseType">Tipo de Licencia</label>
+            <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
+          </div>
+          <div class="section__item">
+            <label class="required" for="licenseExpiration">fecha de expiración</label>
+            <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
+          </div> 
+        </div>
+    
+        <div class="section__header">
+          <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+          </svg>
+          <span><h3 class="subtitle inline">información del vehiculo</h3></span>
+        </div>
+        <div class="form__section">
+          <div class="section__item">
+            <label class="required" for="plate">placa</label>
+            <input class="form__input" type="text" id="plate" formControlName="plate">
+          </div>
+          <div class="section__item">
+            <label class="required" for="soatExpiration">vencimiento de SOAT</label>
+            <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
+          </div>
+          <div class="section__item">
+            <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
+            <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
+          </div>
+          <div class="section__item">
+              <label class="required" for="type">tipo</label>
+              <select class="form__input select" name="docType" id="type" formControlName="type">
+                <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
+              </select>
+          </div>
+          <div class="section__item">
+              <label class="required" for="state">estado</label>
+              <select class="form__input select" name="docType" id="state" formControlName="state">
+                <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
+              </select>
+          </div>
+          <div class="section__item">
+            <label class="required" for="capacity">capacidad (T)</label>
+            <input class="form__input" type="number" id="capacity" formControlName="capacity">
+          </div>
+          <div class="section__item">
+            <label for="comments">comentarios</label>
+            <textarea rows="2" id="comments" formControlName="comments"></textarea>
+          </div>
+        </div>
+      </ng-container>
+      
+      <!-- Crear Colaborador -->
+      <div class="form__section" *ngIf="collaboratorRegister">
+        <p>Escribir "Tesorero" para registrarlo como colaborador</p>
+        <div class="section__item">
+          <label class="required" for="roleNameCollab">nombre colaborador</label>
+          <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
+        </div>     
+      </div>
+      
+      <!-- Crear Asociado -->
+      <div class="form__section" *ngIf="assocRegister">
+        <p>Escribir "Admin" para registrarlo como asociado</p>
+        <div class="section__item">
+          <label class="required" for="roleNameAssoc">nombre colaborador</label>
+          <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
+        </div>     
+      </div>
     </div>
 
-    <!-- Crear Agricultor -->
-    <ng-container *ngIf="farmerRegister">
+    <button class="button button--success" type="submit" [disabled]=" 
+      !(areRequiredFieldsValid()) ||
+      (farmerRegister && !areAgricultorFieldsValid()) || 
+      (assocRegister && !areAssocFieldsValid()) ||
+      (collaboratorRegister && !areCollabFieldsValid()) || 
+      (transporterRegister && !areTransporterFieldsValid())">
+      <div *ngIf="farmerRegister">Crear Agricultor</div>
+      <div *ngIf="assocRegister">Crear Asociado</div>
+      <div *ngIf="transporterRegister">Crear Transportador</div>
+      <div *ngIf="collaboratorRegister">Crear Colaborador</div>
+    </button>
+    
+  </form>
+</div>
+
+<!-- Asignar mas roles-->
+<div *ngIf="searchValidator">
+  <div class="header">
+    <div>
+      <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+        <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+      </svg>
+      <span><h2 class="title inline">usuario ya registrado</h2></span>
+    </div>
+    <button class="button button--cancel" (click)="cerrarTodo()">regresar</button>
+  </div>
+
+  <div class="form">
+    <!-- datos personales -->
+    <div>
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h3 class="subtitle inline">datos personales</h3></span>
+      </div>
       <div class="form__section">
+        <div class="section__item">
+          <label for="nameReg">Nombres</label>
+          <div class="item--name">
+            <input class="form__input col-4" type="text" id="nameReg"  [value]="userData.names || 'por definir'" disabled>
+            <input class="form__input col-2" type text id="firstLastnameReg" [value]="userData.firstLastname" disabled>
+            <input class="form__input col-2" type="text" id="secondLastnameReg"  [value]="userData.secondLastname" disabled>
+          </div>
+        </div>
+        <div class="section__item">
+          <label for="docTypeReg">Tipo de documento</label>
+          <select class="form__input select col-4" name="docTypeReg" id="docTypeReg"  [value]="userData.docType" disabled>
+            <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="section__item">
+          <label for="docNumberReg">N° de Identificación</label>
+          <input class="form__input col-3" type="number" id="docNumberReg"  [value]="userData.docNumber" disabled required>
+        </div>
+      </div>
+    </div>
+    <!-- cargar archivos -->
+    <div>
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h3 class="subtitle inline">Cargar archivos</h3></span>
+      </div>
+      <div class="form__section">
+        <div class="section_photo">
+          <div class="photo" (click)="fileInput.click()">
+            <!-- Si no hay una foto cargada, muestra el círculo con el ícono por defecto -->
+            <svg class="icon__photo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+            </svg>
+            <!-- Input de carga de archivos visible -->
+            <input #fileInput type="file" style="display: none" (change)="onFileSelected($event, 'user_picture')" accept="image/*">
+            <!-- Si hay una foto cargada, muestra la imagen dentro del círculo -->
+            <img *ngIf="photoFilePath" [src]="'http://localhost/uqplatanos/' + photoFilePath" alt="Foto del usuario">
+          </div>
+        </div>
+    
+        <div class="section__documents">
+          <div class="documents">
+            <div class="document">
+              <label for="doc_user">Documento de identidad</label>
+              <div class="doc" (click)="doc_user.click()">
+                <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                </svg>
+              </div>
+              <input #doc_user type="file" style="display: none" (change)="onFileSelected($event, 'user_document')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
+                {{ uploadMessage }}
+              </div>
+            </div>
+            <div class="document">
+              <label for="doc_user">Registro Unico Tributario (RUT)</label>
+              <div class="doc" (click)="rut_user.click()">
+                <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                </svg>
+              </div>
+              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'user_rut')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
+                {{ uploadMessage }}
+              </div>
+            </div>
+          </div>
+    
+          <!-- documents farmer -->
+          <div class="documents" *ngIf="this.userFarmer">
+            <div class="document">
+              <label for="doc_user">Certificado del dueño de la finca</label>
+              <div class="doc" (click)="rut_user.click()">
+                <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                </svg>
+              </div>
+              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'farm_ownercertificate')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
+                {{ uploadMessage }}
+              </div>
+            </div>
+          </div>
+    
+          <!-- documents transporter -->
+          <div class="documents" *ngIf="this.userTransporter">
+            <div class="document">
+              <label for="doc_user">Licencia de transporte</label>
+              <div class="doc" (click)="rut_user.click()">
+                <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                </svg>
+              </div>
+              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'transporter_license')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
+                {{ uploadMessage }}
+              </div>
+            </div>
+            <div class="document">
+              <label for="doc_user">Registro Único Nacional de Tránsito (RUNT)</label>
+              <div class="doc" (click)="rut_user.click()">
+                <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                </svg>
+              </div>
+              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_runt')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
+                {{ uploadMessage }}
+              </div>
+            </div>
+            <div class="document">
+              <label for="doc_user">Seguro obligatorio automovilístico (SOAT)</label>
+              <div class="doc" (click)="rut_user.click()">
+                <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                </svg>
+              </div>
+              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_soat')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
+                {{ uploadMessage }}
+              </div>
+            </div>
+            <div class="document">
+              <label for="doc_user">Revisión técnico-mecánica del vehículo</label>
+              <div class="doc" (click)="rut_user.click()">
+                <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                  <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                </svg>
+              </div>
+              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_techrev')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
+                {{ uploadMessage }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- roles asociados al usuario -->
+    <div>
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h3 class="subtitle inline">Roles asociados al usuario</h3></span>
+      </div>
+      <div class="section__item">
+        <ng-container *ngIf="!userFarmer && !userAssoc && !userCollaborator && !userTransporter; else rolesSelect">
+          <p>Aun no cuenta con un rol asignado</p>
+        </ng-container>
+        <ng-template #rolesSelect>
+          <input class="form__input" type="text" value="Agricultor" *ngIf="userFarmer" disabled>
+          <input class="form__input" type="text" value="Asociado" *ngIf="userAssoc" disabled>
+          <input class="form__input" type="text" value="Colaborador" *ngIf="userCollaborator" disabled>
+          <input class="form__input" type="text" value="Transportador" *ngIf="userTransporter" disabled>
+        </ng-template>
+      </div>
+    </div>
+    <!-- posibles roles por agregar -->
+    <div>
+      <div class="section__header">
+        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h3 class="subtitle inline">posibles roles por agregar</h3></span>
+      </div>
+      <div class="form__section">
+        <div class="rolesSelect">
+          <button class="button button--success" *ngIf="!userFarmer" (click)="rolesAdd('0')">Agricultor</button>
+          <button class="button button--success" *ngIf="!userAssoc" (click)="rolesAdd('1')">Asociado</button>
+          <button class="button button--success" *ngIf="!userCollaborator" (click)="rolesAdd('2')">Colaborador</button>
+          <button class="button button--success" *ngIf="!userTransporter" (click)="rolesAdd('3')">Transportador</button>        
+        </div>
+      </div>
+    </div>
+    <!-- Agregar nuevos roles a usuarios existentes -->
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit(2)"> 
+      <!-- Crear Agricultor -->
+      <div class="form__section" *ngIf="farmerRegister">
         <div class="section__item">
           <label class="required" for="farmName">nombre del predio</label>
           <input class="form__input" type="text" id="farmName" formControlName="farmName">
@@ -156,43 +479,23 @@
         <div class="section__item">
           <label for="GPSposition">posición GPS</label>
           <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
-        </div>       
-      </div>
-
-      <div class="section__header">
-        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="getHeaderIcon().viewBox">
-          <path [attr.d]="getHeaderIcon().path"/>
-        </svg>
-        <span><h3 class="subtitle inline">carga de archivos</h3></span>
-      </div>
-      <div class="form__section">
+        </div>
         <div class="section__item">
           <label for="fileOwnerCertificate">certificado de propiedad</label>
           <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
-        </div> 
-      </div>
-    </ng-container>
-      
-    <!-- Crear Transportador -->
-    <ng-container *ngIf="transporterRegister">
-      <div class="form__section">
+        </div>        
+      </div>  
+  
+      <!-- Crear Transportador -->
+      <div class="form__section" *ngIf="transporterRegister">
         <div class="section__item">
           <label class="required" for="licenseType">Tipo de Licencia</label>
           <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
-        </div>
+        </div>    
         <div class="section__item">
           <label class="required" for="licenseExpiration">fecha de expiración</label>
           <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
-        </div> 
-      </div>
-  
-      <div class="section__header">
-        <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
-        </svg>
-        <span><h3 class="subtitle inline">información del vehiculo</h3></span>
-      </div>
-      <div class="form__section">
+        </div>
         <div class="section__item">
           <label class="required" for="plate">placa</label>
           <input class="form__input" type="text" id="plate" formControlName="plate">
@@ -226,244 +529,38 @@
           <textarea rows="2" id="comments" formControlName="comments"></textarea>
         </div>
       </div>
-    </ng-container>
-    
-    <!-- Crear Colaborador -->
-    <div class="form__section" *ngIf="collaboratorRegister">
-      <p>Escribir "Tesorero" para registrarlo como colaborador</p>
-      <div class="section__item">
-        <label class="required" for="roleNameCollab">nombre colaborador</label>
-        <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
-      </div>     
-    </div>
-    
-    <!-- Crear Asociado -->
-    <div class="form__section" *ngIf="assocRegister">
-      <p>Escribir "Admin" para registrarlo como asociado</p>
-      <div class="section__item">
-        <label class="required" for="roleNameAssoc">nombre colaborador</label>
-        <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
-      </div>     
-    </div>
-
-    <button class="button button--success" type="submit" [disabled]=" 
-      !(areRequiredFieldsValid()) ||
-      (farmerRegister && !areAgricultorFieldsValid()) || 
-      (assocRegister && !areAssocFieldsValid()) ||
-      (collaboratorRegister && !areCollabFieldsValid()) || 
-      (transporterRegister && !areTransporterFieldsValid())">
-      <div *ngIf="farmerRegister">Crear Agricultor</div>
-      <div *ngIf="assocRegister">Crear Asociado</div>
-      <div *ngIf="transporterRegister">Crear Transportador</div>
-      <div *ngIf="collaboratorRegister">Crear Colaborador</div>
-    </button>
-    
-  </form>
-</div>
-
-<!-- Asignar mas roles-->
-<div *ngIf="searchValidator">
-  <div class="header">
-    <div>
-      <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-        <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
-      </svg>
-      <span><h2 class="title inline">usuario ya registrado</h2></span>
-    </div>
-    <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
-  </div>
-
-  <div class="form__section">
-    <div class="section__item">
-      <label for="nameReg">Nombres</label>
-      <input class="form__input col-3" type="text" id="nameReg"  [value]="userData.names || 'por definir'" disabled>
-    </div>
-    <div class="section__item">
-      <label for="firstLastnameReg">Primer Apellido</label>
-      <input class="form__input" type text id="firstLastnameReg" [value]="userData.firstLastname" disabled>
-    </div>
-    <div class="section__item">
-      <label for="secondLastnameReg">Segundo Apellido</label>
-      <input class="form__input" type="text" id="secondLastnameReg"  [value]="userData.secondLastname" disabled>
-    </div>
-    <div class="section__item">
-      <label for="docTypeReg">Tipo de documento</label>
-      <select class="form__input select" name="docTypeReg" id="docTypeReg"  [value]="userData.docType" disabled>
-        <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
-      </select>
-    </div>
-    <div class="section__item">
-      <label for="docNumberReg">N° de Identificación</label>
-      <input class="form__input" type="number" id="docNumberReg"  [value]="userData.docNumber" disabled required>
-    </div>
-    <div class="section__item">
-      <label for="docIssueDateReg">Fecha de Expedición</label>
-      <input class="form__input" type="date" id="docIssueDateReg"  [value]="userData.docIssueDate" disabled>
-    </div>
-    <div class="section__item">
-      <label for="birthdayReg">Fecha de Nacimiento</label>
-      <input class="form__input" type="date" id="birthdayReg"  [value]="userData.birthday" disabled>
-    </div>
-    <div class="section__item">
-      <label for="addressReg">Dirección</label>
-      <input class="form__input" type="text" id="addressReg"  [value]="userData.address" disabled>
-    </div>
-    <div class="section__item">
-      <label for="cityReg">Ciudad</label>
-      <input class="form__input" type="text" id="cityReg"  [value]="userData.city" disabled>
-    </div>
-    <div class="section__item">
-      <label for="phoneNumberReg">Teléfono/Celular</label>
-      <input class="form__input" type="number" id="phoneNumberReg"  [value]="userData.phoneNumber" disabled required>
-    </div>
-    <div class="section__item">
-      <label for="altPhoneNumberReg">Teléfono Alterno</label>
-      <input class="form__input" type="number" id="altPhoneNumberReg"  [value]="userData.altPhoneNumber" disabled>
-    </div>
-    <div class="section__item">
-      <label for="emailReg">Correo Electrónico</label>
-      <input class="form__input" type="email" id="emailReg"  [value]="userData.email" disabled>
-    </div>
-  </div>
-
   
-  <div class="section__header">
-    <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
-    </svg>
-    <span><h3 class="subtitle inline">Roles asociados al usuario</h3></span>
-  </div>
-  <div class="section__item">
-    <ng-container *ngIf="!userFarmer && !userAssoc && !userCollaborator && !userTransporter; else rolesSelect">
-      <p>Aun no cuenta con un rol asignado</p>
-    </ng-container>
-    <ng-template #rolesSelect>
-      <input class="form__input" type="text" value="Agricultor" *ngIf="userFarmer" disabled>
-      <input class="form__input" type="text" value="Asociado" *ngIf="userAssoc" disabled>
-      <input class="form__input" type="text" value="Colaborador" *ngIf="userCollaborator" disabled>
-      <input class="form__input" type="text" value="Transportador" *ngIf="userTransporter" disabled>
-    </ng-template>
-  </div>
-
-  <div class="section__header">
-    <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-      <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
-    </svg>
-    <span><h3 class="subtitle inline">posibles roles por agregar</h3></span>
-  </div>
-  <div class="form__section">
-    <div class="rolesSelect">
-      <button class="button button--success" *ngIf="!userFarmer" (click)="rolesAdd('0')">Agricultor</button>
-      <button class="button button--success" *ngIf="!userAssoc" (click)="rolesAdd('1')">Asociado</button>
-      <button class="button button--success" *ngIf="!userCollaborator" (click)="rolesAdd('2')">Colaborador</button>
-      <button class="button button--success" *ngIf="!userTransporter" (click)="rolesAdd('3')">Transportador</button>        
-    </div>
-  </div>
+      <!-- Crear Colaborador -->
+      <div class="form__section" *ngIf="collaboratorRegister">
+        <p>Escribir "Tesorero" para registrarlo como colaborador</p>
+        <div class="section__item">
+          <label class="required" for="roleNameCollab">nombre colaborador</label>
+          <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
+        </div>     
+      </div>
   
-  <!-- Agregar nuevos roles a usuarios existentes -->
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit(2)"> 
-    <!-- Crear Agricultor -->
-    <div class="form__section" *ngIf="farmerRegister">
-      <div class="section__item">
-        <label class="required" for="farmName">nombre del predio</label>
-        <input class="form__input" type="text" id="farmName" formControlName="farmName">
+      <!-- Crear Asociado -->
+      <div class="form__section" *ngIf="assocRegister">
+        <p>Escribir "Admin" para registrarlo como asociado</p>
+        <div class="section__item">
+          <label class="required" for="roleNameAssoc">nombre colaborador</label>
+          <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
+        </div>     
       </div>
-      <div class="section__item">
-        <label class="required" for="zoneName">vereda</label>
-        <input class="form__input" type="text" id="zoneName" formControlName="zoneName">
-      </div>
-      <div class="section__item">
-        <label class="required" for="cityFarm">Ciudad</label>
-        <input class="form__input" type="text" id="cityFarm" formControlName="cityFarm">
-      </div>
-      <div class="section__item">
-        <label class="required" for="area">hectareas (ha)</label>
-        <input class="form__input" type="text" id="area" formControlName="area">
-      </div>
-      <div class="section__item">
-        <label for="GPSposition">posición GPS</label>
-        <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
-      </div>
-      <div class="section__item">
-        <label for="fileOwnerCertificate">certificado de propiedad</label>
-        <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
-      </div>        
-    </div>  
-
-    <!-- Crear Transportador -->
-    <div class="form__section" *ngIf="transporterRegister">
-      <div class="section__item">
-        <label class="required" for="licenseType">Tipo de Licencia</label>
-        <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
-      </div>    
-      <div class="section__item">
-        <label class="required" for="licenseExpiration">fecha de expiración</label>
-        <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
-      </div>
-      <div class="section__item">
-        <label class="required" for="plate">placa</label>
-        <input class="form__input" type="text" id="plate" formControlName="plate">
-      </div>
-      <div class="section__item">
-        <label class="required" for="soatExpiration">vencimiento de SOAT</label>
-        <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
-      </div>
-      <div class="section__item">
-        <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
-        <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
-      </div>
-      <div class="section__item">
-          <label class="required" for="type">tipo</label>
-          <select class="form__input select" name="docType" id="type" formControlName="type">
-            <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
-          </select>
-      </div>
-      <div class="section__item">
-          <label class="required" for="state">estado</label>
-          <select class="form__input select" name="docType" id="state" formControlName="state">
-            <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
-          </select>
-      </div>
-      <div class="section__item">
-        <label class="required" for="capacity">capacidad (T)</label>
-        <input class="form__input" type="number" id="capacity" formControlName="capacity">
-      </div>
-      <div class="section__item">
-        <label for="comments">comentarios</label>
-        <textarea rows="2" id="comments" formControlName="comments"></textarea>
-      </div>
-    </div>
-
-    <!-- Crear Colaborador -->
-    <div class="form__section" *ngIf="collaboratorRegister">
-      <p>Escribir "Tesorero" para registrarlo como colaborador</p>
-      <div class="section__item">
-        <label class="required" for="roleNameCollab">nombre colaborador</label>
-        <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
-      </div>     
-    </div>
-
-    <!-- Crear Asociado -->
-    <div class="form__section" *ngIf="assocRegister">
-      <p>Escribir "Admin" para registrarlo como asociado</p>
-      <div class="section__item">
-        <label class="required" for="roleNameAssoc">nombre colaborador</label>
-        <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
-      </div>     
-    </div>
-    
-    <button type="submit" class="button button--success" [disabled]=" 
-      (farmerRegister && !areAgricultorFieldsValid()) || 
-      (assocRegister && !areAssocFieldsValid()) ||
-      (collaboratorRegister && !areCollabFieldsValid()) || 
-      (transporterRegister && !areTransporterFieldsValid())"
-      *ngIf="farmerRegister || collaboratorRegister || transporterRegister || assocRegister">
-      <div *ngIf="farmerRegister">Crear Agricultor</div>
-      <div *ngIf="transporterRegister">Crear Transportador</div>
-      <div *ngIf="collaboratorRegister">Crear Colaborador</div>
-      <div *ngIf="assocRegister">Crear Asociado</div>
-    </button>
-  </form>
+      
+      <button type="submit" class="button button--success" [disabled]=" 
+        (farmerRegister && !areAgricultorFieldsValid()) || 
+        (assocRegister && !areAssocFieldsValid()) ||
+        (collaboratorRegister && !areCollabFieldsValid()) || 
+        (transporterRegister && !areTransporterFieldsValid())"
+        *ngIf="farmerRegister || collaboratorRegister || transporterRegister || assocRegister">
+        <div *ngIf="farmerRegister">Crear Agricultor</div>
+        <div *ngIf="transporterRegister">Crear Transportador</div>
+        <div *ngIf="collaboratorRegister">Crear Colaborador</div>
+        <div *ngIf="assocRegister">Crear Asociado</div>
+      </button>
+    </form>
+  </div>
 </div>
 <app-notification *ngIf="showDialog" 
 [message]="message" 

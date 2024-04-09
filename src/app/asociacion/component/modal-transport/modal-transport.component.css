@@ -43,25 +43,79 @@ button {
   text-transform: capitalize;
 }
 
-/* .section__header {
+.section {
+  width: 20%;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+}
 
-} */
+.section--top {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.section__photo {
+  width: 20%;
+}
+
+.photo {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 1px solid lightgray;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.icon__photo {
+  width: 4rem;
+}
+
+.documents ul {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.documents li {
+  list-style: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.form {
+  display: flex;
+  gap: 60px;
+  flex-direction: column;
+}
 
 .form__section {
   display: flex;
   flex-wrap: wrap;
-  border: solid 1px black;
+  border: solid 1px lightgray;
   border-radius: 15px;
   padding: 15px;
-  padding-top: 35px;
   justify-content: space-between;
-  margin-bottom: 40px;
+  gap: 40px;
+}
+
+.form--right {
+  width: 75%;
 }
 
 .section__item {
   display: flex;
-  margin: 0 20px 20px 0;
-  align-items: center;
+  flex-direction: column;
+  align-items: start;
+  gap: 10px;
 }
 
 .form__item {
@@ -73,6 +127,11 @@ button {
 
 label {
   margin-right: 10px;
+}
+
+.item--name {
+  gap: 15px;
+  display: flex;
 }
 
 .form__input {
@@ -104,6 +163,18 @@ label {
 
 .mb {
   margin-bottom: 40px;
+}
+
+.col-2 {
+  width: 100px;
+}
+
+.col-3 {
+  width: 150px;
+}
+
+.col-4 {
+  width: 200px;
 }
 
 .button {

@@ -6,139 +6,240 @@
       </svg>
       <span><h1 class="title inline">actualizar información</h1></span>
     </div>
-    <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
+    <button class="button button--cancel" (click)="cerrarTodo()">regresar</button>
   </div>
-  <form [formGroup]="infoUser" (ngSubmit)="onSubmit()">
-    <div class="section__header">
-      <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
-      </svg>
-      <span><h2 class="subtitle inline">Datos personales</h2></span>
-    </div>
+  <form class="form" [formGroup]="infoUser" (ngSubmit)="onSubmit()">
     <div class="form__section">
-      <div class="section__item">
-        <label class="required" for="name">Nombres</label>
-        <input class="form__input col-3" type="text" id="name" formControlName="name" required>
+      <!-- <div class="section__header">
+        <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h2 class="subtitle inline">Datos personales</h2></span>
+      </div> -->
+      <div class="section">
+        <div class="photo">
+          <svg class="icon__photo" *ngIf="!this.pictureFilePath" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+          </svg>
+          <img *ngIf="this.pictureFilePath" [src]="'http://localhost/uqplatanos/' + this.pictureFilePath" alt="Foto del usuario">
+        </div>
+
+        <div class="documents">
+          <ul>
+            <li *ngIf="documentFilePath" (click)="openDocument(documentFilePath)"><a class="link">Ver documento de identidad</a></li>
+            <li *ngIf="rutFilePath" (click)="openDocument(rutFilePath)"><a class="link">Ver RUT</a></li>
+            <li *ngIf="runtFilePath" (click)="openDocument(runtFilePath)"><a class="link">Ver certificado de dueño de la finca</a></li>
+            <li *ngIf="soatFilePath" (click)="openDocument(soatFilePath)"><a class="link">Ver certificado de dueño de la finca</a></li>
+            <li *ngIf="techrevFilePath" (click)="openDocument(techrevFilePath)"><a class="link">Ver certificado de dueño de la finca</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="section__item">
-        <label class="required" for="firstLastname">Primer Apellido</label>
-        <input class="form__input" type text id="firstLastname" formControlName="firstLastname" required>
-      </div>
-      <div class="section__item">
-        <label for="secondLastname">Segundo Apellido</label>
-        <input class="form__input" type="text" id="secondLastname" formControlName="secondLastname">
-      </div>
-      <div class="section__item">
-        <label class="required" for="docType">Tipo de documento</label>
-        <select class="form__input select" name="docType" id="docType" formControlName="docType" required>
-          <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
-        </select>
-      </div>
-      <div class="section__item">
-        <label class="required" for="docNumber">N° de Identificación</label>
-        <input class="form__input" type="number" id="docNumber" formControlName="docNumber" required>
-      </div>
-      <div class="section__item">
-        <label for="docIssueDate">Fecha de Expedición</label>
-        <input class="form__input" type="date" id="docIssueDate" formControlName="docIssueDate">
-      </div>
-      <div class="section__item">
-        <label for="docIssuePlace">Lugar de Expedición</label>
-        <input class="form__input" type="text" id="docIssuePlace" formControlName="docIssuePlace">
-      </div>
-      <div class="section__item">
-        <label for="birthday">Fecha de Nacimiento</label>
-        <input class="form__input" type="date" id="birthday" formControlName="birthday">
-      </div>
-      <div class="section__item">
-        <label for="address">Dirección</label>
-        <input class="form__input" type="text" id="address" formControlName="address">
-      </div>
-      <div class="section__item">
-        <label for="city">Ciudad</label>
-        <input class="form__input" type="text" id="city" formControlName="city">
-      </div>
-      <div class="section__item">
-        <label class="required" for="phoneNumber">Teléfono/Celular</label>
-        <input class="form__input" type="number" id="phoneNumber" formControlName="phoneNumber">
-      </div>
-      <div class="section__item">
-        <label for="altPhoneNumber">Teléfono Alterno</label>
-        <input class="form__input" type="number" id="altPhoneNumber" formControlName="altPhoneNumber">
-      </div>
-      <div class="section__item">
-        <label for="email">Correo Electrónico</label>
-        <input class="form__input" type="email" id="email" formControlName="email">
-      </div>
-      <div class="section__item">
-        <label for="bankAccountBName">Nombre del Banco</label>
-        <input class="form__input" type="text" id="bankAccountBName" formControlName="bankAccountBName">
-      </div>
-      <div class="section__item">
-        <label for="bankAccountType">Tipo de Cuenta</label>
-        <select class="form__input select" name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
-          <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
-        </select>
-      </div>
-      <div class="section__item">
-        <label for="bankAccountNumber">Número de Cuenta</label>
-        <input class="form__input" type="number" id="bankAccountNumber" formControlName="bankAccountNumber">
-      </div>
-    </div>
-    <div class="section__header">
-      <svg class="header__icon icon--marginr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-        <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
-      </svg>
-      <span><h2 class="subtitle inline">Detalles de la licencia</h2></span>
-    </div>
-    <div class="form__section">
-      <div class="section__item">
-        <label class="required" for="licenseType">Tipo de Licencia</label>
-        <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
-      </div>    
-      <div class="section__item">
-        <label class="required" for="licenseExpiration">fecha de expiración</label>
-        <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
-      </div>
-    </div>
-    <div class="section__header">
-      <svg class="header__icon icon--marginr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-        <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
-      </svg>
-      <span><h2 class="subtitle inline">Información del vehiculo</h2></span>
-    </div>
-    <div class="form__section">
-      <div class="section__item">
-        <label class="required" for="plate">placa</label>
-        <input class="form__input" type="text" id="plate" formControlName="plate">
-      </div>
-      <div class="section__item">
-        <label class="required" for="soatExpiration">vencimiento de SOAT</label>
-        <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
-      </div>
-      <div class="section__item">
-        <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
-        <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
-      </div>
-      <div class="section__item">
-          <label class="required" for="type">tipo</label>
-          <select class="form__input select" name="docType" id="type" formControlName="type">
-            <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
+      <div class="form__section form--right">
+        <div class="section__item">
+          <label class="required" for="name">Nombre completo</label>
+          <div class="item--name">
+            <input class="form__input col-4" type="text" id="name" formControlName="name" required>
+            <input class="form__input col-2" type="text" id="firstLastname" formControlName="firstLastname" required>
+            <input class="form__input col-2" type="text" id="secondLastname" formControlName="secondLastname">
+          </div>
+        </div>
+        <div class="section__item">
+          <label class="required" for="docType">Tipo de documento</label>
+          <select class="form__input select col-4" name="docType" id="docType" formControlName="docType" required>
+            <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
           </select>
-      </div>
-      <div class="section__item">
-          <label class="required" for="state">estado</label>
-          <select class="form__input select" name="docType" id="state" formControlName="state">
-            <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
+        </div>
+        <div class="section__item">
+          <label class="required" for="docNumber">N° de Identificación</label>
+          <input class="form__input col-3" type="number" id="docNumber" formControlName="docNumber" required>
+        </div>
+        <div class="section__item">
+          <label for="docIssueDate">Fecha de Expedición</label>
+          <input class="form__input col-3" type="date" id="docIssueDate" formControlName="docIssueDate">
+        </div>
+        <div class="section__item">
+          <label for="docIssuePlace">Lugar de Expedición</label>
+          <input class="form__input col-4" type="text" id="docIssuePlace" formControlName="docIssuePlace">
+        </div>
+        <div class="section__item">
+          <label for="birthday">Fecha de Nacimiento</label>
+          <input class="form__input col-3" type="date" id="birthday" formControlName="birthday">
+        </div>
+        <div class="section__item">
+          <label for="address">Dirección</label>
+          <input class="form__input col-4" type="text" id="address" formControlName="address">
+        </div>
+        <div class="section__item">
+          <label for="city">Ciudad</label>
+          <input class="form__input col-4" type="text" id="city" formControlName="city">
+        </div>
+        <div class="section__item">
+          <label class="required" for="phoneNumber">Teléfono/Celular</label>
+          <input class="form__input col-3" type="number" id="phoneNumber" formControlName="phoneNumber">
+        </div>
+        <div class="section__item">
+          <label for="altPhoneNumber">Teléfono Alterno</label>
+          <input class="form__input col-3" type="number" id="altPhoneNumber" formControlName="altPhoneNumber">
+        </div>
+        <div class="section__item">
+          <label for="email">Correo Electrónico</label>
+          <input class="form__input col-4" type="email" id="email" formControlName="email">
+        </div>
+        <div class="section__item">
+          <label for="bankAccountBName">Nombre del Banco</label>
+          <input class="form__input col-3" type="text" id="bankAccountBName" formControlName="bankAccountBName">
+        </div>
+        <div class="section__item">
+          <label for="bankAccountType">Tipo de Cuenta</label>
+          <select class="form__input select col-3" name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
+            <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
           </select>
+        </div>
+        <div class="section__item">
+          <label for="bankAccountNumber">Número de Cuenta</label>
+          <input class="form__input col-4" type="number" id="bankAccountNumber" formControlName="bankAccountNumber">
+        </div>
       </div>
-      <div class="section__item">
-        <label class="required" for="capacity">capacidad (T)</label>
-        <input class="form__input" type="number" id="capacity" formControlName="capacity">
+    </div>
+    
+    <div>
+      <div class="section__header">
+        <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+        </svg>
+        <span><h2 class="subtitle inline">Datos personales</h2></span>
       </div>
-      <div class="section__item">
-        <label class="required" for="comments">comentarios</label>
-        <textarea rows="2" id="comments" formControlName="comments"></textarea>
+      <div class="form__section">
+        <div class="section__item">
+          <label class="required" for="name">Nombres</label>
+          <input class="form__input col-3" type="text" id="name" formControlName="name" required>
+        </div>
+        <div class="section__item">
+          <label class="required" for="firstLastname">Primer Apellido</label>
+          <input class="form__input" type text id="firstLastname" formControlName="firstLastname" required>
+        </div>
+        <div class="section__item">
+          <label for="secondLastname">Segundo Apellido</label>
+          <input class="form__input" type="text" id="secondLastname" formControlName="secondLastname">
+        </div>
+        <div class="section__item">
+          <label class="required" for="docType">Tipo de documento</label>
+          <select class="form__input select" name="docType" id="docType" formControlName="docType" required>
+            <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="section__item">
+          <label class="required" for="docNumber">N° de Identificación</label>
+          <input class="form__input" type="number" id="docNumber" formControlName="docNumber" required>
+        </div>
+        <div class="section__item">
+          <label for="docIssueDate">Fecha de Expedición</label>
+          <input class="form__input" type="date" id="docIssueDate" formControlName="docIssueDate">
+        </div>
+        <div class="section__item">
+          <label for="docIssuePlace">Lugar de Expedición</label>
+          <input class="form__input" type="text" id="docIssuePlace" formControlName="docIssuePlace">
+        </div>
+        <div class="section__item">
+          <label for="birthday">Fecha de Nacimiento</label>
+          <input class="form__input" type="date" id="birthday" formControlName="birthday">
+        </div>
+        <div class="section__item">
+          <label for="address">Dirección</label>
+          <input class="form__input" type="text" id="address" formControlName="address">
+        </div>
+        <div class="section__item">
+          <label for="city">Ciudad</label>
+          <input class="form__input" type="text" id="city" formControlName="city">
+        </div>
+        <div class="section__item">
+          <label class="required" for="phoneNumber">Teléfono/Celular</label>
+          <input class="form__input" type="number" id="phoneNumber" formControlName="phoneNumber">
+        </div>
+        <div class="section__item">
+          <label for="altPhoneNumber">Teléfono Alterno</label>
+          <input class="form__input" type="number" id="altPhoneNumber" formControlName="altPhoneNumber">
+        </div>
+        <div class="section__item">
+          <label for="email">Correo Electrónico</label>
+          <input class="form__input" type="email" id="email" formControlName="email">
+        </div>
+        <div class="section__item">
+          <label for="bankAccountBName">Nombre del Banco</label>
+          <input class="form__input" type="text" id="bankAccountBName" formControlName="bankAccountBName">
+        </div>
+        <div class="section__item">
+          <label for="bankAccountType">Tipo de Cuenta</label>
+          <select class="form__input select" name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
+            <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
+        </div>
+        <div class="section__item">
+          <label for="bankAccountNumber">Número de Cuenta</label>
+          <input class="form__input" type="number" id="bankAccountNumber" formControlName="bankAccountNumber">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section__header">
+        <svg class="header__icon icon--marginr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+          <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
+        </svg>
+        <span><h2 class="subtitle inline">Detalles de la licencia</h2></span>
+      </div>
+      <div class="form__section">
+        <div class="section__item">
+          <label class="required" for="licenseType">Tipo de Licencia</label>
+          <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
+        </div>    
+        <div class="section__item">
+          <label class="required" for="licenseExpiration">fecha de expiración</label>
+          <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <div class="section__header">
+        <svg class="header__icon icon--marginr" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+          <path d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/>
+        </svg>
+        <span><h2 class="subtitle inline">Información del vehiculo</h2></span>
+      </div>
+      <div class="form__section">
+        <div class="section__item">
+          <label class="required" for="plate">placa</label>
+          <input class="form__input" type="text" id="plate" formControlName="plate">
+        </div>
+        <div class="section__item">
+          <label class="required" for="soatExpiration">vencimiento de SOAT</label>
+          <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
+        </div>
+        <div class="section__item">
+          <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
+          <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
+        </div>
+        <div class="section__item">
+            <label class="required" for="type">tipo</label>
+            <select class="form__input select" name="docType" id="type" formControlName="type">
+              <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="section__item">
+            <label class="required" for="state">estado</label>
+            <select class="form__input select" name="docType" id="state" formControlName="state">
+              <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="section__item">
+          <label class="required" for="capacity">capacidad (T)</label>
+          <input class="form__input" type="number" id="capacity" formControlName="capacity">
+        </div>
+        <div class="section__item">
+          <label class="required" for="comments">comentarios</label>
+          <textarea rows="2" id="comments" formControlName="comments"></textarea>
+        </div>
       </div>
     </div>
 

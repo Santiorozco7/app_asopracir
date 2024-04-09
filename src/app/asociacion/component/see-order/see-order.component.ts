@@ -72,9 +72,9 @@ export class SeeOrderComponent {
   confirmCallback: (() => void) | null = null;
 
   docTypeselect: any[] = [
-    { id: 0, name: 'CC' },
-    { id: 1, name: 'TI' },
-    { id: 2, name: 'CE' },
+    { id: 0, name: 'Cédula de ciudadanía' },
+    { id: 1, name: 'Tarjeta de Identidad' },
+    { id: 2, name: 'Cédula de Extranjería' },
     { id: 3, name: 'NIT' },
   ];
 

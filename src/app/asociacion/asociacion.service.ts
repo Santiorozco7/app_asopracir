@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -498,5 +499,21 @@ export class AsociacionService {
     url = this.addTimestamp(url);
 
     return this.http.get(url);
+  }
+
+  public uploadFile(file: File, ID: number, folder: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No se encontró un token en el almacenamiento local.');
+      return of({ state: 'Fail', errmsg: 'No se encontró un token en el almacenamiento local.' });
+    }
+
+    const formData = new FormData();
+    formData.append('fileToUpload', file);
+    formData.append('ID', ID.toString());
+    formData.append('folder', folder);
+    formData.append('token', token);
+
+    return this.http.post<any>(`${this.API_ASOPRACIR}upload.php`, formData)
   }
 }

@@ -34,10 +34,22 @@ export class RegisterComponent {
   positiveNotification = true;
   message = '';
 
+  photoFilePath: string | null = null; 
+  documentFilePath: string | null = null; 
+  rutFilePath: string | null = null; 
+  licenseFilePath: string | null = null; 
+  ownercertificateFilePath: string | null = null; 
+  runtFilePath: string | null = null; 
+  soatFilePath: string | null = null; 
+  techrevFilePath: string | null = null; 
+  
+  uploadMessage: string = ''; // Variable para almacenar el mensaje de carga
+
   docTypeselect: any[] = [
     { id: 0, name: 'Cédula de ciudadanía' },
-    { id: 1, name: 'Cédula de extranjería' },
-    { id: 2, name: 'NIT' },
+    { id: 1, name: 'Tarjeta de Identidad' },
+    { id: 2, name: 'Cédula de Extranjería' },
+    { id: 3, name: 'NIT' },
   ];
 
   bankAccountTypeselect: any[] = [
@@ -504,7 +516,10 @@ export class RegisterComponent {
       this.service.getUser(this.docTypeaux, this.docNumberaux).subscribe(userData => {
         if (userData['state'] === 'Ok') {
           this.userData = userData.data; // Asigna los datos del usuario a la variable userData
-
+          this.photoFilePath = userData.data.filePicture; // Guarda la ruta de la imagen cargada
+          this.documentFilePath = userData.data.fileDocument; // Guarda la ruta de la imagen cargada
+          this.rutFilePath = userData.data.fileRUT; // Guarda la ruta de la imagen cargada
+          
           this.userID = userData.data.userID;
           this.farmerRegister = false;
           this.transporterRegister = false;
@@ -538,6 +553,35 @@ export class RegisterComponent {
         }
       });      
     }
+  }
+
+  onFileSelected(event: any, folder: string) {
+    const file = event.target.files[0];
+    const ID = parseInt(this.userID, 10); // Suponiendo que `this.userID` contiene el ID del usuario
+    console.log('subiendo archivo...');
+
+    this.service.uploadFile(file, ID, folder).subscribe(upload => {
+      if (upload['state'] === 'Ok') {
+        console.log('Archivo cargado con éxito:', upload.data);
+        if (folder === "user_picture") {
+          this.photoFilePath = upload.filePath;
+          console.log('subio una foto');
+        }
+        if (folder === "user_document") {
+          this.documentFilePath = upload.filePath;
+          console.log('subio un doc');
+        }
+        if (folder === "user_rut") {
+          this.rutFilePath = upload.filePath; 
+          console.log('subio un rut');
+        }
+        this.uploadMessage = 'Cargado con éxito.';
+      } else if (upload['state'] === 'Fail') {
+        this.uploadMessage = 'Error al cargar: ';
+        console.log('error al cargar', upload.data);
+        console.log('error al cargar', upload.errmsg);
+      }
+    });
   }
 
   rolesAdd(selectRole:string):void {
