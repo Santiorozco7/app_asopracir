@@ -3,6 +3,18 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
 
+interface UploadStatus {
+  [key: string]: string;
+  user_picture: string;
+  user_document: string;
+  user_rut: string;
+  farm_ownercertificate: string;
+  transporter_license: string;
+  vehicle_runt: string;
+  vehicle_soat: string;
+  vehicle_techrev: string;
+}
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -73,6 +85,17 @@ export class RegisterComponent {
     { id: 1, name: 'Mantenimiento' },
     { id: 2, name: 'Fuera de servicio' },
   ];
+
+  uploadStatus: UploadStatus = {
+    user_picture: '',
+    user_document: '',
+    user_rut: '',
+    farm_ownercertificate: '',
+    transporter_license: '',
+    vehicle_runt: '',
+    vehicle_soat: '',
+    vehicle_techrev: ''
+  };
 
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
     this.userForm.valueChanges.subscribe(() => {
@@ -250,14 +273,14 @@ export class RegisterComponent {
                         setTimeout(() => {
                           this.View();
                         }, 3200);
-                      } if(resultFarmer['state'] === 'Fail') {
+                      } else if(resultFarmer['state'] === 'Fail') {
                         console.log('Agricultor no fue creado',resultFarm);
                         this.showDialog = true;
                         this.positiveNotification = false;
                         this.message = '¡Ha ocurrido un error!';
                       }                  
                     })
-                  } if(resultFarm['state'] === 'Fail') {
+                  } else if(resultFarm['state'] === 'Fail') {
                     console.log('Finca no fue creado');
                     this.showDialog = true;
                     this.positiveNotification = false;
@@ -266,7 +289,7 @@ export class RegisterComponent {
                 })
               }
               if (this.transporterRegister) {  //Crear Transportador
-                console.log("Creando trasnportador...................");
+                console.log("Creando transportador...................");
                 this.service.createVehicle(
                   plate,
                   soatExpiration,
@@ -286,14 +309,14 @@ export class RegisterComponent {
                         setTimeout(() => {
                           this.View();
                         }, 3200);
-                      }if (resultVehicle['state'] === 'Fail') {
+                      } else if (resultVehicle['state'] === 'Fail') {
                         console.log("Trasnportador no creado");
                         this.showDialog = true;
                         this.positiveNotification = false;
                         this.message = '¡Ha ocurrido un error!';
                       }
                     })
-                  }if (resultVehicle['state'] === 'Fail') {
+                  } else if (resultVehicle['state'] === 'Fail') {
                     console.log("Vehiculo no creado");
                     this.showDialog = true;
                     this.positiveNotification = false;
@@ -307,7 +330,7 @@ export class RegisterComponent {
                   if (resultCollab['state'] === 'Ok') {
                     console.log("Colaborador Creado");
                     this.View();
-                  }if (resultCollab['state'] === 'Fail') {
+                  } else if (resultCollab['state'] === 'Fail') {
                     console.log("Colaborador no creado");
                   }
                 });
@@ -318,16 +341,19 @@ export class RegisterComponent {
                   if (resultAssoc['state'] === 'Ok') {
                     console.log("Asociado Creado");
                     this.View();
-                  }if (resultAssoc['state'] === 'Fail') {
+                  } else if (resultAssoc['state'] === 'Fail') {
                     console.log("Asociado no creado");
                   }
                 });
               }
-            }if(resultUser['state'] === 'Fail') {
-              console.log('Usuario no fue creado');
+            } else if ((resultUser['state'] === 'Fail') && (resultUser['sessionStatus'] !== 'Session expired')) {
               this.showDialog = true;
               this.positiveNotification = false;
               this.message = '¡Ha ocurrido un error!';
+              console.log("Usuario no fue creado", resultUser);
+            } else if ((resultUser['state'] === 'Fail') && (resultUser['sessionStatus'] === 'Session expired')) {
+              this.router.navigate(['/']);
+              console.log('No hay session',resultUser);
             }
           });
           break;
@@ -352,9 +378,12 @@ export class RegisterComponent {
                     console.log('Agricultor no fue creado',resultFarm);
                   }
                 })
-              } if(resultFarm['state'] === 'Fail') {
-                console.log('Finca no fue creado');
-              }
+              } else if (resultFarm['state'] === 'Fail') {
+                this.showDialog = true;
+                this.positiveNotification = false;
+                this.message = '¡Ha ocurrido un error!';
+                console.log("Finca no fue creada", resultFarm);
+              } 
             })
           }
           if (this.transporterRegister) {  //Crear Transportador
@@ -377,9 +406,12 @@ export class RegisterComponent {
                     console.log("Trasnportador no creado");
                   }
                 })
-              }if (resultVehicle['state'] === 'Fail') {
-                console.log("Vehiculo no creado");
-              }
+              } else if (resultVehicle['state'] === 'Fail') {
+                this.showDialog = true;
+                this.positiveNotification = false;
+                this.message = '¡Ha ocurrido un error!';
+                console.log("Vehiculo no fue creado", resultVehicle);
+              } 
             })
           }
           if (this.collaboratorRegister) {  //Crear Colaborador
@@ -388,9 +420,12 @@ export class RegisterComponent {
               if (resultCollab['state'] === 'Ok') {
                 console.log("Colaborador Creado");
                 this.View();
-              }if (resultCollab['state'] === 'Fail') {
-                console.log("Colaborador no creado");
-              }
+              } else if (resultCollab['state'] === 'Fail') {
+                this.showDialog = true;
+                this.positiveNotification = false;
+                this.message = '¡Ha ocurrido un error!';
+                console.log("Colaborador no fue creado", resultCollab);
+              } 
             });
           }
           if (this.assocRegister) {  //Crear Asociado
@@ -399,14 +434,21 @@ export class RegisterComponent {
               if (resultAssoc['state'] === 'Ok') {
                 console.log("Asociado Creado");
                 this.View();
-              }if (resultAssoc['state'] === 'Fail') {
-                console.log("Asociado no creado");
+              } else if (resultAssoc['state'] === 'Fail') {
+                this.showDialog = true;
+                this.positiveNotification = false;
+                this.message = '¡Ha ocurrido un error!';
+                console.log("asociado no fue creado", resultAssoc);
               }
             });
           }
           break;
         default:
           console.log("Tipo de acción no reconocido");
+          this.showDialog = true;
+          this.positiveNotification = false;
+          this.message = '¡Ha ocurrido un error!';
+          this.router.navigate(['/']);
       }
     }
   }
@@ -539,7 +581,7 @@ export class RegisterComponent {
               console.log("Roles no encontrados: ", userRoles.data);
             }
           });
-        }else if(userData['state'] === 'Fail') {
+        } else if ((userData['state'] === 'Fail') && (userData['sessionStatus'] !== 'Session expired')) {
           this.farmerRegister = true;
           this.transporterRegister = false;
           this.collaboratorRegister = false;
@@ -550,39 +592,45 @@ export class RegisterComponent {
             docNumber: this.docNumberaux
           });
           console.log('No hay Usuario registrado con esa CC',userData.data);
+        } else if ((userData['state'] === 'Fail') && (userData['sessionStatus'] === 'Session expired')) {
+          this.router.navigate(['/']);
+          console.log('No hay session',userData);
         }
       });      
     }
   }
 
-  onFileSelected(event: any, folder: string) {
-    const file = event.target.files[0];
-    const ID = parseInt(this.userID, 10); // Suponiendo que `this.userID` contiene el ID del usuario
-    console.log('subiendo archivo...');
+onFileSelected(event: any, folder: string) {
+  const file = event.target.files[0];
+  const ID = parseInt(this.userID, 10); // Suponiendo que `this.userID` contiene el ID del usuario
+  console.log('Subiendo archivo...');
 
-    this.service.uploadFile(file, ID, folder).subscribe(upload => {
-      if (upload['state'] === 'Ok') {
-        console.log('Archivo cargado con éxito:', upload.data);
-        if (folder === "user_picture") {
+  this.service.uploadFile(file, ID, folder).subscribe(upload => {
+    if (upload['state'] === 'Ok') {
+      console.log('Archivo cargado con éxito:', upload.data);
+      // Asignar el mensaje de éxito solo al tipo de archivo que se está cargando
+      this.uploadStatus[folder] = 'Cargado con éxito';
+      // Asignar el filePath según el tipo de archivo cargado
+      switch (folder) {
+        case 'user_picture':
           this.photoFilePath = upload.filePath;
-          console.log('subio una foto');
-        }
-        if (folder === "user_document") {
+          break;
+        case 'user_document':
           this.documentFilePath = upload.filePath;
-          console.log('subio un doc');
-        }
-        if (folder === "user_rut") {
-          this.rutFilePath = upload.filePath; 
-          console.log('subio un rut');
-        }
-        this.uploadMessage = 'Cargado con éxito.';
-      } else if (upload['state'] === 'Fail') {
-        this.uploadMessage = 'Error al cargar: ';
-        console.log('error al cargar', upload.data);
-        console.log('error al cargar', upload.errmsg);
+          break;
+        case 'user_rut':
+          this.rutFilePath = upload.filePath;
+          break;
+        // Agregar más casos según los tipos de archivos que tengas
       }
-    });
-  }
+    } else if (upload['state'] === 'Fail') {
+      console.log('Error al cargar:', upload.data);
+      console.log('Error al cargar:', upload.errmsg);
+      // Asignar el mensaje de error solo al tipo de archivo que se está cargando
+      this.uploadStatus[folder] = 'Error al cargar: ' + upload.errmsg;
+    }
+  });
+}
 
   rolesAdd(selectRole:string):void {
     switch (selectRole) {

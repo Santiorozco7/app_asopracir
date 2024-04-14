@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ColaboradorService } from '../../colaborador.service';
 import { OrderFormComponent } from '../../component/order-form/order-form.component';
+import { AuthService } from '../../../auth/auth.service';
 
 interface OrderInformation {
   collab: {
@@ -71,7 +72,7 @@ export class RoutesComponent {
   message = '';
 
 
-  constructor(private formBuilder: FormBuilder, private service: ColaboradorService, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private service: ColaboradorService, private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.View(this.fechaActual);
@@ -111,6 +112,7 @@ export class RoutesComponent {
         this.alertFlag = true;
         console.log('No se encontraron rutas',routes);
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] === 'Session expired')) {
+        this.authService.logout();
         this.router.navigate(['/']);
         console.log('No se encontraron rutas',routes);
       }

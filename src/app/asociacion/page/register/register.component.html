@@ -319,35 +319,38 @@
             <!-- Si hay una foto cargada, muestra la imagen dentro del círculo -->
             <img *ngIf="photoFilePath" [src]="'http://localhost/uqplatanos/' + photoFilePath" alt="Foto del usuario">
           </div>
-        </div>
+          <div *ngIf="uploadStatus['user_picture']" [class.success]="uploadStatus['user_picture'].startsWith('Cargado')" [class.error]="uploadStatus['user_picture'].startsWith('Error')">
+            {{ uploadStatus['user_picture'] }}
+          </div>
+        </div>        
     
         <div class="section__documents">
           <div class="documents">
             <div class="document">
-              <label for="doc_user">Documento de identidad</label>
-              <div class="doc" (click)="doc_user.click()">
+              <label for="user_document">Documento de identidad</label>
+              <div class="doc" (click)="user_document.click()">
                 <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                 </svg>
               </div>
-              <input #doc_user type="file" style="display: none" (change)="onFileSelected($event, 'user_document')" accept=".pdf,.doc,.docx">
-              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
-                {{ uploadMessage }}
+              <input #user_document type="file" style="display: none" (change)="onFileSelected($event, 'user_document')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadStatus['user_document']" [class.success]="uploadStatus['user_document'].startsWith('Cargado')" [class.error]="uploadStatus['user_document'].startsWith('Error')">
+                {{ uploadStatus['user_document'] }}
               </div>
             </div>
             <div class="document">
-              <label for="doc_user">Registro Unico Tributario (RUT)</label>
-              <div class="doc" (click)="rut_user.click()">
+              <label for="user_rut">Registro Unico Tributario (RUT)</label>
+              <div class="doc" (click)="user_rut.click()">
                 <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                 </svg>
               </div>
-              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'user_rut')" accept=".pdf,.doc,.docx">
-              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
-                {{ uploadMessage }}
+              <input #user_rut type="file" style="display: none" (change)="onFileSelected($event, 'user_rut')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadStatus['user_rut']" [class.success]="uploadStatus['user_rut'].startsWith('Cargado')" [class.error]="uploadStatus['user_rut'].startsWith('Error')">
+                {{ uploadStatus['user_rut'] }}
               </div>
             </div>
-          </div>
+          </div>          
     
           <!-- documents farmer -->
           <div class="documents" *ngIf="this.userFarmer">
@@ -359,60 +362,60 @@
                 </svg>
               </div>
               <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'farm_ownercertificate')" accept=".pdf,.doc,.docx">
-              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
-                {{ uploadMessage }}
+              <div *ngIf="uploadStatus['farm_ownercertificate']" [class.success]="uploadStatus['farm_ownercertificate'].startsWith('Cargado')" [class.error]="uploadStatus['farm_ownercertificate'].startsWith('Error')">
+                {{ uploadStatus['farm_ownercertificate'] }}
               </div>
             </div>
           </div>
     
           <!-- documents transporter -->
-          <div class="documents" *ngIf="this.userTransporter">
+          <div class="documents" *ngIf="userTransporter">
             <div class="document">
-              <label for="doc_user">Licencia de transporte</label>
-              <div class="doc" (click)="rut_user.click()">
+              <label for="transport_license">Licencia de transporte</label>
+              <div class="doc" (click)="transport_license.click()">
                 <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                 </svg>
               </div>
-              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'transporter_license')" accept=".pdf,.doc,.docx">
-              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
-                {{ uploadMessage }}
+              <input #transport_license type="file" style="display: none" (change)="onFileSelected($event, 'transporter_license')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadStatus['transporter_license']" [class.success]="uploadStatus['transporter_license'].startsWith('Cargado')" [class.error]="uploadStatus['transporter_license'].startsWith('Error')">
+                {{ uploadStatus['transporter_license'] }}
               </div>
             </div>
             <div class="document">
-              <label for="doc_user">Registro Único Nacional de Tránsito (RUNT)</label>
-              <div class="doc" (click)="rut_user.click()">
+              <label for="vehicle_runt">Registro Único Nacional de Tránsito (RUNT)</label>
+              <div class="doc" (click)="vehicle_runt.click()">
                 <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                 </svg>
               </div>
-              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_runt')" accept=".pdf,.doc,.docx">
-              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
-                {{ uploadMessage }}
+              <input #vehicle_runt type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_runt')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadStatus['vehicle_runt']" [class.success]="uploadStatus['vehicle_runt'].startsWith('Cargado')" [class.error]="uploadStatus['vehicle_runt'].startsWith('Error')">
+                {{ uploadStatus['vehicle_runt'] }}
               </div>
             </div>
             <div class="document">
-              <label for="doc_user">Seguro obligatorio automovilístico (SOAT)</label>
-              <div class="doc" (click)="rut_user.click()">
+              <label for="vehicle_soat">Seguro obligatorio automovilístico (SOAT)</label>
+              <div class="doc" (click)="vehicle_soat.click()">
                 <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                 </svg>
               </div>
-              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_soat')" accept=".pdf,.doc,.docx">
-              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
-                {{ uploadMessage }}
+              <input #vehicle_soat type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_soat')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadStatus['vehicle_soat']" [class.success]="uploadStatus['vehicle_soat'].startsWith('Cargado')" [class.error]="uploadStatus['vehicle_soat'].startsWith('Error')">
+                {{ uploadStatus['vehicle_soat'] }}
               </div>
             </div>
             <div class="document">
-              <label for="doc_user">Revisión técnico-mecánica del vehículo</label>
-              <div class="doc" (click)="rut_user.click()">
+              <label for="vehicle_techrev">Revisión técnico-mecánica del vehículo</label>
+              <div class="doc" (click)="vehicle_techrev.click()">
                 <svg class="icon__doc" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                   <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                 </svg>
               </div>
-              <input #rut_user type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_techrev')" accept=".pdf,.doc,.docx">
-              <div *ngIf="uploadMessage" [class.success]="uploadMessage.startsWith('Cargado')" [class.error]="uploadMessage.startsWith('Error')">
-                {{ uploadMessage }}
+              <input #vehicle_techrev type="file" style="display: none" (change)="onFileSelected($event, 'vehicle_techrev')" accept=".pdf,.doc,.docx">
+              <div *ngIf="uploadStatus['vehicle_techrev']" [class.success]="uploadStatus['vehicle_techrev'].startsWith('Cargado')" [class.error]="uploadStatus['vehicle_techrev'].startsWith('Error')">
+                {{ uploadStatus['vehicle_techrev'] }}
               </div>
             </div>
           </div>

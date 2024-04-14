@@ -37,6 +37,31 @@ export class LoginComponent {
     return this.userForm.get('password') as FormControl;
   }
 
+  ngOnInit(): void {
+    // Verificar si el usuario ya está autenticado.
+    if (this.service.isLoggedIn()) {
+      // Obtener los roles del usuario desde el servicio de autenticación.
+      const userRoles = this.service.getUserRoles();
+      
+      // Verificar si el usuario tiene el rol de agricultor.
+      if (userRoles.isFarmer) {
+        this.router.navigate(['/agricultor']);
+      }
+      // Verificar si el usuario tiene el rol de colaborador.
+      else if (userRoles.isCollab) {
+        this.router.navigate(['/colaborador']);
+      }
+      // Verificar si el usuario tiene el rol de administrador.
+      else if (userRoles.isAdmin) {
+        this.router.navigate(['/asociacion']);
+      }
+      // Si el rol del usuario no coincide con ninguno de los roles conocidos, redirigirlo a una página predeterminada.
+      else {
+        this.router.navigate(['/default']);
+      }
+    }
+  }  
+
   roleSelect(role:string):void {
     console.log('Valor seleccionado:', role);
     switch (role) {

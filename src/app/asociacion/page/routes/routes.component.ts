@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
 
 interface OrderInformation {
   collab: {
@@ -74,7 +75,7 @@ export class RoutesComponent {
     4: 'Vendida'
   };
 
-  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private authService: AuthService) {
     this.filterUser.valueChanges.subscribe(() => {
       this.filterValue = this.filterUser.value.state ?? 0;
       console.log(this.filterValue);
@@ -95,10 +96,15 @@ export class RoutesComponent {
       if (routes['state'] === 'Ok') {
         this.routes = routes.data;
         console.log("Se encontraron las rutas", this.routes);
-      } else {
-        this.routes = routes.data;
-        console.log("No se encontraron las rutas", this.routes);
+      } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] !== 'Session expired')) {
+        console.log("No hay ordenes para mostrar", routes);
+        // this.pendingsAlert = true;
+      } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] === 'Session expired')) {
+        this.authService.logout();
+        this.router.navigate(['/']);
+        console.log('No hay session',routes);
       }
+
     })
   }
 

@@ -67,6 +67,7 @@
                 </tr>
             </tbody>
         </table>
+        <span class="error" *ngIf="pendingsAlert"><p>No ordenes pendiente en el momento</p></span>
     </div>
     
     <div *ngIf="filterValue === 'programadas'">

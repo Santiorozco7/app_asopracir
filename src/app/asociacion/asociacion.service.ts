@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class AsociacionService {
   constructor(private http: HttpClient) { }
 
   private addTimestamp(url: string): string {
-    const timestamp = new Date().getTime();
+    let timestamp = new Date().getTime();
     return `${url}&timestamp=${timestamp}`;
   }
 
@@ -23,7 +22,7 @@ export class AsociacionService {
     limit?: string,
     offset?: string,
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=getFarms`;
 
@@ -45,37 +44,37 @@ export class AsociacionService {
   }
 
   public getTransporters(filter: string): Observable<any> {
-  const url = `${this.API_ASOPRACIR}assoc.php?do=getTransporters&token=${localStorage.getItem('token')}&filter=${filter}`;
+  let url = `${this.API_ASOPRACIR}assoc.php?do=getTransporters&token=${localStorage.getItem('token')}&filter=${filter}`;
   return this.http.get(this.addTimestamp(url));
   }
 
   public getCollaborators(): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getCollaborators&token=${localStorage.getItem('token')}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getCollaborators&token=${localStorage.getItem('token')}`;
     return this.http.get(this.addTimestamp(url));
   }
 
   public getPendingOrders(): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getPendingOrders&token=${localStorage.getItem('token')}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getPendingOrders&token=${localStorage.getItem('token')}`;
     return this.http.get(this.addTimestamp(url));
   }
 
   public getPendingTapes(months: number): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getPendingTapes&token=${localStorage.getItem('token')}&months=${months}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getPendingTapes&token=${localStorage.getItem('token')}&months=${months}`;
     return this.http.get(this.addTimestamp(url));
   }
 
   public getOrders(filter: number): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getOrders&token=${localStorage.getItem('token')}&filter=${filter}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getOrders&token=${localStorage.getItem('token')}&filter=${filter}`;
     return this.http.get(this.addTimestamp(url));
   }
 
   public getOrder(orderID: number): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getOrder&token=${localStorage.getItem('token')}&orderID=${orderID}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getOrder&token=${localStorage.getItem('token')}&orderID=${orderID}`;
     return this.http.get(this.addTimestamp(url));
   }
 
   public getRoutes(filter?:number, limit?:string, offset?:string): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=getRoutes`;
 
@@ -97,27 +96,27 @@ export class AsociacionService {
   }
 
   public getRoute(routeID?: number): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getRoute&token=${localStorage.getItem('token')}&routeID=${routeID}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getRoute&token=${localStorage.getItem('token')}&routeID=${routeID}`;
     return this.http.get(this.addTimestamp(url));
   }
   
   public getFarmer(docType: string, docNumber: string): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getFarmer&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getFarmer&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
     return this.http.get(this.addTimestamp(url));
   }
   
   public getUser(docType: string, docNumber: string): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getUser&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getUser&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
     return this.http.get(this.addTimestamp(url));
   }
 
   public getRoles(docType: string, docNumber: string): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getRoles&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getRoles&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
     return this.http.get(this.addTimestamp(url));
   }
   
   public getTransporter(docType: string, docNumber: string): Observable<any> {
-    const url = `${this.API_ASOPRACIR}assoc.php?do=getTransporter&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
+    let url = `${this.API_ASOPRACIR}assoc.php?do=getTransporter&token=${localStorage.getItem('token')}&docType=${docType}&docNumber=${docNumber}`;
     return this.http.get(this.addTimestamp(url));
   }
 
@@ -159,7 +158,7 @@ export class AsociacionService {
     bankAccountType?: string,
     bankAccountNumber?: string
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=createUser&names=${names}&firstLastname=${firstLastname}&docType=${docType}&docNumber=${docNumber}`;
 
@@ -213,7 +212,7 @@ export class AsociacionService {
     capacity: string,
     comments: string,
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=createVehicle`;
 
@@ -248,7 +247,7 @@ export class AsociacionService {
     area?: string,
     GPSposition?: string
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=createFarm`;
 
@@ -283,7 +282,7 @@ export class AsociacionService {
     comments: string,
     state:string
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=updateVehicle&vehID=${vehID}`;
 
@@ -333,7 +332,7 @@ export class AsociacionService {
     bankAccountType?: string,
     bankAccountNumber?: string
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=updateUser&userID=${userID}`;
 
@@ -399,7 +398,7 @@ export class AsociacionService {
     area: string,
     GPSposition?: string
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=updateFarm&farmID=${farmID}`;
 
@@ -434,7 +433,7 @@ export class AsociacionService {
     vehID?: number,
     collabID?: number
   ): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=updateRoute&routeID=${routeID}`;
 
@@ -486,7 +485,7 @@ export class AsociacionService {
   }
 
   public getStats(filter?:string): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
     let url = `${this.API_ASOPRACIR}assoc.php?do=getStats`;
 
@@ -502,7 +501,7 @@ export class AsociacionService {
   }
 
   public uploadFile(file: File, ID: number, folder: string): Observable<any> {
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
     if (!token) {
       console.error('No se encontró un token en el almacenamiento local.');
       return of({ state: 'Fail', errmsg: 'No se encontró un token en el almacenamiento local.' });

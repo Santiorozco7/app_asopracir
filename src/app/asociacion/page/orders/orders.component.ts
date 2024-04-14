@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-orders',
@@ -14,6 +15,7 @@ export class OrdersComponent {
   ordersFilter: any[] = [];
   tapesAlert:boolean = false;
   ordersAlert:boolean = false;
+  pendingsAlert:boolean = false;
   filterValue:string = "pendientes";
 
   months:number = 1;
@@ -34,7 +36,7 @@ export class OrdersComponent {
     6: 'Pagada',
   };
 
-  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private authService: AuthService) {
     this.filterUser.valueChanges.subscribe(() => {
       this.filterValue = this.filterUser.value.state ?? 'pendientes';
       console.log(this.filterValue);
@@ -51,25 +53,44 @@ export class OrdersComponent {
 
   View() {
     this.service.getPendingOrders().subscribe(orders => {
-      if (orders['state'] === 'Fail') {
-        // this.router.navigate(['/']);
-        console.log(orders);
-      } else {
+      if (orders['state'] === 'Ok') {
         this.orders = orders.data;
-      console.log(orders.data);
-      this.service.getPendingTapes(this.months).subscribe(tapes => {
-        if (tapes['state'] === 'Ok') {
-          this.tapes = tapes.data;
-          console.log("Futuras cosechas", this.tapes);
-          this.service.getOrders(this.filter).subscribe(ordersFilter => {
-            if (ordersFilter['state'] === 'Ok') {
-              this.ordersFilter = ordersFilter.data;
-              console.log("Filtro de ordenes", this.ordersFilter);
-            }
-          })
-        }
-      })
-      }  
+        console.log(orders.data);
+        this.pendingsAlert = false;
+        this.service.getPendingTapes(this.months).subscribe(tapes => {
+          if (tapes['state'] === 'Ok') {
+            this.tapes = tapes.data;
+            console.log("Futuras cosechas", this.tapes);
+            this.tapesAlert = false;
+            this.service.getOrders(this.filter).subscribe(ordersFilter => {
+              if (ordersFilter['state'] === 'Ok') {
+                this.ordersAlert = false;
+                this.ordersFilter = ordersFilter.data;
+                console.log("Filtro de ordenes", this.ordersFilter);
+              } else if ((ordersFilter['state'] === 'Fail') && (ordersFilter['sessionStatus'] !== 'Session expired')) {
+                this.ordersAlert = true;
+                console.log("No hay ordenes asociadas en el filtro para mostrar", ordersFilter);
+              } else if ((ordersFilter['state'] === 'Fail') && (ordersFilter['sessionStatus'] === 'Session expired')) {
+                this.router.navigate(['/']);
+                console.log('No hay session',ordersFilter);
+              }
+            })
+          } else if ((tapes['state'] === 'Fail') && (tapes['sessionStatus'] !== 'Session expired')) {
+            this.tapesAlert = true;
+            console.log("No hay cintas pendientes para mostrar", tapes);
+          } else if ((tapes['state'] === 'Fail') && (tapes['sessionStatus'] === 'Session expired')) {
+            this.router.navigate(['/']);
+            console.log('No hay session',orders);
+          }
+        })
+      } else if ((orders['state'] === 'Fail') && (orders['sessionStatus'] !== 'Session expired')) {
+        console.log("No hay ordenes para mostrar", orders);
+        this.pendingsAlert = true;
+      } else if ((orders['state'] === 'Fail') && (orders['sessionStatus'] === 'Session expired')) {
+        this.authService.logout();
+        this.router.navigate(['/']);
+        console.log('No hay session',orders);
+      }
     });
   }
 

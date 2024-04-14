@@ -144,10 +144,15 @@ export class ModalFarmComponent {
         console.log("Hubo cambios en el formulario");
         if (currentFormValues.state !== null && currentFormValues.state !== undefined && currentFormValues.state === '1') {
           this.isStateActive = true;
-        } else {
+        } else if (currentFormValues.state !== null && currentFormValues.state !== undefined && currentFormValues.state === '0'){
           this.isStateActive = false;
         }
       } else {
+        if (currentFormValues.state !== null && currentFormValues.state !== undefined && currentFormValues.state === '1') {
+          this.isStateActive = true;
+        } else if (currentFormValues.state !== null && currentFormValues.state !== undefined && currentFormValues.state === '0'){
+          this.isStateActive = false;
+        }
         this.formChanges = false;
         this.verificaActualizar = 0;
         console.log("No hubo cambios en el formulario");
@@ -210,7 +215,7 @@ export class ModalFarmComponent {
           });
           if (this.infoUser.value.state !== null && this.infoUser.value.state !== undefined && this.infoUser.value.state === '1') {
             this.isStateActive = true;
-          } else {
+          } else if (this.infoUser.value.state !== null && this.infoUser.value.state !== undefined && this.infoUser.value.state === '0'){
             this.isStateActive = false;
           }
           console.log("este es el estado del ususrio: ",this.infoUser.value);

@@ -9,7 +9,7 @@
     <button class="button button--cancel" (click)="cerrarTodo()">Cancelar</button>
   </div>
   
-  <form class="infoTotal" [formGroup]="infoUser" (ngSubmit)="onSubmitUser()">
+  <form class="modal__form" [formGroup]="infoUser" (ngSubmit)="onSubmitUser()">
     <div class="form__item">
       <label for="docType">Tipo de documento</label>
       <select class="form__input select" name="docType" id="docType" formControlName="docType" required>

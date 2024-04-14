@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
 
 interface VehicleType {
   id: number;
@@ -37,7 +38,7 @@ export class TransportComponent {
     state: ['all'] // Default value, you can set it to 'activo', 'inactivo', or 'todos'
   });
 
-  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private authService: AuthService) {
     this.infoUser.valueChanges.subscribe(() => {
       this.stateValue = this.infoUser.value.state ?? 'all';
       console.log(this.stateValue);
@@ -59,11 +60,15 @@ export class TransportComponent {
         this.Transporters = Transporters.data;
         this.stateFlag = false;
         console.log(Transporters.data);
-      } else if (Transporters['state'] === 'Fail') {
+      } else if ((Transporters['state'] === 'Fail') && (Transporters['sessionStatus'] !== 'Session expired')) {
         this.stateFlag = true;
         console.log("No hay usuarios para mostrar");
         this.Transporters = [];
         this.originalTransporters = [];
+      } else if ((Transporters['state'] === 'Fail') && (Transporters['sessionStatus'] === 'Session expired')) {
+        this.authService.logout();
+        this.router.navigate(['/']);
+        console.log('No hay session',Transporters);
       }
     });
   }

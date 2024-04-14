@@ -2,6 +2,7 @@ import { Component, Renderer2, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-production',
@@ -19,7 +20,7 @@ export class ProductionComponent {
     state: ['all'] 
   });
 
-  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private renderer: Renderer2, private el: ElementRef) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private renderer: Renderer2, private el: ElementRef, private authService: AuthService) {
     this.infoUser.valueChanges.subscribe(() => {
       this.stateValue = this.infoUser.value.state ?? 'all';
       console.log(this.stateValue);
@@ -33,16 +34,18 @@ export class ProductionComponent {
 
   // Se cambio el View
   View() {
-    this.service.getStats(this.stateValue).subscribe(HT => {
-      if (HT['state'] === 'Fail') {
-        this.verificacionHistorial = true;
-        console.log("No hay información en historial", HT);
-        // this.router.navigate(['/']);
-      }
-      if (HT['state'] === 'Ok') {
+    this.service.getStats(this.stateValue).subscribe(stats => {
+      if (stats['state'] === 'Ok') {
         this.verificacionHistorial = false;
-        this.history = HT.data;
-        console.log("Este es el historial:",HT.data);
+        this.history = stats.data;
+        console.log("Este es el historial:",stats.data);
+      } else if ((stats['state'] === 'Fail') && (stats['sessionStatus'] !== 'Session expired')) {
+        console.log("No hay ordenes para mostrar", stats);
+        this.verificacionHistorial = true;
+      } else if ((stats['state'] === 'Fail') && (stats['sessionStatus'] === 'Session expired')) {
+        this.authService.logout();
+        this.router.navigate(['/']);
+        console.log('No hay session',stats);
       }
     });  
   }

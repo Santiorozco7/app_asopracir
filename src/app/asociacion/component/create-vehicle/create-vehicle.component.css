@@ -43,6 +43,13 @@ button {
   text-transform: capitalize;
 }
 
+.modal__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .form__section {
   display: flex;
   flex-wrap: wrap;

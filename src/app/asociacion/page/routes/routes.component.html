@@ -52,6 +52,7 @@
         </ng-container>
     </tbody>
 </table>
+<!-- <span class="error" *ngIf="routesAlert">No hay rutas que esten: {{ typeFilter[selectedValueAux] }}</span> -->
 
 <app-modal-routes [rutasVisible]="rutasVisible" [managementFlag]="managementFlag" [routeID]="routesAUX"  (cerrarModal)="cerrarmodalRutas()" *ngIf="managementFlag"></app-modal-routes>
 

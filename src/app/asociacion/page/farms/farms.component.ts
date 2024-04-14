@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-farms',
@@ -21,7 +22,7 @@ export class FarmsComponent {
     state: ['all'] 
   });
 
-  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private authService: AuthService) {
     this.infoUser.valueChanges.subscribe(() => {
       this.stateValue = this.infoUser.value.state ?? 'all';
       console.log(this.stateValue);
@@ -43,11 +44,15 @@ export class FarmsComponent {
         this.farms = farms.data;
         this.stateFlag = false;
         console.log(farms.data);
-      } else if (farms['state'] === 'Fail') {
+      } else if ((farms['state'] === 'Fail') && (farms['sessionStatus'] !== 'Session expired')) {
         this.stateFlag = true;
-        console.log("No hay usuarios para mostrar");
+        console.log("No hay usuarios para mostrar", farms);
         this.farms = [];
         this.originalFarms = [];
+      } else if ((farms['state'] === 'Fail') && (farms['sessionStatus'] === 'Session expired')) {
+        this.authService.logout();
+        this.router.navigate(['/']);
+        console.log('No hay session',farms);
       }
     });
   }

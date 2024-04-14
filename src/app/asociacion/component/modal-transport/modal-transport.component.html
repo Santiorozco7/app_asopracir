@@ -101,85 +101,6 @@
         </div>
       </div>
     </div>
-    
-    <div>
-      <div class="section__header">
-        <svg class="header__icon icon--marginr " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
-        </svg>
-        <span><h2 class="subtitle inline">Datos personales</h2></span>
-      </div>
-      <div class="form__section">
-        <div class="section__item">
-          <label class="required" for="name">Nombres</label>
-          <input class="form__input col-3" type="text" id="name" formControlName="name" required>
-        </div>
-        <div class="section__item">
-          <label class="required" for="firstLastname">Primer Apellido</label>
-          <input class="form__input" type text id="firstLastname" formControlName="firstLastname" required>
-        </div>
-        <div class="section__item">
-          <label for="secondLastname">Segundo Apellido</label>
-          <input class="form__input" type="text" id="secondLastname" formControlName="secondLastname">
-        </div>
-        <div class="section__item">
-          <label class="required" for="docType">Tipo de documento</label>
-          <select class="form__input select" name="docType" id="docType" formControlName="docType" required>
-            <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
-          </select>
-        </div>
-        <div class="section__item">
-          <label class="required" for="docNumber">N° de Identificación</label>
-          <input class="form__input" type="number" id="docNumber" formControlName="docNumber" required>
-        </div>
-        <div class="section__item">
-          <label for="docIssueDate">Fecha de Expedición</label>
-          <input class="form__input" type="date" id="docIssueDate" formControlName="docIssueDate">
-        </div>
-        <div class="section__item">
-          <label for="docIssuePlace">Lugar de Expedición</label>
-          <input class="form__input" type="text" id="docIssuePlace" formControlName="docIssuePlace">
-        </div>
-        <div class="section__item">
-          <label for="birthday">Fecha de Nacimiento</label>
-          <input class="form__input" type="date" id="birthday" formControlName="birthday">
-        </div>
-        <div class="section__item">
-          <label for="address">Dirección</label>
-          <input class="form__input" type="text" id="address" formControlName="address">
-        </div>
-        <div class="section__item">
-          <label for="city">Ciudad</label>
-          <input class="form__input" type="text" id="city" formControlName="city">
-        </div>
-        <div class="section__item">
-          <label class="required" for="phoneNumber">Teléfono/Celular</label>
-          <input class="form__input" type="number" id="phoneNumber" formControlName="phoneNumber">
-        </div>
-        <div class="section__item">
-          <label for="altPhoneNumber">Teléfono Alterno</label>
-          <input class="form__input" type="number" id="altPhoneNumber" formControlName="altPhoneNumber">
-        </div>
-        <div class="section__item">
-          <label for="email">Correo Electrónico</label>
-          <input class="form__input" type="email" id="email" formControlName="email">
-        </div>
-        <div class="section__item">
-          <label for="bankAccountBName">Nombre del Banco</label>
-          <input class="form__input" type="text" id="bankAccountBName" formControlName="bankAccountBName">
-        </div>
-        <div class="section__item">
-          <label for="bankAccountType">Tipo de Cuenta</label>
-          <select class="form__input select" name="bankAccountType" id="bankAccountType" formControlName="bankAccountType">
-            <option *ngFor="let item of bankAccountTypeselect" [value]="item.id">{{ item.name }}</option>
-          </select>
-        </div>
-        <div class="section__item">
-          <label for="bankAccountNumber">Número de Cuenta</label>
-          <input class="form__input" type="number" id="bankAccountNumber" formControlName="bankAccountNumber">
-        </div>
-      </div>
-    </div>
 
     <div>
       <div class="section__header">
@@ -210,31 +131,31 @@
       <div class="form__section">
         <div class="section__item">
           <label class="required" for="plate">placa</label>
-          <input class="form__input" type="text" id="plate" formControlName="plate">
+          <input class="form__input col-2" type="text" id="plate" formControlName="plate">
         </div>
         <div class="section__item">
           <label class="required" for="soatExpiration">vencimiento de SOAT</label>
-          <input class="form__input" type="date" id="soatExpiration" formControlName="soatExpiration">
+          <input class="form__input col-3" type="date" id="soatExpiration" formControlName="soatExpiration">
         </div>
         <div class="section__item">
           <label class="required" for="techExpiration">vencimiento de revisión técnico-mecánica</label>
-          <input class="form__input" type="date" id="techExpiration" formControlName="techExpiration">
+          <input class="form__input col-3" type="date" id="techExpiration" formControlName="techExpiration">
         </div>
         <div class="section__item">
-            <label class="required" for="type">tipo</label>
-            <select class="form__input select" name="docType" id="type" formControlName="type">
+            <label class="required" for="type">tipo de vehículo</label>
+            <select class="form__input select col-3" name="docType" id="type" formControlName="type">
               <option *ngFor="let item of typeSelect" [value]="item.id">{{ item.name }}</option>
             </select>
         </div>
         <div class="section__item">
-            <label class="required" for="state">estado</label>
-            <select class="form__input select" name="docType" id="state" formControlName="state">
+            <label class="required" for="state">estado de vehículo</label>
+            <select class="form__input select col-3" name="docType" id="state" formControlName="state">
               <option *ngFor="let item of stateSelect" [value]="item.id">{{ item.name }}</option>
             </select>
         </div>
         <div class="section__item">
           <label class="required" for="capacity">capacidad (T)</label>
-          <input class="form__input" type="number" id="capacity" formControlName="capacity">
+          <input class="form__input col-1" type="number" id="capacity" formControlName="capacity">
         </div>
         <div class="section__item">
           <label class="required" for="comments">comentarios</label>
