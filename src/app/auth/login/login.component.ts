@@ -42,49 +42,34 @@ export class LoginComponent {
     if (this.service.isLoggedIn()) {
       // Obtener los roles del usuario desde el servicio de autenticación.
       const userRoles = this.service.getUserRoles();
-      
-      // Verificar si el usuario tiene el rol de agricultor.
       if (userRoles.isFarmer) {
         this.router.navigate(['/agricultor']);
-      }
-      // Verificar si el usuario tiene el rol de colaborador.
-      else if (userRoles.isCollab) {
+      } else if (userRoles.isCollab) {
         this.router.navigate(['/colaborador']);
-      }
-      // Verificar si el usuario tiene el rol de administrador.
-      else if (userRoles.isAdmin) {
+      } else if (userRoles.isAdmin) {
         this.router.navigate(['/asociacion']);
-      }
-      // Si el rol del usuario no coincide con ninguno de los roles conocidos, redirigirlo a una página predeterminada.
-      else {
+      } else {
         this.router.navigate(['/default']);
       }
     }
   }  
 
   roleSelect(role:string):void {
-    console.log('Valor seleccionado:', role);
+    this.role = role;
     switch (role) {
       case '0':
-        this.role = role;
-        console.log('Ingresa un agriculto');
         this.roleName = "agricultor"
         break;
       
       case '1':
-        this.role = role;
-        console.log('Ingresa un colaborador');
         this.roleName = "colaborador"
         break;
 
       case '3':
-        this.role = role;
-        console.log('Ingresa un asociado');
         this.roleName = "asociado"
         break;
 
       default:
-        console.log('Aun no hay seleccion');
         break;
     }
   }
@@ -92,41 +77,34 @@ export class LoginComponent {
   login() {
     if (this.userForm.valid) {
       const formData = this.userForm.value;
-
       const docType: string = formData.docType || "";
       const docNumber: string = formData.documento || "";
       const password: string = formData.password || "";
-      console.log(docType,' ',docNumber,' ',password,' ',this.role);
       this.service.login(docType, docNumber, password, this.role).subscribe(credenciales =>{
         if(credenciales['state'] === 'Ok') {
           console.log('Ingreso ',credenciales);
           if (this.role) {
             console.log("Con rol");
             if (this.role === "0" && credenciales.roles.isFarmer) {
-              console.log("entro como agricultor por medio la seleccion del rol ");
               this.router.navigate(['/agricultor']); // Redirigir al módulo de agricultor.
             } else if (this.role === "1" && credenciales.roles.isCollab) {
-              console.log("entro como asociado por medio la seleccion del rol ");
                this.router.navigate(['/colaborador']); // Redirigir al módulo de colaborador.
             } else if (this.role === "3" && credenciales.roles.isAdmin) {
-              console.log("entro como asociado por medio la seleccion del rol ");
                this.router.navigate(['/asociacion']); // Redirigir al módulo de asociacion.
             }
           }else if (!this.role) {
-            console.log("Sin rol");
             if (credenciales['role'] === "0" && credenciales.roles.isFarmer) {
-              console.log("entro como agricultor por medio del rol inicial ");
               this.router.navigate(['/agricultor']); // Redirigir al módulo de agricultor.
             } else if (credenciales['role'] === "1" && credenciales.roles.isCollab) {
-              console.log("entro como asociado por medio del rol inicial ");
                this.router.navigate(['/colaborador']); // Redirigir al módulo de colaborador.
             }
           }
         } else if (credenciales['state'] === 'Fail'){
-          console.log('No ingreso ',credenciales);
           this.err = true;
         }
       });
+    } else {
+      this.userForm.markAllAsTouched(); 
     }
   }
 }

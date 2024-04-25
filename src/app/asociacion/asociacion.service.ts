@@ -6,9 +6,8 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AsociacionService {
-  private API_ASOPRACIR = "http://localhost/uqplatanos/";
-  // private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
-  // private API_ASOPRACIR = "http://192.168.102.191/uqplatanos/";
+  // private API_ASOPRACIR = "http://localhost/uqplatanos/";
+  private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
 
   constructor(private http: HttpClient) { }
 
