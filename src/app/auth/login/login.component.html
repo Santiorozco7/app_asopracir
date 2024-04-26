@@ -1,38 +1,48 @@
-<div class="card">
-  <div class="card__body">
-    <h2 class="card__header">Iniciar sesión como {{ roleName }}</h2>
-    <form class="form" [formGroup]="userForm" (ngSubmit)="login()">
-      <div class="form__group">
-        <label class="form__label" for="docType">Tipo de documento</label>
-        <select class="form__input select" name="docType" id="docType" formControlName="docType" required>
-          <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
-        </select>
-      </div>
-      <div class="form__group">
-        <label class="form__label" for="documento">Número de documento</label>
-        <input class="form__input" type="number" id="documento" formControlName="documento" placeholder="Ingrese el número de documento" [ngClass]="{ 'error': (documento.invalid && documento.touched) || err  }"/>
-        <div class="alert" [ngClass]="{ 'alert--error': documento.invalid && (documento.dirty || documento.touched) }">
-          El número de documento es obligatorio
+<div class="container">
+  <img class="background" src="../../../assets/log.jpeg" alt="fondo">
+  <div class="login">
+    <div class="login__image">
+      <img class="logo" src="../../../assets/logo_asopracir.png" alt="Logo asopracir">
+    </div>
+    <div class="login__body">
+      <h2 class="header">Iniciar sesión como {{ roleName }}</h2>
+      <form class="form" [formGroup]="userForm" (ngSubmit)="login()">
+        <div class="form__group">
+          <label class="form__label" for="docType">Tipo de documento</label>
+          <select class="input select" name="docType" id="docType" formControlName="docType" required [(ngModel)]="defaultDocType">
+            <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
+          </select>
         </div>
-      </div>
-      <div class="form__group">
-        <label class="form__label" for="password">Contraseña</label>
-        <input class="form__input" type="password" id="password" formControlName="password" placeholder="Ingrese su contraseña" [ngClass]="{ 'error': (password.invalid && password.touched) || err }"/>
-        <div class="alert" [ngClass]="{ 'alert--error': password.invalid && (password.dirty || password.touched) }">
-          La contraseña es obligatoria
+        <div class="form__group">
+          <label class="form__label" for="documento">Número de documento</label>
+          <div class="form__input">
+            <input class="input" type="number" id="documento" formControlName="documento" placeholder="Ingrese el número de documento" [ngClass]="{ 'error': (documento.invalid && documento.touched) || err  }"/>
+            <svg class="alert--icon" *ngIf="documento.invalid && (documento.dirty || documento.touched) || err" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
+            </svg>
+          </div>
         </div>
-      </div>
-      <div class="form__group">
-        <button class="button button--success" [disabled]="userForm.invalid">Iniciar sesión</button>
-        <div class="alert" [ngClass]="{ 'alert--error': err }">los datos ingresados son incorrectos</div>
-      </div>
-    </form>
-    <div class="options">
-      <p>Otras opciones</p>
-      <div class="buttons">
-        <button class="button button--search" (click)="roleSelect('0')" *ngIf="role !== '0'">Agricultor</button>
-        <button class="button button--search" (click)="roleSelect('1')" *ngIf="role !== '1'">Colaborador</button>
-        <button class="button button--search" (click)="roleSelect('3')" *ngIf="role !== '3'">Asociado</button>
+        <div class="form__group">
+          <label class="form__label" for="password">Contraseña</label>
+          <div class="form__input">
+            <input class="input" type="password" id="password" formControlName="password" placeholder="Ingrese su contraseña" [ngClass]="{ 'error': (password.invalid && password.touched) || err }"/>
+            <svg class="alert--icon" *ngIf="password.invalid && (password.dirty || password.touched) || err" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="form__group">
+          <button class="button button--success">Iniciar sesión</button>
+          <!-- <div class="alert" [ngClass]="{ 'alert--error': err }">los datos ingresados son incorrectos</div> -->
+        </div>
+      </form>
+      <div class="options">
+        <p>Otras opciones</p>
+        <div class="buttons">
+          <button class="button button--search" (click)="roleSelect('0')" *ngIf="role !== '0'">Productor</button>
+          <button class="button button--search" (click)="roleSelect('1')" *ngIf="role !== '1'">Logística</button>
+          <button class="button button--search" (click)="roleSelect('3')" *ngIf="role !== '3'">Administrador</button>
+        </div>
       </div>
     </div>
   </div>

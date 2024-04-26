@@ -1,40 +1,66 @@
-.card {
+.container {
   height: 100vh;
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  background-color: #FEFEFE;
+  font-weight: bold;
+  font-size: large;
 }
 
-.card__body {
-  width: 90%;
+.login {
+  display: flex;
+  width: 70%;
+  height: 90%;
+}
+
+.login__image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.logo {
+  width: 30rem;
+}
+
+.login__body {
+  width: 50%;
   min-width: 300px;
-  max-width: 500px;
+  /* max-width: 500px; */
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  justify-content: space-between;
 }
 
-.card__header, .alert {
+.header, .alert {
   text-align: center;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  height: 350px;
+  gap: 30px;
+  justify-content: space-evenly;
 }
 
 .form__group {
-  height: 75px;
   display: flex;
+  gap: 5px;
   flex-direction: column;
 }
 
 .form__input {
+  position: relative;
+}
+
+.input {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -46,6 +72,14 @@
   font-size: 14px; 
   margin-top: 5px; 
   visibility: hidden;
+}
+
+.alert--icon {
+  position: absolute;
+  width: 1rem;
+  fill: #f00;
+  height: 100%;
+  right: 0.5rem;
 }
 
 .error {
@@ -74,15 +108,35 @@
 }
 
 .button--success {
-  margin-bottom: 1.5rem;
   margin-top: 0;
 }
 
+.background {
+  display: none;
+}
+
 @media only screen and (min-width: 0px) and (max-width: 768px) {
-  .card__body {
-    padding: 30px;
-    gap: 60px;
+  .login {
+    width: 80%;
+    z-index: 999;
+  }
+
+  .login__image {
+    display: none;
+  }
+
+  .background {
+    display: unset;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+  }
+
+  .login__body {
+    padding: 0;
     box-shadow: none;
     width: 100%;
+    justify-content: space-between;
   }
 }

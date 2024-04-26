@@ -1,0 +1,21 @@
+.header {
+    background-color: #f6f6f6;
+    padding: 2rem;
+    height: 15vh;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto; 
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .header__title {
+    font-size: 1.5rem; 
+  }
+  
+  .icon {
+    width: 1.5rem;
+    position: absolute;
+    right: 5%;
+  }

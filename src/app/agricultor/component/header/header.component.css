@@ -1,12 +1,20 @@
 .header {
   background-color: #f6f6f6;
-  padding: 1rem; /* Ajustado en rem para ser relativo al tamaño de fuente del elemento raíz */
+  padding: 2rem; 
   text-align: center;
-  max-width: 800px; /* Ajusta según tus necesidades */
-  margin: 0 auto; /* Centra el contenido */
+  max-width: 800px;
+  margin: 0 auto; 
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .header__title {
-  padding: 1rem; 
   font-size: 1.5rem; 
+}
+
+.icon {
+  width: 1.5rem;
+  position: absolute;
+  right: 5%;
 }

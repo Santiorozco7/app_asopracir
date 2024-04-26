@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NotificationModule } from './notification/notification.module';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -21,9 +20,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     HttpClientModule,
     NotificationModule
   ],
-  providers: [
-    { provide: LocationStrategy, useClass: HashLocationStrategy}
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -12,7 +12,8 @@ import { formatDate } from '@angular/common';
 export class LoginComponent {
   err:boolean =false;
   role:string = '0';
-  roleName:string = 'agricultor';
+  roleName:string = 'productor';
+  defaultDocType: number = 0;
 
   docTypeselect: any[] = [
     { id: 0, name: 'Cédula de ciudadanía' },
@@ -58,15 +59,15 @@ export class LoginComponent {
     this.role = role;
     switch (role) {
       case '0':
-        this.roleName = "agricultor"
+        this.roleName = "productor"
         break;
       
       case '1':
-        this.roleName = "colaborador"
+        this.roleName = "logística"
         break;
 
       case '3':
-        this.roleName = "asociado"
+        this.roleName = "administrador"
         break;
 
       default:

@@ -1,17 +1,4 @@
 <div class="container" *ngIf="!modalVisible">
-  <div class="date-container" *ngIf="!mostrarTodos">
-    <a href="javascript:void(0);" class="show" (click)="disminuirDia()">
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"></path>
-      </svg>   
-    </a>
-    <span class="fecha-actual">{{ fechaActual.toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric'}) }}</span>    
-    <a href="javascript:void(0);" class="show" (click)="aumentarDia()">
-      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
-      </svg>
-    </a>
-  </div>
   <div class="container__error" *ngIf="alertFlag">
     <svg class="icon--error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
       <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
@@ -144,6 +131,19 @@
       <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="(todasOrdenesRecogidasFlag && route.routeState === '2')">Finalizar ruta</button>
     </div>
   </ng-container>
+  <div class="date-container" *ngIf="!mostrarTodos">
+    <a href="javascript:void(0);" class="show" (click)="disminuirDia()">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"></path>
+      </svg>   
+    </a>
+    <span class="fecha-actual">{{ fechaActual.toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric'}) }}</span>    
+    <a href="javascript:void(0);" class="show" (click)="aumentarDia()">
+      <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+      </svg>
+    </a>
+  </div>
 </div>
 
 <app-order-form [modalVisible]="modalVisible" [orderID]="orderID" (cerrarModal)="closeOrderForm()" (cerrarActualizar)="View(fechaActual)"></app-order-form>
