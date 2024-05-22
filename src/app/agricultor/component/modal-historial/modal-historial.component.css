@@ -32,12 +32,10 @@ button {
 
 .modal__card {
   width: 100%;
-  height: auto;
+  height: 100%;
   padding: 1rem;
-  margin: 0 1rem;
   display: flex;
   overflow: scroll;
-  border-radius: 1rem;
   flex-direction: column;
   background-color: white;
   justify-content: space-between;
@@ -83,6 +81,7 @@ button {
 .modal__content {
   height: 100%;
   display: flex;
+  gap: 30px;
   flex-direction: column;
 }
 
@@ -92,9 +91,9 @@ button {
 
 .form__item {
   display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
+  flex-direction: column;
   justify-content: space-between;
+  gap: 5px;
 }
 
 .form__input {
@@ -109,5 +108,6 @@ button {
   display: block;
   overflow: hidden;
   white-space: nowrap;
+  width: 100%;
   text-overflow: ellipsis;
 }

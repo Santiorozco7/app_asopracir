@@ -12,19 +12,31 @@
       </div>
       <div class="modal__content">
         <div class="form__item">
-          <label class="form__label" for="numBunches">Racimos cosechados en el mes</label>
+          <label class="form__label" for="numBunches">Racimos cosechados</label>
           <input class="form__input input--truncated" id="numBunches" [value]="historyDetails.numBunches" disabled>
         </div>
         <div class="form__item">
-          <label class="form__label" for="weight">Peso total de la cosecha del mes</label>
+          <label class="form__label" for="weight">Peso total de la cosecha</label>
           <input class="form__input input--truncated" id="weight" [value]="historyDetails.weight+'kg'" disabled>
         </div>
         <div class="form__item">
-          <label class="form__label" for="payAmount">Pago de la cosecha del mes</label>
+          <label class="form__label" for="payAmount">Pago de la cosecha</label>
           <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount | currency:'COP ':'symbol':'1.2-2'" disabled>
         </div>
         <div class="form__item">
           <label class="form__label" for="payAmount">Precio por Kilo</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="payAmount">Peso de primera calidad (falta)</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="payAmount">Peso de segunda calidad (falta)</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
+        </div>
+        <div class="form__item">
+          <label class="form__label" for="payAmount">Peso de tercera calidad (falta)</label>
           <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
         </div>
       </div> 
