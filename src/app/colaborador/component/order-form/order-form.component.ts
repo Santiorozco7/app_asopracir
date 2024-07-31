@@ -22,7 +22,7 @@ export class OrderFormComponent implements OnChanges {
     const orderIDString = orderID !== undefined ? orderID : "";
     console.log(orderIDString);
     if (this.stateFlag) {
-      this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
+      this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
         if (result['state'] === 'Ok') {
           console.log('Se actualizo la orden a 2', result);
         } else if (result['state'] === 'Fail') {
@@ -37,7 +37,9 @@ export class OrderFormComponent implements OnChanges {
   firstQualityPricePerKilo?: number;
   secondQualityWeights: number[] = [];
   secondQualityPricePerKilo?: number;
-  
+  thirdQualityWeights: number[] = [];
+  thirdQualityPricePerKilo?: number;
+
   newWeight?: number;
   selectedQuality: string = 'first'; 
 
@@ -56,6 +58,7 @@ export class OrderFormComponent implements OnChanges {
       if (price['state'] === 'Ok') {
         this.firstQualityPricePerKilo = price.data.price1;
         this.secondQualityPricePerKilo = price.data.price2;
+        this.thirdQualityPricePerKilo = price.data.price3;
         console.log('Se obtuvo el precio',price);
       } else if (price['state'] === 'Fail') {
         console.log('No se obtuvo el precio',price);
@@ -73,6 +76,8 @@ export class OrderFormComponent implements OnChanges {
       this.firstQualityPricePerKilo = undefined;
       this.secondQualityWeights = [];
       this.secondQualityPricePerKilo = undefined;
+      this.thirdQualityWeights = [];
+      this.thirdQualityPricePerKilo = undefined;
       
       this.newWeight = undefined;
 
@@ -85,7 +90,7 @@ export class OrderFormComponent implements OnChanges {
     const orderID = this.orderID !== "" ? this.orderID : undefined;
     const orderIDString = orderID !== undefined ? orderID : "";
     console.log(orderIDString);
-    this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
+    this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
       if (result['state'] === 'Ok') {
         console.log('Se actualizo la orden a 2', result);
       } else if (result['state'] === 'Fail') {
@@ -107,31 +112,44 @@ export class OrderFormComponent implements OnChanges {
           this.secondQualityWeights.push(this.newWeight);
           this.newWeight = undefined;
         }
+    } else if (this.selectedQuality === 'third') {
+        if (this.newWeight !== undefined && this.newWeight > 0) {
+          this.thirdQualityWeights.push(this.newWeight);
+          this.newWeight = undefined;
+        }
     }
   }
   
   mostrarTodos: boolean = false;
-  qualityFilter: boolean =false;
+  qualityFilter: number = 0;
   
   toggleVerTodos() {
     this.mostrarTodos = !this.mostrarTodos;
   }
 
   filter() {
-    this.qualityFilter = !this.qualityFilter;
+    this.qualityFilter = this.qualityFilter + 1;
+    if (this.qualityFilter == 3) {
+      this.qualityFilter = 0;
+    }
   }
 
   deleteWeight(index: number): void {
-    if (this.qualityFilter) {
+    if (this.qualityFilter == 0) {
       this.firstQualityWeights.splice(index, 1);
       this.showDialog = true;
       this.positiveNotification = true;
       this.message = `Se ha eliminado el racimo de primera`;              
-    } else if (!this.qualityFilter) {
+    } else if (this.qualityFilter == 1) {
       this.secondQualityWeights.splice(index, 1);
       this.showDialog = true;
       this.positiveNotification = true;
       this.message = `Se ha eliminado el racimo de segunda`;
+    } else if (this.qualityFilter == 2) {
+      this.thirdQualityWeights.splice(index, 1);
+      this.showDialog = true;
+      this.positiveNotification = true;
+      this.message = `Se ha eliminado el racimo de tercera`;
     }
   }
 
@@ -153,19 +171,20 @@ export class OrderFormComponent implements OnChanges {
   
   // Calcula el total de racimos sumando la longitud de los arreglos de pesos de ambas calidades
   calculateTotalBunchesAll(): number {
-    return this.firstQualityWeights.length + this.secondQualityWeights.length;
+    return this.firstQualityWeights.length + this.secondQualityWeights.length + this.thirdQualityWeights.length;
   }
 
   // Calcula el total del peso sumando los pesos de ambas calidades
   calculateTotalWeightAll(): number {
-    return this.calculateTotalWeight(this.firstQualityWeights) + this.calculateTotalWeight(this.secondQualityWeights);
+    return this.calculateTotalWeight(this.firstQualityWeights) + this.calculateTotalWeight(this.secondQualityWeights) + this.calculateTotalWeight(this.thirdQualityWeights);
   }
 
   // Calcula el precio total sumando los precios de ambas calidades
   calculateTotalPriceAll(): number {
     const totalPriceAll =
       this.calculateTotalPrice(this.firstQualityWeights, this.firstQualityPricePerKilo) +
-      this.calculateTotalPrice(this.secondQualityWeights, this.secondQualityPricePerKilo);
+      this.calculateTotalPrice(this.secondQualityWeights, this.secondQualityPricePerKilo) +
+      this.calculateTotalPrice(this.thirdQualityWeights, this.thirdQualityPricePerKilo);
     return totalPriceAll;
   }  
 
@@ -181,12 +200,14 @@ export class OrderFormComponent implements OnChanges {
   onConfirm() {
     const platanosLengthString = this.calculateTotalBunches(this.firstQualityWeights).toString();
     const platanosCalidadLengthString = this.calculateTotalBunches(this.secondQualityWeights).toString();
+    const platanosCalidadthirdLengthString = this.calculateTotalBunches(this.thirdQualityWeights).toString();
     const sumaPlatanosString = this.calculateTotalWeight(this.firstQualityWeights) !== undefined ? this.calculateTotalWeight(this.firstQualityWeights).toString() : undefined;
     const sumaPlatanosCalidadString = this.calculateTotalWeight(this.secondQualityWeights) !== undefined ? this.calculateTotalWeight(this.secondQualityWeights).toString() : undefined;
-    const precioTotal = this.firstQualityPricePerKilo !== undefined && this.secondQualityPricePerKilo !== undefined ? this.calculateTotalPriceAll().toString() : undefined;
+    const sumaPlatanosCalidadSthirdtring = this.calculateTotalWeight(this.thirdQualityWeights) !== undefined ? this.calculateTotalWeight(this.thirdQualityWeights).toString() : undefined;
+    const precioTotal = this.firstQualityPricePerKilo !== undefined && this.secondQualityPricePerKilo !== undefined && this.thirdQualityPricePerKilo !== undefined ? this.calculateTotalPriceAll().toString() : undefined;
     
-    console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', precioTotal, ' ', this.encargado)
-    this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, platanosLengthString, platanosCalidadLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
+    console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', sumaPlatanosCalidadSthirdtring,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', platanosCalidadthirdLengthString,' ', precioTotal, ' ', this.encargado)
+    this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, sumaPlatanosCalidadSthirdtring, platanosLengthString, platanosCalidadLengthString, platanosCalidadthirdLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
       if (result['state'] === 'Ok') {
         console.log('Se actualizo la orden',result);
         

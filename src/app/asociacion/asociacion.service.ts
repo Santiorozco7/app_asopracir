@@ -131,12 +131,40 @@ export class AsociacionService {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createRoute&token=${localStorage.getItem('token')}&transID=${transID}&vehID=${vehID}&collabID=${collabID}&pickupDate=${pickupDate}`);
   }
 
-  public createTransporter(userID:string, vehID:string, licenseType:string, licenseExpiration:string): Observable<any> {
-    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createTransporter&token=${localStorage.getItem('token')}&userID=${userID}&vehID=${vehID}&licenseType=${licenseType}&licenseExpiration=${licenseExpiration}`);
-  }
+  // public createTransporter(userID:string, vehID:string, licenseType:string, licenseExpiration:string): Observable<any> {
+  //   return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createTransporter&token=${localStorage.getItem('token')}&userID=${userID}&vehID=${vehID}&licenseType=${licenseType}&licenseExpiration=${licenseExpiration}`);
+  // }
 
   public createCollab(userID:string, roleName:string): Observable<any> {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=createCollab&token=${localStorage.getItem('token')}&userID=${userID}&roleName=${roleName}`);
+  }
+
+  public getVehicle(plate:string): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getVehicle&token=${localStorage.getItem('token')}&plate=${plate}`);
+  }
+
+  public createTransporter(
+    userID: string,
+    vehID: string,
+    licenseType?: string,
+    licenseExpiration?: string
+  ): Observable<any> {
+    let token = localStorage.getItem('token');
+
+    let url = `${this.API_ASOPRACIR}assoc.php?do=createTransporter&userID=${userID}&vehID=${vehID}`;
+
+    if (licenseType) {
+      url += `&licenseType=${licenseType}`;
+    }
+    if (licenseExpiration) {
+      url += `&licenseExpiration=${licenseExpiration}`;
+    }
+
+    url += `&token=${token}`;
+
+    url = this.addTimestamp(url);
+
+    return this.http.get(url);
   }
 
   public createUser(
@@ -422,6 +450,59 @@ export class AsociacionService {
     return this.http.get(url);
   }
 
+  public updateOrder(
+    orderID:string, 
+    weight1?:string, 
+    weight2?:string, 
+    weight3?:string,
+    numBunches1?:string, 
+    numBunches2?:string,
+    numBunches3?:string,
+    payAmount?:string, 
+    payDate?:string, 
+    signedBy?:string, 
+    state?:string
+    ): Observable<any> {
+    const token = localStorage.getItem('token');
+
+    let url = `${this.API_ASOPRACIR}assoc.php?do=updateOrder&orderID=${orderID}`;
+
+    if (weight1) {
+      url += `&weight1=${weight1}`;
+    }
+    if (weight2) {
+      url += `&weight2=${weight2}`;
+    }
+    if (weight3) {
+      url += `&weight3=${weight3}`;
+    }
+    if (numBunches1) {
+      url += `&numBunches1=${numBunches1}`;
+    }
+    if (numBunches2) {
+      url += `&numBunches2=${numBunches2}`;
+    }
+    if (numBunches3) {
+      url += `&numBunches3=${numBunches3}`;
+    }
+    if (payAmount) {
+      url += `&payAmount=${payAmount}`;
+    }
+    if (payDate) {
+      url += `&payDate=${payDate}`;
+    }
+    if (signedBy) {
+      url += `&signedBy=${signedBy}`;
+    }
+    if (state) {
+      url += `&state=${state}`;
+    }
+    
+    url += `&token=${token}`;
+
+    return this.http.get(url);
+  }
+
   public updateRoute(
     routeID: number,
     pickupDate?: string,
@@ -483,6 +564,10 @@ export class AsociacionService {
     return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=setFarmerStatus&token=${localStorage.getItem('token')}&farmerID=${farmerID}&state=${state}`);
   }
 
+  public getDetailedStats(month:string, year:string): Observable<any> {
+    return this.http.get(`${this.API_ASOPRACIR}assoc.php?do=getDetailedStats&token=${localStorage.getItem('token')}&month=${month}&year=${year}`);
+  }
+
   public getStats(filter?:string): Observable<any> {
     let token = localStorage.getItem('token');
 
@@ -499,7 +584,7 @@ export class AsociacionService {
     return this.http.get(url);
   }
 
-  public uploadFile(file: File, ID: number, folder: string): Observable<any> {
+  public uploadFile(file: File, ID: string, folder: string): Observable<any> {
     let token = localStorage.getItem('token');
     if (!token) {
       console.error('No se encontró un token en el almacenamiento local.');

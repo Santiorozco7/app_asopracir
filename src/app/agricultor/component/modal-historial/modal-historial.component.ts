@@ -14,7 +14,9 @@ export class ModalHistorialComponent {
 
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
-  ngOnChanges() {}
+  ngOnChanges() {
+    console.log(this.historyDetails);
+  }
 
   closeDialog(event: Event): void {
     // Verifica si el clic se realizó fuera del contenido del modal

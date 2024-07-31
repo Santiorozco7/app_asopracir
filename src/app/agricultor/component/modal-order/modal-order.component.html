@@ -33,11 +33,11 @@
       </div>
       <div class="form__item">
         <label class="form__label" for="weight">Peso</label>
-        <input class="form__input input--truncated" id="weight" [value]="order.weight" disabled>
+        <input class="form__input input--truncated" id="weight" [value]="order.weight+'kg'" disabled>
       </div>
       <div class="form__item">
         <label class="form__label" for="payAmount">Pago por la cosecha</label>
-        <input class="form__input input--truncated" id="payAmount" [value]="order.payAmount" disabled>
+        <input class="form__input input--truncated" id="payAmount" [value]="order.payAmount | currency:'COP ':'symbol':'1.2-2'" disabled>
       </div>
       <div class="form__item">
         <label class="form__label" for="signedBy">Recibido por</label>

@@ -42,6 +42,7 @@ export class ModalTransportComponent {
 
   pictureFilePath: string | null = null;
   documentFilePath: string | null = null;
+  licenseFilePath: string | null = null;
   rutFilePath: string | null = null;
   runtFilePath: string | null = null;
   soatFilePath: string | null = null;
@@ -174,7 +175,7 @@ export class ModalTransportComponent {
           // aqui estaba lo de la placa
           
           console.log("El indice del vehiculo: ", this.originalVehicle); // -----------------------------------------
-          console.log("datos originales: ", this.originalData.transID);
+          console.log("datos originales: ", this.originalData);
           // console.log("El estado es 'Ok'");
           console.log(infoTransporter.data);
           // Asignar los valores recibidos del servicio al formulario
@@ -184,15 +185,17 @@ export class ModalTransportComponent {
           
           this.pictureFilePath = userData.filePicture;
           this.documentFilePath = userData.fileDocument;
+          this.licenseFilePath = transporterData.fileLicense;
+          console.log("saa ", this.licenseFilePath);
           this.rutFilePath = userData.fileRUT;
-
-          this.runtFilePath = vehiclesData.fileRUNT;
-          this.soatFilePath = vehiclesData.fileSOAT;
-          this.techrevFilePath = vehiclesData.fileTechRev;
 
           // Se obtiene todo los datos del vehículo que pertenece a la placa
           this.vehicles = vehiclesData.filter((vehicle:Vehicle) => vehicle.plate === this.modalData.placa);
           console.log('Vehículo encontrado:', this.vehicles);
+          
+          this.runtFilePath = this.vehicles[0].fileRUNT;
+          this.soatFilePath = this.vehicles[0].fileSOAT;
+          this.techrevFilePath = this.vehicles[0].fileTechRev;
 
           // const vehiclesAux = vehiclesData[0];
           console.log("vehiculos: ",vehiclesData);

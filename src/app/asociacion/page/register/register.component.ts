@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
 
 interface UploadStatus {
   [key: string]: string;
@@ -13,6 +14,20 @@ interface UploadStatus {
   vehicle_runt: string;
   vehicle_soat: string;
   vehicle_techrev: string;
+}
+
+interface Vehicle {
+  vehID: string;
+  plate: string;
+  type: string;
+  capacity: string;
+  state: string;
+  fileRUNT: string;
+  fileSOAT: string;
+  fileTechRev: string;
+  soatExpiration: string;
+  techExpiration: string;
+  comments: string;
 }
 
 @Component({
@@ -33,7 +48,14 @@ export class RegisterComponent {
   docNumberaux:string = '';
   userID:string = '';
   userData: any; // Declara una variable para almacenar los datos del usuario
+  farmID:string = '';
+  vehID:string = '';
+  ID:string = '';
+  plate:Vehicle[] = [];
 
+  // Variables para verificar la existencia del vehículo por medio de la placa
+  activPlate:boolean = false;
+  plateValue: string = '';
   
   // Roles del usuario
   userFarmer:boolean = false;
@@ -179,6 +201,27 @@ export class RegisterComponent {
       console.log("Recargando transportadores");
       this.router.navigate(['/asociacion/transporte']);
     }
+    else {
+      console.log("Recargando página de registro");
+      this.router.navigate(['/asociacion/registrar']);
+    }
+  }
+
+  ngOnInit(): void {        // Verificar la existencia de la placa antes de crear transportador
+    this.userForm.get('plate')?.valueChanges
+      .pipe(debounceTime(300)) // Espera 300 ms de inactividad antes de actualizar
+      .subscribe(value => {
+        this.plateValue = (value ?? '').toUpperCase();
+        this.service.getVehicle(this.plateValue).subscribe(userData => {
+          if (userData['state'] === 'Ok') {
+            console.log("si hay vehiculo: ", userData);
+            this.activPlate = true;
+          }if(userData['state'] === 'Fail') {
+            console.log('no hay vehiculo');
+            this.activPlate = false;
+          }
+        });
+      });
   }
 
   onSubmit(actionType: number): void {
@@ -428,8 +471,8 @@ export class RegisterComponent {
               } 
             });
           }
-          if (this.assocRegister) {  //Crear Asociado
-            console.log("Creando colaborador...................");
+          if (this.assocRegister) {  //Crear Administrador
+            console.log("Creando Administrador...................");
             this.service.createCollab(this.userID, roleNameAssoc).subscribe(resultAssoc => {
               if (resultAssoc['state'] === 'Ok') {
                 console.log("Asociado Creado");
@@ -453,6 +496,10 @@ export class RegisterComponent {
     }
   }
 
+  onSelectVehicle(event:any) {
+    this.vehID = event.target.value;
+  }
+
   onSelectUserType(event: any) {
     this.selectedValue = event.target.value; // Obtiene el valor seleccionado
     console.log('Valor seleccionado:', this.selectedValue);
@@ -470,7 +517,7 @@ export class RegisterComponent {
         this.assocRegister = true;
         this.collaboratorRegister = false;
         this.transporterRegister = false;
-        console.log('Registrar un Asociado');
+        console.log('Registrar un Administrador');
         break;
 
       case '2':
@@ -478,7 +525,7 @@ export class RegisterComponent {
         this.assocRegister = false;
         this.collaboratorRegister = true;
         this.transporterRegister = false;
-        console.log('Registrar un Colaborador');
+        console.log('Registrar Logística');
         break;
 
       case '3':
@@ -577,6 +624,23 @@ export class RegisterComponent {
               this.userTransporter = userRoles.data.isTransporter;
               this.userCollaborator = userRoles.data.isCollab;
               console.log(this.userFarmer);
+              if(this.userFarmer){
+                this.service.getFarmer(this.docTypeaux, this.docNumberaux).subscribe(farm => {
+                  if (farm['state'] === 'Ok'){
+                    this.farmID = farm.data.farm.farmID;
+                    console.log("datos del predio  ", this.farmID);
+                  }
+                });
+              }
+              if(this.userTransporter){
+                this.service.getTransporter(this.docTypeaux, this.docNumberaux).subscribe(transporter => {
+                  console.log(transporter)
+                  if (transporter['state'] === 'Ok'){
+                    this.plate = transporter.data.vehicles;
+                    console.log("datos del transportador  ", this.plate);
+                  }
+                });
+              }
             }else if (userRoles['state'] === 'Fail') {
               console.log("Roles no encontrados: ", userRoles.data);
             }
@@ -602,34 +666,47 @@ export class RegisterComponent {
 
 onFileSelected(event: any, folder: string) {
   const file = event.target.files[0];
-  const ID = parseInt(this.userID, 10); // Suponiendo que `this.userID` contiene el ID del usuario
+  if (folder === "farm_ownercertificate" && this.userFarmer) {
+    this.ID = this.farmID;
+  } else if ((folder === "vehicle_techrev" || folder === "vehicle_runt" || folder === "vehicle_soat") && this.vehID !== '' && this.userTransporter) {
+    this.ID = this.vehID;
+  } else if (folder === "user_picture" || folder === "user_document" || folder === "user_rut" || folder === "transporter_license"){
+    this.ID = this.userID; // Suponiendo que `this.userID` contiene el ID del usuario
+  }
+  
   console.log('Subiendo archivo...');
-
-  this.service.uploadFile(file, ID, folder).subscribe(upload => {
-    if (upload['state'] === 'Ok') {
-      console.log('Archivo cargado con éxito:', upload.data);
-      // Asignar el mensaje de éxito solo al tipo de archivo que se está cargando
-      this.uploadStatus[folder] = 'Cargado con éxito';
-      // Asignar el filePath según el tipo de archivo cargado
-      switch (folder) {
-        case 'user_picture':
-          this.photoFilePath = upload.filePath;
+  if (this.ID !== '') {
+    this.service.uploadFile(file, this.ID, folder).subscribe(upload => {
+      if (upload['state'] === 'Ok') {
+        console.log('Archivo cargado con éxito:', upload.data);
+        // Asignar el mensaje de éxito solo al tipo de archivo que se está cargando
+        this.uploadStatus[folder] = 'Cargado con éxito';
+        // Asignar el filePath según el tipo de archivo cargado
+        switch (folder) {
+          case 'user_picture':
+            this.photoFilePath = upload.filePath;
+            break;
+          case 'user_document':
+            this.documentFilePath = upload.filePath;
+            break;
+          case 'user_rut':
+            this.rutFilePath = upload.filePath;
+            break;
+           case 'farm_ownercertificate':
+            this.ownercertificateFilePath = upload.filePath;
           break;
-        case 'user_document':
-          this.documentFilePath = upload.filePath;
-          break;
-        case 'user_rut':
-          this.rutFilePath = upload.filePath;
-          break;
-        // Agregar más casos según los tipos de archivos que tengas
+          // Agregar más casos según los tipos de archivos que tengas
+        }
+      } else if (upload['state'] === 'Fail') {
+        console.log('Error al cargar:', upload.data);
+        console.log('Error al cargar:', upload.errmsg);
+        // Asignar el mensaje de error solo al tipo de archivo que se está cargando
+        this.uploadStatus[folder] = 'Error al cargar: ' + upload.errmsg;
       }
-    } else if (upload['state'] === 'Fail') {
-      console.log('Error al cargar:', upload.data);
-      console.log('Error al cargar:', upload.errmsg);
-      // Asignar el mensaje de error solo al tipo de archivo que se está cargando
-      this.uploadStatus[folder] = 'Error al cargar: ' + upload.errmsg;
-    }
-  });
+    });
+  } else {
+    console.log("Seleccione un vehiculo.........")
+  }
 }
 
   rolesAdd(selectRole:string):void {
@@ -691,7 +768,7 @@ onFileSelected(event: any, folder: string) {
   }
   
   areCollabFieldsValid(): boolean {
-    return this.userForm.get('roleNameCollab')?.value === 'Tesorero';
+    return this.userForm.get('roleNameCollab')?.value === 'Logística';
   }
   
   areTransporterFieldsValid(): boolean {

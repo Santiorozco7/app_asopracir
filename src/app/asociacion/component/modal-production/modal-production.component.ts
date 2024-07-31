@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostListener } from '@angular/core';
+import { AsociacionService } from '../../asociacion.service';
 
 @Component({
   selector: 'app-modal-production',
@@ -8,12 +9,24 @@ import { Component, Input, Output, EventEmitter, Renderer2, ElementRef, HostList
 export class ModalProductionComponent {
   @Input() showModalHistory: boolean = false;
   @Input() historyDetails: any = {};
+  orderDetails: any[] = [];
 
   @Output() closeModalHistory = new EventEmitter<void>();
 
-  constructor(private renderer: Renderer2, private el: ElementRef) {}
+  constructor(private renderer: Renderer2, private el: ElementRef, private service: AsociacionService) {
+  }
 
-  ngOnChanges() {}
+  ngOnChanges() {
+    
+  }
+
+  update(details:any) {
+    console.log(details);
+    this.service.getDetailedStats(details.Month, details.Year).subscribe(orderDetails => {
+     console.log(orderDetails);
+     this.orderDetails = orderDetails.data;
+    });
+  }
 
   cerrarTodo() {
     this.closeModalHistory.emit();

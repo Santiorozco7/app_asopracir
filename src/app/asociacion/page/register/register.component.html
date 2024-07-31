@@ -116,8 +116,8 @@
       <span class="mr"><h3 class="subtitle inline">Tipo de usuario a registrar</h3></span>
       <select class="form__input select" name="select" id="userType" (change)="onSelectUserType($event)">
         <option value="0">Agricultor</option>
-        <option value="1">Asociado</option>
-        <option value="2">Colaborador</option>
+        <option value="1">Administrador</option>
+        <option value="2">Logística</option>
         <option value="3">Transportador</option>
       </select>
     </div>
@@ -154,7 +154,7 @@
           </div>       
         </div>
   
-        <div class="section__header">
+        <!-- <div class="section__header">
           <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" [attr.viewBox]="getHeaderIcon().viewBox">
             <path [attr.d]="getHeaderIcon().path"/>
           </svg>
@@ -165,7 +165,7 @@
             <label for="fileOwnerCertificate">certificado de propiedad</label>
             <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
           </div> 
-        </div>
+        </div> -->
       </ng-container>
         
       <!-- Crear Transportador -->
@@ -191,6 +191,7 @@
           <div class="section__item">
             <label class="required" for="plate">placa</label>
             <input class="form__input" type="text" id="plate" formControlName="plate">
+            <span style="color: red;" *ngIf="activPlate">El vehículo existentes</span>
           </div>
           <div class="section__item">
             <label class="required" for="soatExpiration">vencimiento de SOAT</label>
@@ -225,33 +226,34 @@
       
       <!-- Crear Colaborador -->
       <div class="form__section" *ngIf="collaboratorRegister">
-        <p>Escribir "Tesorero" para registrarlo como colaborador</p>
+        <p>Escribir "Logística" para registrarlo como Logística</p>
         <div class="section__item">
-          <label class="required" for="roleNameCollab">nombre colaborador</label>
+          <label class="required" for="roleNameCollab">Ecribir Logística</label>
           <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
         </div>     
       </div>
       
-      <!-- Crear Asociado -->
+      <!-- Crear Administrador -->
       <div class="form__section" *ngIf="assocRegister">
-        <p>Escribir "Admin" para registrarlo como asociado</p>
+        <p>Escribir "Admin" para registrarlo como Administrador</p>
         <div class="section__item">
-          <label class="required" for="roleNameAssoc">nombre colaborador</label>
+          <label class="required" for="roleNameAssoc">Escribir Admin</label>
           <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
         </div>     
       </div>
     </div>
 
-    <button class="button button--success" type="submit" [disabled]=" 
+    <!-- Verificar la existencia del vehículo por medio de la placa con "activPlate" -->
+    <button class="button button--success" type="submit" *ngIf="!activPlate" [disabled]=" 
       !(areRequiredFieldsValid()) ||
       (farmerRegister && !areAgricultorFieldsValid()) || 
       (assocRegister && !areAssocFieldsValid()) ||
       (collaboratorRegister && !areCollabFieldsValid()) || 
       (transporterRegister && !areTransporterFieldsValid())">
       <div *ngIf="farmerRegister">Crear Agricultor</div>
-      <div *ngIf="assocRegister">Crear Asociado</div>
+      <div *ngIf="assocRegister">Crear Administrador</div>
       <div *ngIf="transporterRegister">Crear Transportador</div>
-      <div *ngIf="collaboratorRegister">Crear Colaborador</div>
+      <div *ngIf="collaboratorRegister">Crear Logística</div>
     </button>
     
   </form>
@@ -311,7 +313,7 @@
         <div class="section_photo">
           <div class="photo" (click)="fileInput.click()">
             <!-- Si no hay una foto cargada, muestra el círculo con el ícono por defecto -->
-            <svg class="icon__photo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <svg class="icon__photo" *ngIf="!this.photoFilePath" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
               <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
             </svg>
             <!-- Input de carga de archivos visible -->
@@ -370,6 +372,12 @@
     
           <!-- documents transporter -->
           <div class="documents" *ngIf="userTransporter">
+            <div>
+              <select class="form__input select" name="select" (change)="onSelectVehicle($event)">
+                <option value="" disabled selected>Seleccione un vehículo</option>
+                <option *ngFor="let item of plate" [value]="item.vehID">{{ item.plate }}</option>
+              </select>
+            </div>
             <div class="document">
               <label for="transport_license">Licencia de transporte</label>
               <div class="doc" (click)="transport_license.click()">
@@ -453,8 +461,8 @@
       <div class="form__section">
         <div class="rolesSelect">
           <button class="button button--success" *ngIf="!userFarmer" (click)="rolesAdd('0')">Agricultor</button>
-          <button class="button button--success" *ngIf="!userAssoc" (click)="rolesAdd('1')">Asociado</button>
-          <button class="button button--success" *ngIf="!userCollaborator" (click)="rolesAdd('2')">Colaborador</button>
+          <button class="button button--success" *ngIf="!userAssoc" (click)="rolesAdd('1')">Administrador</button>
+          <button class="button button--success" *ngIf="!userCollaborator" (click)="rolesAdd('2')">Logística</button>
           <button class="button button--success" *ngIf="!userTransporter" (click)="rolesAdd('3')">Transportador</button>        
         </div>
       </div>
@@ -483,10 +491,10 @@
           <label for="GPSposition">posición GPS</label>
           <input class="form__input" type="text" id="GPSposition" formControlName="GPSposition">
         </div>
-        <div class="section__item">
+        <!-- <div class="section__item">
           <label for="fileOwnerCertificate">certificado de propiedad</label>
           <input class="form__input" type="file" id="fileOwnerCertificate" formControlName="fileOwnerCertificate">
-        </div>        
+        </div>         -->
       </div>  
   
       <!-- Crear Transportador -->
@@ -533,20 +541,20 @@
         </div>
       </div>
   
-      <!-- Crear Colaborador -->
+      <!-- Crear Logística -->
       <div class="form__section" *ngIf="collaboratorRegister">
-        <p>Escribir "Tesorero" para registrarlo como colaborador</p>
+        <p>Escribir "Logística" para registrarlo como Logística</p>
         <div class="section__item">
-          <label class="required" for="roleNameCollab">nombre colaborador</label>
+          <label class="required" for="roleNameCollab">Escribir Logística</label>
           <input class="form__input" type="text" id="roleNameCollab" formControlName="roleNameCollab">
         </div>     
       </div>
   
-      <!-- Crear Asociado -->
+      <!-- Crear Administrador -->
       <div class="form__section" *ngIf="assocRegister">
-        <p>Escribir "Admin" para registrarlo como asociado</p>
+        <p>Escribir "Admin" para registrarlo como Administrador</p>
         <div class="section__item">
-          <label class="required" for="roleNameAssoc">nombre colaborador</label>
+          <label class="required" for="roleNameAssoc">Escribir Admin</label>
           <input class="form__input" type="text" id="roleNameAssoc" formControlName="roleNameAssoc">
         </div>     
       </div>
@@ -559,8 +567,8 @@
         *ngIf="farmerRegister || collaboratorRegister || transporterRegister || assocRegister">
         <div *ngIf="farmerRegister">Crear Agricultor</div>
         <div *ngIf="transporterRegister">Crear Transportador</div>
-        <div *ngIf="collaboratorRegister">Crear Colaborador</div>
-        <div *ngIf="assocRegister">Crear Asociado</div>
+        <div *ngIf="collaboratorRegister">Crear Logística</div>
+        <div *ngIf="assocRegister">Crear Administrador</div>
       </button>
     </form>
   </div>

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-vehicle',
@@ -16,6 +17,9 @@ export class CreateVehicleComponent {
   userIDaux:string = '';
   activVehicle:boolean = false;
   activSpan:boolean = false;
+  activPlate:boolean = false;
+  transID?:number;
+  plateValue: string = '';
 
   // Cuadro de diálogo de confirmación
   mostrarDialogo = false;
@@ -41,14 +45,11 @@ export class CreateVehicleComponent {
   ];
 
   infoUser = this.formBuilder.group({
-    docType: [''],
-    docNumber: ['']
+    docType: ['', Validators.required],
+    docNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]]
   });
 
   infoVehicle = this.formBuilder.group({
-    licenseExpiration: ['', [Validators.required]],
-    licenseType: ['', [Validators.required]],
-
     plate: ['', [Validators.required]],
     soatExpiration: ['', [Validators.required]],
     techExpiration: ['', [Validators.required]],
@@ -67,11 +68,39 @@ export class CreateVehicleComponent {
   }
 
   cerrarTodo() {
+    this.infoUser.setValue({
+      docType: '',
+      docNumber: ''
+    });
+    this.infoVehicle.setValue({
+      plate: '',
+      soatExpiration: '',
+      techExpiration: '',
+      type: '',    
+      capacity: '',
+      comments: ''
+    });
+    this.transID = undefined;
+    this.activVehicle = false;
+    this.activPlate = false;
     this.cerrarcreateVehicle.emit();
   }
 
-  ngOnChanges(): void {
-    
+  ngOnInit(): void {
+    this.infoVehicle.get('plate')?.valueChanges
+      .pipe(debounceTime(300)) // Espera 300 ms de inactividad antes de actualizar
+      .subscribe(value => {
+        this.plateValue = (value ?? '').toUpperCase();
+        this.service.getVehicle(this.plateValue).subscribe(userData => {
+          if (userData['state'] === 'Ok') {
+            console.log("si hay vehiculo: ", userData);
+            this.activPlate = true;
+          }if(userData['state'] === 'Fail') {
+            console.log('no hay vehiculo');
+            this.activPlate = false;
+          }
+        });
+      });
   }
 
   onSubmitUser(): void {
@@ -82,12 +111,14 @@ export class CreateVehicleComponent {
 
       // console.log(formDataUser);
 
-      this.service.getUser(docType, docNumber).subscribe(userData => {
+      this.service.getTransporter(docType, docNumber).subscribe(userData => {
         if (userData['state'] === 'Ok') {
-          this.userIDaux = userData.data.userID;
+          console.log("Todos los datosssss: ", userData.data);
+          this.userIDaux = userData.data.user.userID;
+          this.transID = userData.data.transID;
+          console.log("transID: ", this.transID);
           this.activVehicle = true;
           this.activSpan = false;
-          console.log(userData.data.userID);
         }if(userData['state'] === 'Fail') {
           this.activSpan = true;
           console.log('Algo salio mal');
@@ -101,8 +132,6 @@ export class CreateVehicleComponent {
   onSubmit(): void {
     if (this.infoVehicle.valid) {
       const formData = this.infoVehicle.value;
-      const licenseExpiration: string = formData.licenseExpiration ?? "";
-      const licenseType: string = formData.licenseType ?? "";
       
       const plate: string = formData.plate ?? "";
       const soatExpiration: string = formData.soatExpiration ?? "";
@@ -121,18 +150,19 @@ export class CreateVehicleComponent {
       ).subscribe(resultVehicle => {
         if (resultVehicle['state'] === 'Ok') {
           console.log('Vehículo creada con id:', resultVehicle.data.vehID);
-          this.service.createTransporter(this.userIDaux, resultVehicle.data.vehID, licenseType, licenseExpiration).subscribe(resultTransport => {
+          this.service.createTransporter(this.userIDaux, resultVehicle.data.vehID).subscribe(resultTransport => {
             if (resultTransport['state'] === 'Ok') {
               console.log("Transportador Creado");
               this.cerrarActualizar.emit();
             }if (resultVehicle['state'] === 'Fail') {
               console.log("Trasnportador no creado");
+              this.cerrarActualizar.emit();
             }
-          })
+          });
         }if (resultVehicle['state'] === 'Fail') {
           console.log("Vehiculo no creado");
         }
-      })
+      });
       this.cerrarcreateVehicle.emit();
     }
   }

@@ -1,8 +1,9 @@
-import { Component, Renderer2, ElementRef } from '@angular/core';
+import { Component, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AsociacionService } from '../../asociacion.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
+import { ModalProductionComponent } from '../../component/modal-production/modal-production.component';
 
 @Component({
   selector: 'app-production',
@@ -10,6 +11,7 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrls: ['./production.component.css']
 })
 export class ProductionComponent {
+  @ViewChild(ModalProductionComponent) updateModal!: ModalProductionComponent;
   history: any[] = [];
   historyDetails: any = {};
   verificacionHistorial:boolean = false;
@@ -34,7 +36,7 @@ export class ProductionComponent {
 
   // Se cambio el View
   View() {
-    this.service.getStats(this.stateValue).subscribe(stats => {
+    this.service.getStats("lastyear").subscribe(stats => {
       if (stats['state'] === 'Ok') {
         this.verificacionHistorial = false;
         this.history = stats.data;
@@ -61,6 +63,7 @@ export class ProductionComponent {
   modalHistory(historyDetails:string) {
     this.showModalHistory = true;
     this.historyDetails = historyDetails;
+    this.updateModal.update(historyDetails);
     this.renderer.addClass(this.el.nativeElement.ownerDocument.body, 'modal--open'); 
   }
 

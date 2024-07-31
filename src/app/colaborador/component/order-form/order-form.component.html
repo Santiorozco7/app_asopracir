@@ -1,6 +1,6 @@
 <div class="container" *ngIf="modalVisible">
   <div class="header">
-    <a href="javascript:void(0);" class="link left" [ngClass]="{ disabled: (firstQualityWeights.length != 0 || secondQualityWeights.length != 0) && encargado != '' }" (click)="cerrar()" *ngIf="!mostrarTodos">
+    <a href="javascript:void(0);" class="link left" [ngClass]="{ disabled: (firstQualityWeights.length != 0 || secondQualityWeights.length != 0 || thirdQualityWeights.length != 0) && encargado != '' }" (click)="cerrar()" *ngIf="!mostrarTodos">
       <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
         <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
       </svg>
@@ -35,6 +35,7 @@
         <select class="form__input select" id="qualitySelect" [(ngModel)]="selectedQuality">
           <option value="first">Primera</option>
           <option value="second">Segunda</option>
+          <option value="third">Tercera</option>
         </select>
       </div>
       <div class="section__item">
@@ -68,6 +69,12 @@
             <td>{{ calculateTotalPrice(secondQualityWeights, secondQualityPricePerKilo) }}</td>
           </tr>
           <tr>
+            <td>Tercera</td>
+            <td>{{ calculateTotalBunches(thirdQualityWeights) }}</td>
+            <td>{{ calculateTotalWeight(thirdQualityWeights) }}</td>
+            <td>{{ calculateTotalPrice(thirdQualityWeights, thirdQualityPricePerKilo) }}</td>
+          </tr>
+          <tr>
             <td>Total</td>
             <td>{{ calculateTotalBunchesAll() }}</td>
             <td>{{ calculateTotalWeightAll() }}</td>
@@ -81,14 +88,14 @@
     </button>
   </div>
   <div class="card" *ngIf="mostrarTodos">
-    <h3>racimos de {{ qualityFilter ? "segunda" : "primera" }} calidad</h3>
+    <h3>racimos de {{ qualityFilter == 0 ? "primera" : qualityFilter == 1 ? "segunda" : "tercera" }} calidad</h3>
     <div>
       <label for="pricePerKiloInput">Precio actual por kilo:</label>
-      <input type="number" id="pricePerKiloInput" [(ngModel)]="qualityFilter ? secondQualityPricePerKilo : firstQualityPricePerKilo" disabled/>
+      <input type="number" id="pricePerKiloInput" [(ngModel)]="qualityFilter == 0 ? firstQualityPricePerKilo : qualityFilter == 1 ? secondQualityPricePerKilo : thirdQualityPricePerKilo" disabled/>
     </div>
     <ul>
       <li
-        *ngFor="let weight of qualityFilter ? firstQualityWeights : secondQualityWeights; let i = index">
+        *ngFor="let weight of qualityFilter == 0 ? firstQualityWeights : qualityFilter == 1 ? secondQualityWeights : thirdQualityWeights; let i = index">
         {{ weight }} kg
         <button (click)="deleteWeight(i)">Eliminar</button>
       </li>
@@ -110,6 +117,7 @@
         <div class="group">
           <p class="item">racimos de primera <span class="item--value">{{calculateTotalWeight(firstQualityWeights)}} /Kg</span></p>
           <p class="item">racimos de segunda <span class="item--value">{{calculateTotalWeight(secondQualityWeights)}} /Kg</span></p>
+          <p class="item">racimos de tercera <span class="item--value">{{calculateTotalWeight(thirdQualityWeights)}} /Kg</span></p>
         </div>
       </div>
       <div class="modal-footer">

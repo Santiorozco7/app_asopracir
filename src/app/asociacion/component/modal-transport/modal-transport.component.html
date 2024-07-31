@@ -27,10 +27,11 @@
         <div class="documents">
           <ul>
             <li *ngIf="documentFilePath" (click)="openDocument(documentFilePath)"><a class="link">Ver documento de identidad</a></li>
+            <li *ngIf="licenseFilePath" (click)="openDocument(licenseFilePath)"><a class="link">Ver licencia de conducir</a></li>
             <li *ngIf="rutFilePath" (click)="openDocument(rutFilePath)"><a class="link">Ver RUT</a></li>
-            <li *ngIf="runtFilePath" (click)="openDocument(runtFilePath)"><a class="link">Ver certificado de dueño de la finca</a></li>
-            <li *ngIf="soatFilePath" (click)="openDocument(soatFilePath)"><a class="link">Ver certificado de dueño de la finca</a></li>
-            <li *ngIf="techrevFilePath" (click)="openDocument(techrevFilePath)"><a class="link">Ver certificado de dueño de la finca</a></li>
+            <li *ngIf="runtFilePath" (click)="openDocument(runtFilePath)"><a class="link">Ver RUNT del Vehículo</a></li>
+            <li *ngIf="soatFilePath" (click)="openDocument(soatFilePath)"><a class="link">Ver SOAT del vehículo</a></li>
+            <li *ngIf="techrevFilePath" (click)="openDocument(techrevFilePath)"><a class="link">Ver Tecno-Mecanica del vahículo</a></li>
           </ul>
         </div>
       </div>
@@ -45,13 +46,13 @@
         </div>
         <div class="section__item">
           <label class="required" for="docType">Tipo de documento</label>
-          <select class="form__input select col-4" name="docType" id="docType" formControlName="docType" required>
+          <select class="form__input select col-4" name="docType" id="docType" formControlName="docType" readonly required>
             <option *ngFor="let item of docTypeselect" [value]="item.id">{{ item.name }}</option>
           </select>
         </div>
         <div class="section__item">
           <label class="required" for="docNumber">N° de Identificación</label>
-          <input class="form__input col-3" type="number" id="docNumber" formControlName="docNumber" required>
+          <input class="form__input col-3" type="number" id="docNumber" formControlName="docNumber" required [readonly]="true">
         </div>
         <div class="section__item">
           <label for="docIssueDate">Fecha de Expedición</label>
@@ -131,7 +132,7 @@
       <div class="form__section">
         <div class="section__item">
           <label class="required" for="plate">placa</label>
-          <input class="form__input col-2" type="text" id="plate" formControlName="plate">
+          <input class="form__input col-2" type="text" id="plate" formControlName="plate"  [readonly]="true">
         </div>
         <div class="section__item">
           <label class="required" for="soatExpiration">vencimiento de SOAT</label>

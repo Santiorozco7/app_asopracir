@@ -39,7 +39,7 @@ export class OrdersComponent {
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private authService: AuthService) {
     this.filterUser.valueChanges.subscribe(() => {
       this.filterValue = this.filterUser.value.state ?? 'pendientes';
-      console.log(this.filterValue);
+      console.log("filtro valor: ", this.filterValue);
       this.View();
     });
     // Llama a la funciones con los valores iniciales
@@ -48,6 +48,12 @@ export class OrdersComponent {
   }
 
   ngOnInit(): void{
+    this.filter = 0;
+    this.View();
+  }
+
+  update(filter:number){
+    this.filter = filter;
     this.View();
   }
 

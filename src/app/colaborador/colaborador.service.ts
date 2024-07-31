@@ -79,8 +79,10 @@ export class ColaboradorService {
     orderID:string, 
     weight1?:string, 
     weight2?:string, 
+    weight3?:string,
     numBunches1?:string, 
     numBunches2?:string,
+    numBunches3?:string,
     payAmount?:string, 
     payDate?:string, 
     signedBy?:string, 
@@ -96,11 +98,17 @@ export class ColaboradorService {
     if (weight2) {
       url += `&weight2=${weight2}`;
     }
+    if (weight3) {
+      url += `&weight3=${weight3}`;
+    }
     if (numBunches1) {
       url += `&numBunches1=${numBunches1}`;
     }
     if (numBunches2) {
       url += `&numBunches2=${numBunches2}`;
+    }
+    if (numBunches3) {
+      url += `&numBunches3=${numBunches3}`;
     }
     if (payAmount) {
       url += `&payAmount=${payAmount}`;

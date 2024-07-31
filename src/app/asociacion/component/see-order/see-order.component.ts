@@ -59,7 +59,7 @@ interface orderData {
 export class SeeOrderComponent {
 
   @Output() cerrarModal = new EventEmitter<void>();
-  @Output() cerrarActualizar = new EventEmitter<void>();
+  @Output() cerrarActualizar = new EventEmitter<number>();
   @Input() seeOrderVisible: boolean = false;  
   @Input() orderID:number = 0;
 
@@ -124,5 +124,47 @@ export class SeeOrderComponent {
         console.log("No hay datos de la orden ", this.orderData);
       }
     })
+  }
+
+  updateOrder(state:number){
+    if (state == 5) {
+      this.service.updateOrder(this.orderData[0].order.orderID.toString(), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, state.toString()).subscribe(result => {
+        if (result['state'] === 'Ok') {
+          console.log('Se actualizo la orden a 5', result);
+        } else if (result['state'] === 'Fail') {
+          console.log('No se pudo actualizar la orden', result);
+        }
+      });
+    } else if (state == 6) {
+      const fechaFormateada = this.getCurrentDateFormatted();
+      console.log('Fecha Formateada:', fechaFormateada);
+      this.service.updateOrder(this.orderData[0].order.orderID.toString(), undefined, undefined, undefined, undefined, undefined, undefined, undefined, fechaFormateada, undefined, state.toString()).subscribe(result => {
+        if (result['state'] === 'Ok') {
+          console.log('Se actualizo la orden a 6', result);
+        } else if (result['state'] === 'Fail') {
+          console.log('No se pudo actualizar la orden', result);
+        }
+      });
+    }
+    this.cerrarModal.emit();
+    this.cerrarActualizar.emit(state-1);
+  }
+
+  getCurrentDateFormatted(): string {
+    // Configurar la zona horaria de Colombia (UTC-5)
+    const colombiaTimeOffset = -5 * 60; // UTC-5 en minutos
+    const localDate = new Date();
+    
+    // Obtener el tiempo UTC en milisegundos
+    const utcTime = localDate.getTime() + (localDate.getTimezoneOffset() * 60000);
+
+    // Ajustar el tiempo a la zona horaria de Colombia
+    const colombiaDate = new Date(utcTime + (colombiaTimeOffset * 60000));
+
+    const year = colombiaDate.getFullYear();
+    const month = ('0' + (colombiaDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + colombiaDate.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
   }
 }

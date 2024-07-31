@@ -42,7 +42,7 @@
       </div>
 
       <div class="container__cards">
-        <div class="header" [ngClass]="{'vertical__header': mostrarTodos}">
+        <div class="header" [ngClass]="{'vertical__header': mostrarTodos}" *ngIf="routes[0].routeState !== '3'">
           <h3 class="subtitle" [ngClass]="{'vertical__subtitle': mostrarTodos}">órdenes</h3>
           <a href="javascript:void(0);" class="show" (click)="toggleVerTodos()" *ngIf="ordenes">
             <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" *ngIf="mostrarTodos">
@@ -52,7 +52,7 @@
             <span *ngIf="!mostrarTodos">Ver todos</span>
           </a>
         </div>
-        <div class="card-ordenes" [ngClass]="{'vertical': mostrarTodos}">
+        <div class="card-ordenes" [ngClass]="{'vertical': mostrarTodos}" *ngIf="routes[0].routeState !== '3'">
           <ng-container *ngFor="let order of route.orders">
             <ng-container *ngIf="(!mostrarTodos && order.state !== '4') || mostrarTodos">
               <div class="card-order">
@@ -79,10 +79,10 @@
         <div class="card-transporter" *ngIf="!ordenes">
           <p>Aun no hay ordenes agregadas a esta ruta</p>
         </div>
-        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState !== '2' && ordenes">
+        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && !orderWithState2 && ordenes&& routes[0].routeState !== '3'">
           <p>Todas las órdenes han sido recogidas. Haga clic en finalizar ruta para continuar.</p>
         </div>
-        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState === '2'">
+        <div class="card-transporter" *ngIf="!mostrarTodos && todasOrdenesRecogidasFlag && route.routeState === '3'">
           <p>Esta ruta ha sido finalizada</p>
         </div>        
       </div>
@@ -128,7 +128,7 @@
       </div>
 
       <button class="button button--success" (click)="cancelRoute(route.routeID)" *ngIf="route.routeState === '0' && !mostrarTodos" [disabled]="!ordenes">Cancelar ruta</button>
-      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="(todasOrdenesRecogidasFlag && route.routeState === '2')">Finalizar ruta</button>
+      <button class="button button--success" (click)="endRoute()" *ngIf="route.routeState !== '0' && !mostrarTodos" [disabled]="(todasOrdenesRecogidasFlag && route.routeState === '3')">Finalizar ruta</button>
     </div>
   </ng-container>
   <div class="date-container" *ngIf="!mostrarTodos">

@@ -23,21 +23,21 @@
           <label class="form__label" for="payAmount">Pago de la cosecha</label>
           <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount | currency:'COP ':'symbol':'1.2-2'" disabled>
         </div>
-        <div class="form__item">
+        <!-- <div class="form__item">
           <label class="form__label" for="payAmount">Precio por Kilo</label>
           <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
+        </div> -->
+        <div class="form__item">
+          <label class="form__label" for="payAmount">Cantidad de primera calidad</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.numBunches1" disabled>
         </div>
         <div class="form__item">
-          <label class="form__label" for="payAmount">Peso de primera calidad (falta)</label>
-          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
+          <label class="form__label" for="payAmount">Cantidad de segunda calidad</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.numBunches2" disabled>
         </div>
         <div class="form__item">
-          <label class="form__label" for="payAmount">Peso de segunda calidad (falta)</label>
-          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
-        </div>
-        <div class="form__item">
-          <label class="form__label" for="payAmount">Peso de tercera calidad (falta)</label>
-          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.payAmount / historyDetails.weight | currency:'COP ':'symbol':'1.2-2'" disabled>
+          <label class="form__label" for="payAmount">Cantidad de tercera calidad</label>
+          <input class="form__input input--truncated" id="payAmount" [value]="historyDetails.numBunches3" disabled>
         </div>
       </div> 
     </div>

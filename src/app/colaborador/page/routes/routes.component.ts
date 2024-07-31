@@ -87,6 +87,7 @@ export class RoutesComponent {
       if (routes['state'] === 'Ok') {
         // console.log(routes.data);
         this.routes = routes.data;
+        console.log("lalalalal",this.routes);
         this.alertFlag = false;
         this.endFlag = false;
         this.alertendflag = false;
@@ -106,6 +107,17 @@ export class RoutesComponent {
         console.log(this.ordenes)
         this.todasOrdenesRecogidasFlag = this.routes && this.routes[0]?.orders.every(order => order.state === '4');
         this.ordenRecogida = this.routes && this.routes.some(route => route.orders.some(order => order.state === '4'));
+        if (!this.mostrarTodos && this.todasOrdenesRecogidasFlag && !this.orderWithState2 && this.ordenes && this.routes[0].routeState !== "3") {
+          this.service.updateRoute(this.routes[0].routeID, undefined, undefined, this.endWeight.toString(), "2", undefined, undefined).subscribe(result => {
+            if (result['state'] === 'Ok') {
+              console.log('todas las ordenes terminaron ',result);
+              // this.ngOnInit();
+            } else if (result['state'] === 'Fail') {
+              this.alertFlag = true;
+              console.log('No terminaron todas las ordenes ',result);
+            }
+          });
+        }
 
         console.log(this.todasOrdenesRecogidasFlag, this.ordenRecogida)
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] !== 'Session expired')) {
@@ -166,13 +178,13 @@ export class RoutesComponent {
   end2Route(routeID:string){
     console.log(routeID, ' ', this.endWeight);
     if (this.endWeight !== undefined && this.endWeight > 0) {
-      this.service.updateRoute(routeID, undefined, undefined, this.endWeight.toString(), "2", undefined, undefined).subscribe(result => {
+      this.service.updateRoute(routeID, undefined, undefined, this.endWeight.toString(), "4", undefined, undefined, undefined).subscribe(result => {
         if (result['state'] === 'Ok') {
-          console.log('Se cancelo la ruta',result);
+          console.log('llego a la asociacion ',result);
           this.ngOnInit();
         } else if (result['state'] === 'Fail') {
           this.alertFlag = true;
-          console.log('No se pudo cancelar',result);
+          console.log('No llego a la asociacion ',result);
         }
       });
     }
@@ -240,11 +252,11 @@ export class RoutesComponent {
 
   modalVisible: boolean = false;
   showOrderForm(orderID:string){
-    console.log(orderID);
+    console.log("se actualiza este: ", orderID);
     this.orderID = orderID;
     this.price();
     this.modalVisible = true;
-    this.service.updateOrder(orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '3').subscribe(result => {
+    this.service.updateOrder(orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,"3").subscribe(result => {
       if (result['state'] === 'Ok') {
         console.log('Se actualizo la orden a 3',result);
       } else if (result['state'] === 'Fail') {

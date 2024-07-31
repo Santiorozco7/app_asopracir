@@ -25,6 +25,8 @@
               <label for="orderState">estado</label>
               <input class="form__input" type="text" id="orderState" [value]="typeFilter[order.order.state] || 'por definir'" disabled>
             </div>
+            <button (click)="updateOrder(5)" *ngIf="order.order.state == 4"><p>Facturar</p></button>
+            <button (click)="updateOrder(6)" *ngIf="order.order.state == 5"><p>Pagar</p></button>
             <div class="section__item">
               <label for="orderestBunches">número estimado de racimos</label>
               <input class="form__input" type="text" id="orderestBunches" [value]="order.order.estBunches || 'por definir'" disabled>
@@ -35,19 +37,19 @@
             </div>
             <div class="section__item">
               <label for="orderWeight">peso</label>
-              <input class="form__input" type="text" id="orderWeight" [value]="order.order.weight || 'por definir'" disabled>
+              <input class="form__input" type="text" id="orderWeight" [value]="order.order.weight + 'kg' || 'por definir'" disabled>
             </div>
             <div class="section__item">
               <label for="orderpayAmount">valor pagado</label>
-              <input class="form__input" type="text" id="orderpayAmount" [value]="order.order.payAmount || 'por definir'" disabled>
+              <input class="form__input" type="text" id="orderpayAmount" [value]="order.order.payAmount | currency:'COP ':'symbol':'1.2-2' || 'por definir'" disabled>
             </div>
             <div class="section__item">
               <label for="orderpayDate">fecha de pago</label>
               <input class="form__input" type="text" id="orderpayDate" [value]="order.order.payDate || 'por definir'" disabled>
             </div>
             <div class="section__item">
-              <label for="orderNameRecolect">persona que acepto la órden*NO ESTA*</label>
-              <input class="form__input" type="text" id="orderNameRecolect" [value]="order.order.payDate || 'por definir'" disabled>
+              <label for="orderNameRecolect">persona que acepto la órden</label>
+              <input class="form__input" type="text" id="orderNameRecolect" [value]="order.order.signedBy || 'por definir'" disabled>
             </div>
             <div class="section__item">
               <label for="routepickupDate">fecha de recolección</label>
@@ -85,7 +87,7 @@
         <div class="form__section">
             <div class="section__item">
               <label for="orderNames">nombre</label>
-              <input class="form__input" type="text" id="orderNames" [value]="order.order.names || 'por definir'" disabled>
+              <input class="form__input" type="text" id="orderNames" [value]="order.order.names + ' ' + order.order.firstLastname || 'por definir'" disabled>
             </div>
             <div class="section__item">
               <label for="orderphoNumber">teléfono/celular</label>

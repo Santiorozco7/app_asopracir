@@ -20,30 +20,23 @@
       <label for="docNumber">N° de Identificación</label>
       <input class="form__input" type="number" id="docNumber" formControlName="docNumber" placeholder="Digite el número" required>
     </div>
-    <span class="error" *ngIf="activSpan">Usuario no encontrado</span>
+    <span class="error" *ngIf="activSpan || transID == 0">Transpotador no encontrado</span>
     <button class="button button--success" [ngClass]="{'disableButton': activVehicle, 'activeButton': !activVehicle}" type="submit" [disabled]="infoUser.invalid">Buscar</button>
   </form>
   
-  <form [formGroup]="infoVehicle" (ngSubmit)="onSubmit()" *ngIf="activVehicle">
+  <form [formGroup]="infoVehicle" (ngSubmit)="onSubmit()" *ngIf="activVehicle && transID !== 0">
     <div class="section__header">
       <svg class="header__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
       </svg>
-      <span><h2 class="subtitle inline">Información del transportador</h2></span>
+      <span><h2 class="subtitle inline">Información del vehículo</h2></span>
     </div>
     <div class="form__section">
-      <div class="section__item">
-        <label class="required" for="licenseType">Tipo de Licencia</label>
-        <input class="form__input" type="text" id="licenseType" formControlName="licenseType">
-      </div>    
-      <div class="section__item">
-        <label class="required" for="licenseExpiration">Fecha de expiración</label>
-        <input class="form__input" type="date" id="licenseExpiration" formControlName="licenseExpiration">
-      </div>
     
       <div class="section__item">
         <label class="required" for="plate">Placa</label>
-        <input class="form__input" type="text" id="plate" formControlName="plate">
+        <input class="form__input" type="text" id="plate" formControlName="plate" style="text-transform: uppercase;">
+        <span style="color: red;" *ngIf="activPlate">El vehículo existentes</span>
       </div>
       <div class="section__item">
         <label class="required" for="soatExpiration">Vencimiento de SOAT</label>
@@ -69,6 +62,6 @@
       </div>
     </div>
     
-    <button class="button button--success" type="submit" [disabled]="infoVehicle.invalid">Añadir vehículo</button>
+    <button class="button button--success" type="submit" *ngIf="!infoVehicle.invalid && !activPlate">Añadir vehículo</button>
   </form>
 </div>

@@ -131,4 +131,4 @@
 
 <app-add-route [addRouteVisible]="addRuteVisible" (cerrarModal)="cerrarAddRoute()" [orderID]="addOrderID"></app-add-route>
 
-<app-see-order [seeOrderVisible]="seeOrderVisible" (cerrarModal)="cerrarseeOrder()" [orderID]="seeOrderID"></app-see-order>
+<app-see-order [seeOrderVisible]="seeOrderVisible" (cerrarModal)="cerrarseeOrder()" (cerrarActualizar)="update($event)" [orderID]="seeOrderID"></app-see-order>

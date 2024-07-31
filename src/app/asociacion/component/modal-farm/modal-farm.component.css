@@ -172,6 +172,11 @@ label {
   -moz-appearance: none;
 }
 
+select[readonly] {
+  pointer-events: none;
+  touch-action: none;
+}
+
 .error {
   text-align: center;
   color: red;
