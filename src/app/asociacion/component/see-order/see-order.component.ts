@@ -110,18 +110,15 @@ export class SeeOrderComponent {
   }
 
   ngOnChanges(): void {
-    console.log("en orderID es: ", this.orderID);
     this.service.getOrder(this.orderID).subscribe(order => {
       if (order['state'] === 'Ok') {
         this.orderData = [order.data];
-        console.log("Estos son los datos de la orden: ", this.orderData);
         if (order.data.route === null) {
           this.routeStateAUX = 0;
         } else {
           this.routeStateAUX = order.data.route.routeState;
         }
       } else {
-        console.log("No hay datos de la orden ", this.orderData);
       }
     })
   }
@@ -130,19 +127,14 @@ export class SeeOrderComponent {
     if (state == 5) {
       this.service.updateOrder(this.orderData[0].order.orderID.toString(), undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, state.toString()).subscribe(result => {
         if (result['state'] === 'Ok') {
-          console.log('Se actualizo la orden a 5', result);
         } else if (result['state'] === 'Fail') {
-          console.log('No se pudo actualizar la orden', result);
         }
       });
     } else if (state == 6) {
       const fechaFormateada = this.getCurrentDateFormatted();
-      console.log('Fecha Formateada:', fechaFormateada);
       this.service.updateOrder(this.orderData[0].order.orderID.toString(), undefined, undefined, undefined, undefined, undefined, undefined, undefined, fechaFormateada, undefined, state.toString()).subscribe(result => {
         if (result['state'] === 'Ok') {
-          console.log('Se actualizo la orden a 6', result);
         } else if (result['state'] === 'Fail') {
-          console.log('No se pudo actualizar la orden', result);
         }
       });
     }

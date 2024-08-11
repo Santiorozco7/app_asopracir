@@ -15,7 +15,6 @@ export class ModalHistorialComponent {
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnChanges() {
-    console.log(this.historyDetails);
   }
 
   closeDialog(event: Event): void {

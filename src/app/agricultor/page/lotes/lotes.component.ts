@@ -33,7 +33,6 @@ export class LotesComponent {
       tap(batches => {
         if (batches['state'] === 'Fail') {
           this.verificacionInfo = true;
-          console.log("No hay información en lotes", batches);
           // this.router.navigate(['/']);
         }
         if (batches['state'] === 'Ok') {
@@ -44,7 +43,6 @@ export class LotesComponent {
       switchMap(() => this.service.getTapes()) // Utilizando switchMap para cambiar a la llamada de getTapes
     ).subscribe(tapes => {
       if (tapes['state'] === 'Fail') {
-        console.log("No hay cintas creadas");
       }
       if (tapes['state'] === 'Ok') {
         this.tapes = tapes.data;

@@ -83,9 +83,7 @@ export class LoginComponent {
       const password: string = formData.password || "";
       this.service.login(docType, docNumber, password, this.role).subscribe(credenciales =>{
         if(credenciales['state'] === 'Ok') {
-          console.log('Ingreso ',credenciales);
           if (this.role) {
-            console.log("Con rol");
             if (this.role === "0" && credenciales.roles.isFarmer) {
               this.router.navigate(['/agricultor']); // Redirigir al módulo de agricultor.
             } else if (this.role === "1" && credenciales.roles.isCollab) {

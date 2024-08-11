@@ -93,10 +93,8 @@ export class CreateVehicleComponent {
         this.plateValue = (value ?? '').toUpperCase();
         this.service.getVehicle(this.plateValue).subscribe(userData => {
           if (userData['state'] === 'Ok') {
-            console.log("si hay vehiculo: ", userData);
             this.activPlate = true;
           }if(userData['state'] === 'Fail') {
-            console.log('no hay vehiculo');
             this.activPlate = false;
           }
         });
@@ -109,19 +107,16 @@ export class CreateVehicleComponent {
       const docType: string = formDataUser.docType ?? "";
       const docNumber: string = formDataUser.docNumber ?? "";
 
-      // console.log(formDataUser);
+    
 
       this.service.getTransporter(docType, docNumber).subscribe(userData => {
         if (userData['state'] === 'Ok') {
-          console.log("Todos los datosssss: ", userData.data);
           this.userIDaux = userData.data.user.userID;
           this.transID = userData.data.transID;
-          console.log("transID: ", this.transID);
           this.activVehicle = true;
           this.activSpan = false;
         }if(userData['state'] === 'Fail') {
           this.activSpan = true;
-          console.log('Algo salio mal');
         }
       });
 
@@ -149,18 +144,14 @@ export class CreateVehicleComponent {
         comments,
       ).subscribe(resultVehicle => {
         if (resultVehicle['state'] === 'Ok') {
-          console.log('Vehículo creada con id:', resultVehicle.data.vehID);
           this.service.createTransporter(this.userIDaux, resultVehicle.data.vehID).subscribe(resultTransport => {
             if (resultTransport['state'] === 'Ok') {
-              console.log("Transportador Creado");
               this.cerrarActualizar.emit();
             }if (resultVehicle['state'] === 'Fail') {
-              console.log("Trasnportador no creado");
               this.cerrarActualizar.emit();
             }
           });
         }if (resultVehicle['state'] === 'Fail') {
-          console.log("Vehiculo no creado");
         }
       });
       this.cerrarcreateVehicle.emit();

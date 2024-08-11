@@ -78,7 +78,6 @@ export class RoutesComponent {
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private authService: AuthService) {
     this.filterUser.valueChanges.subscribe(() => {
       this.filterValue = this.filterUser.value.state ?? 0;
-      console.log(this.filterValue);
       this.View();
     });
   }
@@ -95,14 +94,11 @@ export class RoutesComponent {
     this.service.getRoutes(this.filterValue, undefined, undefined).subscribe(routes => {
       if (routes['state'] === 'Ok') {
         this.routes = routes.data;
-        console.log("Se encontraron las rutas", this.routes);
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] !== 'Session expired')) {
-        console.log("No hay ordenes para mostrar", routes);
         // this.pendingsAlert = true;
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] === 'Session expired')) {
         this.authService.logout();
         this.router.navigate(['/']);
-        console.log('No hay session',routes);
       }
 
     })
@@ -117,12 +113,10 @@ export class RoutesComponent {
   cancelRouteConfirmed(routeID: number) {
     this.service.cancelRoute(routeID).subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log("Se elimino la ruta correctamente");
         this.showDialog = true;
         this.positiveNotification = true;
         this.message = `Se ha eliminado la órden`;
       } else {
-        console.log("No se logro eliminar la ruta correctamente");
         this.showDialog = true;
         this.positiveNotification = false;
         this.message = `No se ha podido eliminar la órden`;
@@ -140,7 +134,6 @@ export class RoutesComponent {
   abrirmodalRutas(routeID:number, managementFlag:boolean) {
     this.routesAUX = routeID;
     this.managementFlag = managementFlag;
-    console.log("Información: ", this.routesAUX);
     this.rutasVisible = true;
   }
 

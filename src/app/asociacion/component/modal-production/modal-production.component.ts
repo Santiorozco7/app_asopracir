@@ -21,9 +21,7 @@ export class ModalProductionComponent {
   }
 
   update(details:any) {
-    console.log(details);
     this.service.getDetailedStats(details.Month, details.Year).subscribe(orderDetails => {
-     console.log(orderDetails);
      this.orderDetails = orderDetails.data;
     });
   }

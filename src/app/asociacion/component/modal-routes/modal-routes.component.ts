@@ -198,35 +198,26 @@ export class ModalRoutesComponent {
   ngOnChanges(): void {
     if (this.rutasVisible === true) {
       if (this.managementFlag === true) {
-        console.log("en el modal los datos son: ", this.routeID);
         this.service.getRoute(this.routeID).subscribe(route => {
           if (route['state'] === 'Ok'){
             this.routesData = route.data[0];
-            console.log("Detalles de la orden: ", this.routesData);
-            console.log("state", this.routesData?.routeState)
             this.edit = this.routesData?.routeState === '0';
-            console.log(this.edit)
           } else if (route['state'] === 'Fail') {
-            console.log("No se encontraron detalles de la orden ", route);        
           } 
         });
       }
       if (this.managementFlag === false) {
-        console.log("Crear rutaaaaaaaaa");
       }
     }
   }
 
   removeOrderFromRoute(orderID:number){
-    console.log(orderID);
     this.service.removeOrderFromRoute(orderID).subscribe(result => {
       if (result['state'] === 'Fail') {
-        console.log("No se legro eliminar la orden de la ruta ", result);
         this.showDialog = true;
         this.positiveNotification = false;
         this.message = 'no se ha podido eliminar, comprueba nuevamente';
       } else {
-        console.log("Orden eliminada correctamente");
         this.showDialog = true;
         this.positiveNotification = true;
         this.message = `Se ha eliminado la órden`;
@@ -236,11 +227,9 @@ export class ModalRoutesComponent {
   }
 
   onSubmit() {
-      console.log('Actualiza fecha de ruta');
       if ((this.routesData?.routeID !== undefined) && this.pickupDate) {
           this.service.updateRoute(this.routesData.routeID, this.pickupDate, undefined, undefined, undefined, undefined, undefined, undefined).subscribe(updateTransporter => {
             if (updateTransporter['state'] === 'Ok') {
-              console.log("Se logró actualizar");      
               this.showDialog = true;
               this.positiveNotification = true;
               this.message = `La fecha ha sido actualizada`;
@@ -248,11 +237,9 @@ export class ModalRoutesComponent {
               this.showDialog = true;
               this.positiveNotification = false;
               this.message = `No se ha sido actualizada`;
-              console.log("No se logró actualizar ", updateTransporter);
             } 
           });
       } else {
-          console.log("No se puede actualizar: routeID no está definido");
       }
   }
 
@@ -271,12 +258,10 @@ export class ModalRoutesComponent {
   }
 
   obtenerTransportador(transporter:transporterInformation){
-    console.log("transportador seleccionado: ",transporter);
     this.transporter = transporter;
   }
 
   obtenerColaborador(collabotor:CollaboratorInformation){
-    console.log("colaborador seleccionado: ",collabotor);
     this.collabotor = collabotor;
   }
 
@@ -287,19 +272,16 @@ export class ModalRoutesComponent {
       // Manejar el caso en que el valor sea null o undefined
       console.error('El valor de la fecha es nulo o no está definido.');
     }
-    console.log("Crear ruta y la fecha ", this.pickupDate);
     this.showConfirmationModal = true;
   }
   
   createRouteConfirmed() {
     this.service.createRoute(this.transporter?.transID, this.transporter?.vehID, this.collabotor?.collabID, this.pickupDate).subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log("Se logró crear la ruta ", result.data);
         this.showDialog = true;
         this.positiveNotification = true;
         this.message = `Se ha creado la ruta`;
       } else if (result['state'] === 'Fail') {
-        console.log("No se logró crear la ruta ", result);
         this.showDialog = true;
         this.positiveNotification = false;
         this.message = `No se ha podido crear la ruta`;

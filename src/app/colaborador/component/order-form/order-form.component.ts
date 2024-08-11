@@ -20,17 +20,13 @@ export class OrderFormComponent implements OnChanges {
     // Por ejemplo, puedes llamar a un método de tu servicio para realizar alguna tarea de limpieza
     const orderID = this.orderID !== "" ? this.orderID : undefined;
     const orderIDString = orderID !== undefined ? orderID : "";
-    console.log(orderIDString);
     if (this.stateFlag) {
       this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
         if (result['state'] === 'Ok') {
-          console.log('Se actualizo la orden a 2', result);
         } else if (result['state'] === 'Fail') {
-          console.log('No se pudo actualizar la orden', result);
         }
       });
     }
-    console.log('La página se está recargando o cerrando...');
   }
   
   firstQualityWeights: number[] = [];
@@ -59,9 +55,7 @@ export class OrderFormComponent implements OnChanges {
         this.firstQualityPricePerKilo = price.data.price1;
         this.secondQualityPricePerKilo = price.data.price2;
         this.thirdQualityPricePerKilo = price.data.price3;
-        console.log('Se obtuvo el precio',price);
       } else if (price['state'] === 'Fail') {
-        console.log('No se obtuvo el precio',price);
       }
     });
   }
@@ -69,7 +63,6 @@ export class OrderFormComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     // Verificar si hay un cambio en la variable orderID
     if (changes['orderID'] && !changes['orderID'].firstChange) {
-      console.log("Se actualizo toda la informacion");
       this.orderIDtemp = this.orderID;
 
       this.firstQualityWeights = [];
@@ -89,12 +82,9 @@ export class OrderFormComponent implements OnChanges {
   cerrar() {
     const orderID = this.orderID !== "" ? this.orderID : undefined;
     const orderIDString = orderID !== undefined ? orderID : "";
-    console.log(orderIDString);
     this.service.updateOrder(orderIDString, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2').subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden a 2', result);
       } else if (result['state'] === 'Fail') {
-        console.log('No se pudo actualizar la orden', result);
       }
     });
     this.cerrarModal.emit();
@@ -206,10 +196,8 @@ export class OrderFormComponent implements OnChanges {
     const sumaPlatanosCalidadSthirdtring = this.calculateTotalWeight(this.thirdQualityWeights) !== undefined ? this.calculateTotalWeight(this.thirdQualityWeights).toString() : undefined;
     const precioTotal = this.firstQualityPricePerKilo !== undefined && this.secondQualityPricePerKilo !== undefined && this.thirdQualityPricePerKilo !== undefined ? this.calculateTotalPriceAll().toString() : undefined;
     
-    console.log(this.orderID,' ', sumaPlatanosString,' ', sumaPlatanosCalidadString,' ', sumaPlatanosCalidadSthirdtring,' ', platanosLengthString,' ', platanosCalidadLengthString,' ', platanosCalidadthirdLengthString,' ', precioTotal, ' ', this.encargado)
     this.service.updateOrder(this.orderID, sumaPlatanosString, sumaPlatanosCalidadString, sumaPlatanosCalidadSthirdtring, platanosLengthString, platanosCalidadLengthString, platanosCalidadthirdLengthString, precioTotal, undefined, this.encargado, '4').subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden',result);
         
         this.showDialog = true;
         this.positiveNotification = true;
@@ -221,7 +209,6 @@ export class OrderFormComponent implements OnChanges {
           this.cerrarActualizar.emit();
         }, 1500);
       } else if (result['state'] === 'Fail') {
-        console.log('No se pudo actualizar la orden',result);
         this.showDialog = true;
         this.positiveNotification = false;
         this.message = `¡Ha ocurrido un error al crear la órden!`;  

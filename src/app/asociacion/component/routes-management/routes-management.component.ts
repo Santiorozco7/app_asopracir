@@ -143,14 +143,10 @@ export class RoutesManagementComponent {
       this.transportersFlag = true;
       this.collaboratorsFlag = false;
       this.ordersFlag = false;
-      console.log("Entro a la accion 1");
-      console.log("este es la routeID: ", this.routeID);
       this.service.getTransporters('active').subscribe(Transporters => {
         if (Transporters['state'] === 'Fail') {
-          console.log("Transportadores no encontrados", Transporters);
         } else {
           this.transporters = Transporters.data;
-          console.log(Transporters.data);
         }  
       });
     }
@@ -158,13 +154,10 @@ export class RoutesManagementComponent {
       this.transportersFlag = false;
       this.collaboratorsFlag = true;
       this.ordersFlag = false;
-      console.log("Entro a la accion 2");
       this.service.getCollaborators().subscribe(collabotors => {
         if (collabotors['state'] === 'Fail') {
-          console.log("Transportadores no encontrados", collabotors);
         } else {
           this.collabotors = collabotors.data;
-          console.log(collabotors.data);
         }  
       });
     }
@@ -172,14 +165,11 @@ export class RoutesManagementComponent {
       this.transportersFlag = false;
       this.collaboratorsFlag = false;
       this.ordersFlag = true;
-      console.log("Entro a la accion 3");
       this.service.getPendingOrders().subscribe(orders => {
         if (orders['state'] === 'Ok') {
           this.orders = orders.data;
-          console.log(orders.data);
           this.ordersAlert = false;
         } else if (orders['state'] === 'Fail') {
-          console.log("No se encontraron ordenes pendientes ",orders);
           this.ordersAlert = true;
         } 
       });
@@ -189,24 +179,20 @@ export class RoutesManagementComponent {
   // Actualizar transportador
   updateTransporter(transID:number, vehID:number, transporter:transporterInformation){
     if (this.managementFlag === true) {
-      console.log(this.routeID," ",transID," ",vehID);
       this.service.updateRoute(this.routeID, undefined, undefined, undefined, undefined, transID, vehID, undefined).subscribe(updateTransporter => {
         if (updateTransporter['state'] === 'Ok') {
           this.showDialog = true;
           this.positiveNotification = true;
           this.message = `Se ha actualizado el transportador`;
-          console.log("Se logro actualizar");
           this.cerrarTodo();
         } else if (updateTransporter['state'] === 'Fail') {
           this.showDialog = true;
           this.positiveNotification = false;
           this.message = `ha ocurrido un error al actualizar`;
-          console.log("No se logro actualizar ", updateTransporter);
         } 
       });
     }
     if (this.managementFlag === false) {
-      console.log("Guarda los datos en una variable", transporter);
       this.transporter.emit(transporter);
       this.cerrarTodo();
     }
@@ -216,24 +202,20 @@ export class RoutesManagementComponent {
   // Actualizar Colaborador
   updateCollabotor(collabID:number, collabotor:CollaboratorInformation){
     if (this.managementFlag === true) {
-      console.log(this.routeID," ",collabID);
       this.service.updateRoute(this.routeID, undefined, undefined, undefined, undefined, undefined, undefined, collabID).subscribe(updateTransporter => {
         if (updateTransporter['state'] === 'Ok'){
           this.showDialog = true;
           this.positiveNotification = true;
           this.message = `Se ha actualizado el colaborador`;
-          console.log("Se logro actualizar");
           this.cerrarTodo();
         } else if (updateTransporter['state'] === 'Fail') {
           this.showDialog = true;
           this.positiveNotification = false;
           this.message = `ha ocurrido un error al actualizar`;
-          console.log("No se logro actualizar ", updateTransporter);
         } 
       });      
     }
     if (this.managementFlag === false) {
-      console.log("Guarda los datos en una variable", collabotor);
       this.collabotor.emit(collabotor);
       this.cerrarTodo();
     }
@@ -241,16 +223,13 @@ export class RoutesManagementComponent {
 
   // Agregar la orden a la ruta
   addOrderToRoute(orderID:number){
-    console.log(this.routeID," ",orderID);
     this.service.appendOrderToRoute(this.routeID, orderID).subscribe(order => {
       if (order['state'] === 'Ok') {
         this.showDialog = true;
         this.positiveNotification = true;
         this.message = `Se ha agregado la órden`;
-        console.log("Se agrego a la ruta ", order.data);
         this.cerrarTodo();
       } else if (order['state'] === 'Fail') {
-        console.log("No se logro asignar la orden a la ruta ",order);
         this.showDialog = true;
         this.positiveNotification = false;
         this.message = `No se ha podido agregar la órden`;

@@ -80,53 +80,41 @@ export class RoutesComponent {
 
   View(fechaActual: Date) {
     this.startRouteFlag = false;
-    console.log(fechaActual);
     this.fechaActualFormato = `${fechaActual.getFullYear()}-${fechaActual.getMonth() + 1}-${fechaActual.getDate()}`;
-    console.log(this.fechaActualFormato);
     this.service.getRoutes(undefined, this.fechaActualFormato, this.fechaActualFormato, undefined, undefined).subscribe(routes => {
       if (routes['state'] === 'Ok') {
-        // console.log(routes.data);
+      
         this.routes = routes.data;
-        console.log("lalalalal",this.routes);
         this.alertFlag = false;
         this.endFlag = false;
         this.alertendflag = false;
         this.alertendendflag = false;
         this.orderWithState2 = false;
-        console.log(routes.data[0]);
         const orderWithState2 = routes.data[0].orders.find((order: OrderInformation['orders'][0]) => order.state === '2');
         if (orderWithState2) {
           this.orderWithState2 = true;
-          console.log('Se encontró una orden con state igual a 2:', this.orderWithState2);
           // Realizar la acción que necesites para esta orden
         } else {
           this.orderWithState2 = false;
-          console.log('No se encontró una orden con state igual a 2.', this.orderWithState2);
         }
         this.ordenes = routes.data[0].orders.length > 0;
-        console.log(this.ordenes)
         this.todasOrdenesRecogidasFlag = this.routes && this.routes[0]?.orders.every(order => order.state === '4');
         this.ordenRecogida = this.routes && this.routes.some(route => route.orders.some(order => order.state === '4'));
         if (!this.mostrarTodos && this.todasOrdenesRecogidasFlag && !this.orderWithState2 && this.ordenes && this.routes[0].routeState !== "3") {
           this.service.updateRoute(this.routes[0].routeID, undefined, undefined, this.endWeight.toString(), "2", undefined, undefined).subscribe(result => {
             if (result['state'] === 'Ok') {
-              console.log('todas las ordenes terminaron ',result);
               // this.ngOnInit();
             } else if (result['state'] === 'Fail') {
               this.alertFlag = true;
-              console.log('No terminaron todas las ordenes ',result);
             }
           });
         }
 
-        console.log(this.todasOrdenesRecogidasFlag, this.ordenRecogida)
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] !== 'Session expired')) {
         this.alertFlag = true;
-        console.log('No se encontraron rutas',routes);
       } else if ((routes['state'] === 'Fail') && (routes['sessionStatus'] === 'Session expired')) {
         this.authService.logout();
         this.router.navigate(['/']);
-        console.log('No se encontraron rutas',routes);
       }
     });
   }
@@ -148,20 +136,16 @@ export class RoutesComponent {
   }
 
   cancelRoute(routeID:string){
-    console.log(routeID);
     this.service.cancelRoute(routeID).subscribe(cancel => {
       if (cancel['state'] === 'Ok') {
-        console.log('Se cancelo la ruta',cancel);
       } else if (cancel['state'] === 'Fail') {
         this.alertFlag = true;
-        console.log('No se pudo cancelar',cancel);
       }
     });
   }
 
   endRoute(){
     if (this.orderWithState2) {
-      console.log("entro a la bandera");
       this.alertendflag = true;
       this.alertendendflag = false;
     } else {
@@ -176,25 +160,20 @@ export class RoutesComponent {
   }
 
   end2Route(routeID:string){
-    console.log(routeID, ' ', this.endWeight);
     if (this.endWeight !== undefined && this.endWeight > 0) {
       this.service.updateRoute(routeID, undefined, undefined, this.endWeight.toString(), "4", undefined, undefined, undefined).subscribe(result => {
         if (result['state'] === 'Ok') {
-          console.log('llego a la asociacion ',result);
           this.ngOnInit();
         } else if (result['state'] === 'Fail') {
           this.alertFlag = true;
-          console.log('No llego a la asociacion ',result);
         }
       });
     }
     if (this.orderWithState2) {
       this.service.purgeRoute(routeID).subscribe(resultCancel => {
         if (resultCancel['state'] === 'Ok') {
-          console.log('Se cancelo la ruta',resultCancel);
         } else if (resultCancel['state'] === 'Fail') {
           this.alertFlag = true;
-          console.log('No se pudo cancelar',resultCancel);
         }
       });
     }
@@ -202,14 +181,11 @@ export class RoutesComponent {
 
   startRoute(routeID:string, index:number){
     if (index === 0) {
-      console.log(routeID);
       this.startRouteFlag = true;
     } else if (index === 1) {
       const startWeight:string = this.startWeight.toString();
-      console.log(startWeight);
       this.service.updateRoute(routeID, undefined, startWeight, undefined, '1', undefined, undefined, undefined).subscribe(result => {
         if (result['state'] === 'Ok') {
-          console.log('Se actualizo la ruta',result);
           this.showDialog = true;
           this.positiveNotification = true;
           this.message = `Se ha iniciado la ruta con exito`;
@@ -217,7 +193,6 @@ export class RoutesComponent {
             this.ngOnInit();
           }, 1000);
         } else if (result['state'] === 'Fail') {
-          console.log('No se pudo actualizar la ruta',result);
           this.showDialog = true;
           this.positiveNotification = false;
           this.message = `Ha ocurrido un error`;
@@ -225,15 +200,12 @@ export class RoutesComponent {
       });
       this.service.startRoute(routeID).subscribe(resultStart => {
         if (resultStart['state'] === 'Ok') {
-          console.log('Se inicio la ruta',resultStart, startWeight);
         } else if (resultStart['state'] === 'Fail') {
-          console.log('No se pudo iniciar la ruta',resultStart);
         }
       });
       this.View(this.fechaActual);
       this.startRouteFlag = false;
     } else {
-      console.log("No se pudo iniciar la ruta");
     }
   }
 
@@ -252,15 +224,12 @@ export class RoutesComponent {
 
   modalVisible: boolean = false;
   showOrderForm(orderID:string){
-    console.log("se actualiza este: ", orderID);
     this.orderID = orderID;
     this.price();
     this.modalVisible = true;
     this.service.updateOrder(orderID, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,"3").subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log('Se actualizo la orden a 3',result);
       } else if (result['state'] === 'Fail') {
-        console.log('No se pudo actualizar la orden',result);
       }
     });
   }

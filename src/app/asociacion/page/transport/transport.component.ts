@@ -41,7 +41,6 @@ export class TransportComponent {
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private authService: AuthService) {
     this.infoUser.valueChanges.subscribe(() => {
       this.stateValue = this.infoUser.value.state ?? 'all';
-      console.log(this.stateValue);
       this.View();
     });
   }
@@ -59,38 +58,31 @@ export class TransportComponent {
         this.originalTransporters = Transporters.data; 
         this.Transporters = Transporters.data;
         this.stateFlag = false;
-        console.log(Transporters.data);
       } else if ((Transporters['state'] === 'Fail') && (Transporters['sessionStatus'] !== 'Session expired')) {
         this.stateFlag = true;
-        console.log("No hay usuarios para mostrar");
         this.Transporters = [];
         this.originalTransporters = [];
       } else if ((Transporters['state'] === 'Fail') && (Transporters['sessionStatus'] === 'Session expired')) {
         this.authService.logout();
         this.router.navigate(['/']);
-        console.log('No hay session',Transporters);
       }
     });
   }
 
   docSearch() {
-    console.log(this.docNumberInput);
   
     // Verifica si el número de documento es un valor numérico antes de realizar la búsqueda
    if (this.docNumberInput) {
       const resultFind = this.originalTransporters.filter(person => person.docNumber.toString() === this.docNumberInput!.toString());
 
       if (resultFind.length > 0) {
-        console.log('Persona encontrada:', resultFind);
         this.Transporters = resultFind;
         this.searchFlag = false;
       } else {
         this.searchFlag = true;
-        console.log('Persona no encontrada');
         this.Transporters = []; // Limpiar los resultados actuales si no se encuentra ninguna coincidencia
       }
     } else {
-      console.log('Número de documento no válido');
       this.Transporters = this.originalTransporters;
       this.searchFlag = false;
     }
@@ -101,7 +93,7 @@ export class TransportComponent {
 
   mostrarModal(numeroDocumento?: number, tipoDocumento?: number, placa?: string) {
     this.modalData = { numeroDocumento, tipoDocumento, placa };
-    // console.log(this.modalData.numeroDocumento, this.modalData.tipoDocumento);
+  
     this.modalVisible = true;
   }
 
@@ -113,7 +105,7 @@ export class TransportComponent {
   createVehicleVisible = false;
 
   mostrarcreateVehicle() {
-    // console.log(this.modalData.numeroDocumento, this.modalData.tipoDocumento);
+  
     this.createVehicleVisible = true;
   }
 

@@ -134,14 +134,12 @@ export class ModalFarmComponent {
         currentFormValues.zoneName !== originalFarmData.zoneName) {
         this.formChanges = true;
         this.verificaActualizar = 1;
-        console.log("Hubo cambios en el formulario");
       }
 
       // Actualizar estado con la asosiacion.
       else if (currentFormValues.state !== originalfarmerStatus) {
         this.formChanges = true;
         this.verificaActualizar = 2;
-        console.log("Hubo cambios en el formulario");
         if (currentFormValues.state !== null && currentFormValues.state !== undefined && currentFormValues.state === '1') {
           this.isStateActive = true;
         } else if (currentFormValues.state !== null && currentFormValues.state !== undefined && currentFormValues.state === '0'){
@@ -155,7 +153,6 @@ export class ModalFarmComponent {
         }
         this.formChanges = false;
         this.verificaActualizar = 0;
-        console.log("No hubo cambios en el formulario");
       }
     });
   }
@@ -169,12 +166,10 @@ export class ModalFarmComponent {
   }
 
   ngOnChanges(): void {
-    console.log(this.modalData);
     if (this.modalData.tipoDocumento !== undefined && this.modalData.numeroDocumento) {
       this.service.getFarmer(this.modalData.tipoDocumento, this.modalData.numeroDocumento).subscribe(infoFarmer=>{
         if (infoFarmer['state'] === 'Ok') {
           this.originalData = { ...infoFarmer.data };
-          console.log("datos originales: ", this.originalData);
 
           // Asignar los valores recibidos del servicio al formulario
           const userData = infoFarmer.data.user; 
@@ -186,7 +181,6 @@ export class ModalFarmComponent {
           this.rutFilePath = userData.fileRUT;
           this.fileOwnerCertificateFilePath = farmData.fileOwnerCertificate;
 
-          console.log(farmerStatus);
           this.infoUser.patchValue({
             name: userData.names,
             firstLastname: userData.firstLastname,
@@ -218,10 +212,7 @@ export class ModalFarmComponent {
           } else if (this.infoUser.value.state !== null && this.infoUser.value.state !== undefined && this.infoUser.value.state === '0'){
             this.isStateActive = false;
           }
-          console.log("este es el estado del ususrio: ",this.infoUser.value);
       } else {
-          console.log("El estado no es 'Ok'");
-          console.log(infoFarmer);
       }
       });
     }
@@ -282,7 +273,6 @@ export class ModalFarmComponent {
           bankAccountNumber
         ).subscribe(result => {
           if (result['state'] === 'Ok') {
-            console.log('Usuario Actualizado');
             this.service.updateFarm(
               this.originalData.farm.farmID,
               farmName,
@@ -292,20 +282,17 @@ export class ModalFarmComponent {
               GPSposition
             ).subscribe(resultFarm => {
               if (resultFarm['state'] === 'Ok') {
-                console.log('Finca Actualizada');
                 this.showDialog = true;
                 this.positiveNotification = true;
                 this.message = `Se han actualizado los datos `;
                 this.cerrarActualizar.emit();
               }if(resultFarm['state'] === 'Fail') {
-                console.log('Finca no Actualizada');
                 this.showDialog = true;
                 this.positiveNotification = false;
                 this.message = `No se ha podido actualizar`;
               }
             });
           }if(result['state'] === 'Fail') {
-            console.log('Usuario no fue Actualizado');
             this.showDialog = true;
             this.positiveNotification = false;
             this.message = `No se ha podido actualizar`;
@@ -316,10 +303,8 @@ export class ModalFarmComponent {
       if (this.verificaActualizar === 2) {
         this.service.setFarmerStatus(this.originalData.farmerID, farmerStatus).subscribe(result => {
           if (result['state'] === 'Ok') {
-            console.log('Finca Actualizada');
             this.cerrarActualizar.emit();
           }if(result['state'] === 'Fail') {
-            console.log('Finca no Actualizada');
           }
         });
       }

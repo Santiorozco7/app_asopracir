@@ -25,7 +25,6 @@ export class ProductionComponent {
   constructor(private formBuilder: FormBuilder, private service: AsociacionService, private router: Router, private renderer: Renderer2, private el: ElementRef, private authService: AuthService) {
     this.infoUser.valueChanges.subscribe(() => {
       this.stateValue = this.infoUser.value.state ?? 'all';
-      console.log(this.stateValue);
       this.View();
     });
   }
@@ -40,14 +39,11 @@ export class ProductionComponent {
       if (stats['state'] === 'Ok') {
         this.verificacionHistorial = false;
         this.history = stats.data;
-        console.log("Este es el historial:",stats.data);
       } else if ((stats['state'] === 'Fail') && (stats['sessionStatus'] !== 'Session expired')) {
-        console.log("No hay ordenes para mostrar", stats);
         this.verificacionHistorial = true;
       } else if ((stats['state'] === 'Fail') && (stats['sessionStatus'] === 'Session expired')) {
         this.authService.logout();
         this.router.navigate(['/']);
-        console.log('No hay session',stats);
       }
     });  
   }

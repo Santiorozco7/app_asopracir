@@ -94,7 +94,6 @@ export class ModalLotesComponent {
     this.renderer.addClass(this.el.nativeElement.querySelector('.modal'), 'modal--open');
     this.action = accion;
     this.tapeID = tapeID;
-    console.log(this.tapeID)
   }
 
   closeManageBatch(){

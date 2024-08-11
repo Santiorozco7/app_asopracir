@@ -25,13 +25,11 @@ export class HistorialComponent {
     this.service.getStats().subscribe(HT => {
       if (HT['state'] === 'Fail') {
         this.verificacionHistorial = true;
-        console.log("No hay información en historial", HT);
         // this.router.navigate(['/']);
       }
       if (HT['state'] === 'Ok') {
         this.verificacionHistorial = false;
         this.history = HT.data;
-        console.log("Este es el historial:",HT.data);
       }
     });  
   }

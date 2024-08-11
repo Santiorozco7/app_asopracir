@@ -30,7 +30,6 @@ export class OrdenesComponent {
     this.service.getOrders().subscribe(OD => {
       if (OD['state'] === 'Fail') {
         this.verificacionOrden = true;
-        console.log("No hay información de ordenes",OD);
       }
       if (OD['state'] === 'Ok') {
         this.verificacionOrden = false;
@@ -39,11 +38,9 @@ export class OrdenesComponent {
     });
     this.service.getTapes().subscribe(tape => {
       if (tape['state'] === 'Fail') {
-        console.log("No hay información para generar ordenes",tape);
       }
       if (tape['state'] === 'Ok') {
         this.tape = tape.data;
-        console.log("Las ordenes son: ",tape);
       }
     });
   }
@@ -55,7 +52,6 @@ export class OrdenesComponent {
   }
 
   modalOrder(orderID:string) {
-    console.log(orderID)
     this.orderID = orderID;
     this.showModalOrder = true;
     this.service.getOrder(orderID).subscribe(orden => {

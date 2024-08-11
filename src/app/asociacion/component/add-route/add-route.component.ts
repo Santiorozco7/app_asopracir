@@ -83,30 +83,11 @@ export class AddRouteComponent {
     this.cerrarModal.emit();
   }
 
-  // ngOnChanges(): void {
-  //   console.log("boolean ", this.addRouteVisible);
-  //   console.log("orderID", this.orderID);
-  //   this.service.getRoutes(0).subscribe(routes => {
-  //     if (routes['state'] === 'Ok') {
-  //       this.routes = routes.data;
-  //       console.log("rutas no iniciadas", this.routes);
-  //     } else if (routes['state'] === 'Fail'){
-  //       this.routes = routes.data;
-  //       console.log("No se encontraron las rutas", this.routes);
-  //     }
-  //   })
-  // } 
-
   ngOnChanges(): void {
-    console.log("boolean ", this.addRouteVisible);
-    console.log("orderID", this.orderID);
     this.service.getRoutes(0).subscribe(response => {
-      console.log("Respuesta del backend:", response); // Imprimir la respuesta completa
       if (response['state'] === 'Ok') {
         this.routes = response.data;
-        console.log("rutas no iniciadas", this.routes);
       } else if (response['state'] === 'Fail') {
-        console.log("No se encontraron las rutas", response.data);
       }
     });
   }
@@ -119,16 +100,13 @@ export class AddRouteComponent {
   }
 
   addOrderToRoute(routeID:number){
-    console.log("orderID: ",this.orderID," routeID: ",routeID);
     this.service.appendOrderToRoute(routeID, this.orderID).subscribe(result => {
       if (result['state'] === 'Ok') {
-        console.log("Orden agregada", result);
         this.showDialog = true;
         this.positiveNotification = true;
         this.message = `Se ha agregado la órden`;
         this.cerrarTodo();
       } else {
-        console.log("Orden no agregada", result);
         this.showDialog = true;
         this.positiveNotification = false;
         this.message = `Ha ocurrido un error`;

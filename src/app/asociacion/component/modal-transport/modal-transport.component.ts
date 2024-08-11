@@ -118,8 +118,8 @@ export class ModalTransportComponent {
       const originalUserData = this.originalData.user;
       const originalTransporterData = this.originalData.transporter;
       const originalvehiclesData = this.vehicles[0];
-      // console.log(currentFormValues.name);
-      // console.log(this.originalData.user.names);
+    
+    
       // Realizar comparación con los datos originales
       if (currentFormValues.name !== originalUserData.names ||
         currentFormValues.firstLastname !== originalUserData.firstLastname ||
@@ -148,10 +148,8 @@ export class ModalTransportComponent {
         currentFormValues.capacity !== originalvehiclesData.capacity ||
         currentFormValues.commentsVeh !== originalvehiclesData.comments) {
         this.formChanges = true;
-        console.log("Hubo cambios en el formulario");
       } else {
         this.formChanges = false;
-        console.log("No hubo cambios en el formulario");
       }
     });
   }
@@ -165,19 +163,15 @@ export class ModalTransportComponent {
   }
 
   ngOnChanges(): void {
-    console.log(this.modalData);
     if (this.modalData.tipoDocumento !== undefined && this.modalData.numeroDocumento) {
-      // console.log("tipo de documento",this.modalData.numeroDocumento);
-      // console.log("numero de documento",this.modalData.tipoDocumento);
+    
+    
       this.service.getTransporter(this.modalData.tipoDocumento.toString(), this.modalData.numeroDocumento.toString()).subscribe(infoTransporter=>{
         if (infoTransporter['state'] === 'Ok') {
           this.originalData = { ...infoTransporter.data };
           // aqui estaba lo de la placa
           
-          console.log("El indice del vehiculo: ", this.originalVehicle); // -----------------------------------------
-          console.log("datos originales: ", this.originalData);
-          // console.log("El estado es 'Ok'");
-          console.log(infoTransporter.data);
+        
           // Asignar los valores recibidos del servicio al formulario
           const userData = infoTransporter.data.user; 
           const transporterData = infoTransporter.data.transporter;
@@ -186,19 +180,16 @@ export class ModalTransportComponent {
           this.pictureFilePath = userData.filePicture;
           this.documentFilePath = userData.fileDocument;
           this.licenseFilePath = transporterData.fileLicense;
-          console.log("saa ", this.licenseFilePath);
           this.rutFilePath = userData.fileRUT;
 
           // Se obtiene todo los datos del vehículo que pertenece a la placa
           this.vehicles = vehiclesData.filter((vehicle:Vehicle) => vehicle.plate === this.modalData.placa);
-          console.log('Vehículo encontrado:', this.vehicles);
           
           this.runtFilePath = this.vehicles[0].fileRUNT;
           this.soatFilePath = this.vehicles[0].fileSOAT;
           this.techrevFilePath = this.vehicles[0].fileTechRev;
 
           // const vehiclesAux = vehiclesData[0];
-          console.log("vehiculos: ",vehiclesData);
           this.infoUser.patchValue({
             name: userData.names,
             firstLastname: userData.firstLastname,
@@ -230,8 +221,6 @@ export class ModalTransportComponent {
             commentsVeh: this.vehicles[0].comments
           });
       } else {
-          console.log("El estado no es 'Ok'");
-          console.log(infoTransporter);
       }
       });
     }
@@ -295,7 +284,6 @@ export class ModalTransportComponent {
         bankAccountNumber
       ).subscribe(result => {
         if (result['state'] === 'Ok') {
-          console.log('Usuario Actualizado');
           this.service.updateVehicle(
             this.vehicles[0].vehID,
             plate,
@@ -307,7 +295,6 @@ export class ModalTransportComponent {
             state
           ).subscribe(resultVeh => {
             if (resultVeh["state"] === 'Ok') {
-              console.log('Vehículo Actualizado');
               this.service.updateTransporter(
                 this.originalData.transID,
                 licenseType,
@@ -315,27 +302,23 @@ export class ModalTransportComponent {
                 comments
               ).subscribe(resultTrans => {
                 if (resultTrans["state"] === 'Ok') {
-                  console.log('Transportador Actualizado');
                   this.showDialog = true;
                   this.positiveNotification = true;
                   this.message = `Se han actualizado los datos`;
                   this.cerrarActualizar.emit();
                 }if(resultVeh['state'] === 'Fail') {
-                  console.log('Transportador no fue Actualizado');
                   this.showDialog = true;
                   this.positiveNotification = false;
                   this.message = `No se ha podido actualizar`;
                 }
               });
             }if(resultVeh['state'] === 'Fail') {
-              console.log('Vehículo no fue Actualizado');
               this.showDialog = true;
               this.positiveNotification = false;
               this.message = `No se ha podido actualizar`;
             }
           });
         }if(result['state'] === 'Fail') {
-          console.log('Usuario no fue Actualizado');
           this.showDialog = true;
           this.positiveNotification = false;
           this.message = `No se ha podido actualizar`;
