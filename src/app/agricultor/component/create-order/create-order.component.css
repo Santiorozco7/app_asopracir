@@ -9,6 +9,10 @@ button {
   font: inherit;
 }
 
+.button__icon {
+  width: 1rem;
+}
+
 .modal {
   top: 0;
   left: 0;

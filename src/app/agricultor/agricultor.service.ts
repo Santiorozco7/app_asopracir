@@ -7,7 +7,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AgricultorService {
 
-  private API_ASOPRACIR = "http://localhost/uqplatanos/";
+  private API_ASOPRACIR = "https://asopracir.com.co/app/";
+  // private API_ASOPRACIR = "http://localhost/uqplatanos/";
   // private API_ASOPRACIR = "https://ingelectuq.net/uqasopracir/";
 
   constructor(private http: HttpClient) { }
